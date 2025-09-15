@@ -1,0 +1,374 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f0f0f0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Viewport Container - The visible window */
+.viewport-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #ffffff;
+  cursor: grab;
+
+  /* Hardware acceleration hints */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+
+  /* Prevent text selection during interactions */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  /* Smooth interactions */
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viewport-container:active {
+  cursor: grabbing;
+}
+
+/* Transform Layer - The 8000x8000px canvas that gets transformed */
+.transform-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8000px;
+  height: 8000px;
+
+  /* Critical for hardware acceleration */
+  will-change: transform;
+  transform-origin: 0 0;
+  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+
+  /* Optimize rendering */
+  -webkit-transform-origin: 0 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  /* Prevent layout shifts */
+  contain: layout style paint;
+}
+
+/* Content Layer - Where user elements are placed */
+.content-layer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  /* Allow pointer events on content */
+  pointer-events: auto;
+}
+
+/* Sample elements for demonstration */
+.sample-element {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  max-width: 300px;
+
+  /* Ensure elements are interactive */
+  pointer-events: auto;
+  cursor: pointer;
+
+  /* Smooth hover effects */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sample-element:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.sample-element h2 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.sample-element p {
+  font-size: 0.9em;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+/* Performance Monitor */
+.performance-monitor {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: "Monaco", "Menlo", monospace;
+  font-size: 12px;
+  z-index: 1000;
+  pointer-events: none;
+
+  /* Prevent interference with container */
+  user-select: none;
+}
+
+.performance-monitor div {
+  margin-bottom: 5px;
+}
+
+.performance-monitor div:last-child {
+  margin-bottom: 0;
+}
+
+/* Instructions Panel */
+.instructions {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 300px;
+  z-index: 1000;
+  pointer-events: none;
+
+  /* Prevent interference with container */
+  user-select: none;
+}
+
+.instructions h3 {
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 14px;
+}
+
+.instructions ul {
+  list-style: none;
+  font-size: 12px;
+  color: #666;
+}
+
+.instructions li {
+  margin-bottom: 4px;
+  padding-left: 0;
+}
+
+.instructions li:before {
+  content: "• ";
+  color: #667eea;
+  font-weight: bold;
+}
+
+/* Cursor states for different interaction modes */
+.viewport-container.panning {
+  cursor: grabbing !important;
+}
+
+.viewport-container.zooming {
+  cursor: zoom-in;
+}
+
+.viewport-container.zoom-out {
+  cursor: zoom-out;
+}
+
+/* Focus styles for accessibility */
+.viewport-container:focus {
+  outline: 2px solid #667eea;
+  outline-offset: -2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .sample-element {
+    border: 2px solid white;
+  }
+
+  .performance-monitor {
+    border: 1px solid white;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .sample-element {
+    transition: none;
+  }
+
+  .transform-layer {
+    transition: none;
+  }
+}
+
+/* Interactive Scrollbars */
+.scrollbar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 500;
+}
+
+.scrollbar-horizontal {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease, background-color 0.2s ease;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.scrollbar-vertical {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  bottom: 35px;
+  width: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease, background-color 0.2s ease;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.scrollbar-horizontal:hover,
+.scrollbar-vertical:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.scrollbar-thumb {
+  position: absolute;
+  background: rgba(102, 126, 234, 0.6);
+  border-radius: 6px;
+  transition: background-color 0.15s ease, opacity 0.15s ease,
+    transform 0.08s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    width 0.08s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    height 0.08s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    left 0.08s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    top 0.08s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.scrollbar-thumb.horizontal {
+  height: 8px;
+  top: 2px;
+  min-width: 20px;
+}
+
+.scrollbar-thumb.vertical {
+  width: 8px;
+  left: 2px;
+  min-height: 20px;
+}
+
+.scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.8);
+  transform: scale(1.1);
+}
+
+.scrollbar-thumb:active {
+  background: rgba(102, 126, 234, 0.9);
+  cursor: grabbing;
+}
+
+.scrollbar-corner {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 12px;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  opacity: 0.7;
+}
+
+/* Disable transitions during active interaction for real-time updates */
+.scrollbar-thumb.no-transition {
+  transition: none !important;
+}
+
+/* Enhanced smooth transitions when not actively interacting */
+.scrollbar-thumb.smooth {
+  transition: background-color 0.2s ease, opacity 0.2s ease,
+    transform 0.12s cubic-bezier(0.23, 1, 0.32, 1),
+    width 0.12s cubic-bezier(0.23, 1, 0.32, 1),
+    height 0.12s cubic-bezier(0.23, 1, 0.32, 1),
+    left 0.12s cubic-bezier(0.23, 1, 0.32, 1),
+    top 0.12s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Print styles */
+@media print {
+  .performance-monitor,
+  .instructions,
+  .scrollbar-container {
+    display: none;
+  }
+
+  .viewport-container {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  .transform-layer {
+    transform: none !important;
+    position: static;
+    width: auto;
+    height: auto;
+  }
+}
+
+/* Mobile responsive scrollbars */
+@media (max-width: 768px) {
+  .scrollbar-horizontal,
+  .scrollbar-vertical {
+    opacity: 0.5;
+  }
+
+  .scrollbar-horizontal {
+    height: 8px;
+  }
+
+  .scrollbar-vertical {
+    width: 8px;
+  }
+
+  .scrollbar-thumb.horizontal {
+    height: 6px;
+    top: 1px;
+  }
+
+  .scrollbar-thumb.vertical {
+    width: 6px;
+    left: 1px;
+  }
+}
