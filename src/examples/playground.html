@@ -2591,8 +2591,8 @@
 
         // Create canvas with demo configuration
         canvas = MarkupCanvas.createMarkupCanvas(container, {
-          contentWidth: 8000,
-          contentHeight: 8000,
+          width: 8000,
+          height: 8000,
           enableAcceleration: true,
           onTransformUpdate: updateUI,
           // Zoom configuration - adjust these values to your preference
@@ -3133,9 +3133,6 @@
 
       // Artificial Scrollbar Functions
       function updateScrollbars(transform) {
-        const canvasWidth = 8000;
-        const canvasHeight = 8000;
-
         if (!canvas || !canvas.container) return;
 
         const containerRect = canvas.container.getBoundingClientRect();

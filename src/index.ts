@@ -61,8 +61,8 @@ export { createRulers } from "./lib/rulers.js";
 
 // Type definitions
 interface MarkupCanvasOptions {
-	contentWidth?: number;
-	contentHeight?: number;
+	width?: number;
+	height?: number;
 	enableAcceleration?: boolean;
 	enableEventHandling?: boolean;
 	enableKeyboardControls?: boolean;

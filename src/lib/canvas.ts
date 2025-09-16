@@ -53,8 +53,8 @@ interface CanvasBounds {
 }
 
 interface CanvasOptions {
-	contentWidth?: number;
-	contentHeight?: number;
+	width?: number;
+	height?: number;
 	enableAcceleration?: boolean;
 	enableEventHandling?: boolean;
 	onTransformUpdate?: (transform: Transform) => void;
@@ -105,8 +105,8 @@ export function createCanvas(
 
 	// Set default options
 	const config: Required<CanvasOptions> = {
-		contentWidth: 8000,
-		contentHeight: 8000,
+		width: 8000,
+		height: 8000,
 		enableAcceleration: true,
 		enableEventHandling: true,
 		onTransformUpdate: () => {},
@@ -114,14 +114,14 @@ export function createCanvas(
 	};
 
 	// Validate configuration
-	if (typeof config.contentWidth !== "number" || config.contentWidth <= 0) {
-		console.warn("Invalid contentWidth, using default 8000px");
-		config.contentWidth = 8000;
+	if (typeof config.width !== "number" || config.width <= 0) {
+		console.warn("Invalid width, using default 8000px");
+		config.width = 8000;
 	}
 
-	if (typeof config.contentHeight !== "number" || config.contentHeight <= 0) {
-		console.warn("Invalid contentHeight, using default 8000px");
-		config.contentHeight = 8000;
+	if (typeof config.height !== "number" || config.height <= 0) {
+		console.warn("Invalid height, using default 8000px");
+		config.height = 8000;
 	}
 
 	try {
@@ -174,8 +174,8 @@ export function createCanvas(
 		transformLayer.style.position = "absolute";
 		transformLayer.style.top = "0";
 		transformLayer.style.left = "0";
-		transformLayer.style.width = `${config.contentWidth}px`;
-		transformLayer.style.height = `${config.contentHeight}px`;
+		transformLayer.style.width = `${config.width}px`;
+		transformLayer.style.height = `${config.height}px`;
 		transformLayer.style.transformOrigin = "0 0";
 
 		// Add smooth transitions for zoom operations
@@ -368,13 +368,13 @@ export function createCanvas(
 				enableSmoothTransitions(canvas.transformLayer, duration / 1000);
 
 				const bounds = canvas.getBounds();
-				const scaleX = bounds.width / config.contentWidth;
-				const scaleY = bounds.height / config.contentHeight;
+				const scaleX = bounds.width / config.width;
+				const scaleY = bounds.height / config.height;
 				const fitScale = clampZoom(Math.min(scaleX, scaleY) * 0.9); // 90% to add padding
 
 				// Center the content
-				const scaledWidth = config.contentWidth * fitScale;
-				const scaledHeight = config.contentHeight * fitScale;
+				const scaledWidth = config.width * fitScale;
+				const scaledHeight = config.height * fitScale;
 				const centerX = (bounds.width - scaledWidth) / 2;
 				const centerY = (bounds.height - scaledHeight) / 2;
 
@@ -396,7 +396,7 @@ export function createCanvas(
 		};
 
 		console.log("Canvas created successfully:", {
-			contentSize: `${config.contentWidth}x${config.contentHeight}`,
+			contentSize: `${config.width}x${config.height}`,
 			acceleration: config.enableAcceleration,
 			eventHandling: config.enableEventHandling,
 		});
@@ -450,8 +450,8 @@ export function getCanvasBounds(canvas: Canvas): CanvasBounds {
 		const canvasHeight = containerRect.height || container.clientHeight || 0;
 
 		// Get content dimensions
-		const contentWidth = config.contentWidth || 8000;
-		const contentHeight = config.contentHeight || 8000;
+		const contentWidth = config.width || 8000;
+		const contentHeight = config.height || 8000;
 
 		// Calculate visible area in content coordinates
 		const topLeft = canvasToContent(
