@@ -6,10 +6,7 @@ A high-performant canvas where you can place HTML elements for an zoomable and p
 
 - 🚀 **High Performance**: Hardware-accelerated transforms with optimized matrix calculations
 - 📱 **Multi-Platform**: Works on desktop (mouse + keyboard) and mobile (touch)
-- 🎯 **Precise Control**: Zoom to mouse cursor, boundary management, and smooth animations
-- 🔧 **Modular Design**: Use individual components or the complete solution
-- 📦 **Zero Dependencies**: Pure JavaScript, no external libraries required
-- 🎨 **Framework Agnostic**: Works with vanilla JS, React, Vue, Angular, etc.
+- 📦 **Zero Dependencies**: Pure Typescript, no external libraries required
 - 📝 **TypeScript Support**: Full type definitions included
 
 ## Installation
@@ -23,7 +20,7 @@ npm install markup-canvas
 ### HTML
 
 ```html
-<div id="my-container" style="width: 800px; height: 600px;">
+<div id="markup-canvas" style="width: 800px; height: 600px;">
   <div>Your content here</div>
 </div>
 ```
@@ -31,10 +28,10 @@ npm install markup-canvas
 ### JavaScript
 
 ```javascript
-import { initializeMarkupCanvas } from "markup-canvas";
+import { createMarkupCanvas } from "markup-canvas";
 
-const container = document.getElementById("my-container");
-const viewport = initializeMarkupCanvas(container, {
+const container = document.getElementById("mark-up-container");
+const viewport = createMarkupCanvas(container, {
   contentWidth: 2000,
   contentHeight: 2000,
 });
