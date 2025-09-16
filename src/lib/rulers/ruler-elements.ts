@@ -3,7 +3,7 @@
  */
 
 import type { RulerOptions } from "../../types/index.js";
-import { RULER_Z_INDEX } from "./constants.js";
+import { RULER_Z_INDEX, RULER_SIZE } from "./constants.js";
 
 export interface RulerElements {
 	horizontalRuler: HTMLElement;
@@ -46,9 +46,9 @@ function createHorizontalRuler(config: Required<RulerOptions>): HTMLElement {
 	ruler.style.cssText = `
 		position: absolute;
 		top: 0;
-		left: ${config.rulerSize}px;
+		left: ${RULER_SIZE}px;
 		right: 0;
-		height: ${config.rulerSize}px;
+		height: ${RULER_SIZE}px;
 		background: ${config.backgroundColor};
 		border-bottom: 1px solid ${config.borderColor};
 		border-right: 1px solid ${config.borderColor};
@@ -67,10 +67,10 @@ function createVerticalRuler(config: Required<RulerOptions>): HTMLElement {
 	ruler.className = "canvas-ruler vertical-ruler";
 	ruler.style.cssText = `
 		position: absolute;
-		top: ${config.rulerSize}px;
+		top: ${RULER_SIZE}px;
 		left: 0;
 		bottom: 0;
-		width: ${config.rulerSize}px;
+		width: ${RULER_SIZE}px;
 		background: ${config.backgroundColor};
 		border-right: 1px solid ${config.borderColor};
 		border-bottom: 1px solid ${config.borderColor};
@@ -91,8 +91,8 @@ function createCornerBox(config: Required<RulerOptions>): HTMLElement {
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: ${config.rulerSize}px;
-		height: ${config.rulerSize}px;
+		width: ${RULER_SIZE}px;
+		height: ${RULER_SIZE}px;
 		background: ${config.backgroundColor};
 		border-right: 1px solid ${config.borderColor};
 		border-bottom: 1px solid ${config.borderColor};
@@ -114,8 +114,8 @@ function createGridOverlay(config: Required<RulerOptions>): HTMLElement {
 	grid.className = "canvas-ruler grid-overlay";
 	grid.style.cssText = `
 		position: absolute;
-		top: ${config.rulerSize}px;
-		left: ${config.rulerSize}px;
+		top: ${RULER_SIZE}px;
+		left: ${RULER_SIZE}px;
 		right: 0;
 		bottom: 0;
 		pointer-events: none;

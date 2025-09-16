@@ -17,7 +17,6 @@ export function createCanvasConfig(
 		height: DEFAULT_CANVAS_HEIGHT,
 		enableAcceleration: true,
 		enableEventHandling: true,
-		rulerSize: 0,
 		onTransformUpdate: () => {},
 		...options,
 	};

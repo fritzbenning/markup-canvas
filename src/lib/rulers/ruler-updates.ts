@@ -9,6 +9,7 @@ import {
 	createVerticalTick,
 } from "./tick-creation.js";
 import { updateGrid } from "./grid-overlay.js";
+import { RULER_SIZE } from "./constants.js";
 
 /**
  * Update ruler markings based on current canvas state
@@ -26,8 +27,8 @@ export function updateRulers(
 	const translateY = bounds.translateY || 0;
 
 	// Calculate visible content area
-	const canvasWidth = bounds.width - config.rulerSize;
-	const canvasHeight = bounds.height - config.rulerSize;
+	const canvasWidth = bounds.width - RULER_SIZE;
+	const canvasHeight = bounds.height - RULER_SIZE;
 
 	// Calculate content coordinates of visible area
 	const contentLeft = -translateX / scale;

@@ -26,11 +26,15 @@ export function getCanvasBounds(canvas: BaseCanvas): CanvasBounds {
 			translateY: 0,
 		};
 
-		// Get canvas dimensions (subtract ruler size from available space)
+		// Get canvas dimensions (subtract ruler size from available space if rulers exist)
 		const containerRect = container.getBoundingClientRect();
 		const totalWidth = containerRect.width || container.clientWidth || 0;
 		const totalHeight = containerRect.height || container.clientHeight || 0;
-		const rulerSize = config.rulerSize || 0;
+
+		// Check if rulers exist by looking for ruler elements
+		const hasRulers = container.querySelector(".canvas-ruler") !== null;
+		const rulerSize = hasRulers ? 24 : 0; // Static ruler size
+
 		const canvasWidth = Math.max(0, totalWidth - rulerSize);
 		const canvasHeight = Math.max(0, totalHeight - rulerSize);
 

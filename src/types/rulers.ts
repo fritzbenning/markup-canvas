@@ -5,7 +5,6 @@
 import type { Transform, CanvasBounds } from "./canvas.js";
 
 export interface RulerOptions {
-	rulerSize?: number;
 	backgroundColor?: string;
 	borderColor?: string;
 	textColor?: string;

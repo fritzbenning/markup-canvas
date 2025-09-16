@@ -202,7 +202,7 @@
           clickZoomLevel: 1.0,
           clickZoomDuration: 300,
           requireOptionForClickZoom: true,
-          rulerSize: 24, // Enable rulers and grid
+          showRulers: true, // Enable rulers and grid
           showGrid: true, // Show grid by default
           gridColor: "rgba(0, 0, 0, 0.08)", // Grid color
         });
@@ -210,6 +210,11 @@
         // Focus the container to enable keyboard events
         if (canvas && canvas.container) {
           canvas.container.focus();
+          
+          // Ensure rulers are visible by default
+          if (canvas.showRulers) {
+            canvas.showRulers();
+          }
         }
 
         console.log("Simple demo initialized successfully!");

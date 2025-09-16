@@ -61,8 +61,14 @@ function setupTransformLayer(
 	config: Required<CanvasOptions>,
 ): void {
 	transformLayer.style.position = "absolute";
-	transformLayer.style.top = `${config.rulerSize}px`;
-	transformLayer.style.left = `${config.rulerSize}px`;
+
+	// Check if rulers exist by looking for ruler elements in the container
+	const container = transformLayer.parentElement;
+	const hasRulers = container?.querySelector(".canvas-ruler") !== null;
+	const rulerOffset = hasRulers ? 24 : 0; // Static ruler size
+
+	transformLayer.style.top = `${rulerOffset}px`;
+	transformLayer.style.left = `${rulerOffset}px`;
 	transformLayer.style.width = `${config.width}px`;
 	transformLayer.style.height = `${config.height}px`;
 	transformLayer.style.transformOrigin = "0 0";

@@ -13,7 +13,6 @@ export interface CanvasOptions {
 	height?: number;
 	enableAcceleration?: boolean;
 	enableEventHandling?: boolean;
-	rulerSize?: number;
 	onTransformUpdate?: (transform: Transform) => void;
 }
 
@@ -119,7 +118,7 @@ export interface MarkupCanvasOptions {
 	clickZoomLevel?: number;
 	clickZoomDuration?: number;
 	requireOptionForClickZoom?: boolean;
-	rulerSize?: number;
+	enableRulers?: boolean;
 	showGrid?: boolean;
 	gridColor?: string;
 	onTransformUpdate?: (transform: Transform) => void;

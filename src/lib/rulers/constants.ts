@@ -4,8 +4,10 @@
 
 import type { RulerOptions } from "../../types/index.js";
 
+// Static ruler size - always 24px
+export const RULER_SIZE = 24;
+
 export const DEFAULT_RULER_CONFIG: Required<RulerOptions> = {
-	rulerSize: 24,
 	backgroundColor: "rgba(255, 255, 255, 0.95)",
 	borderColor: "#ddd",
 	textColor: "#666",
