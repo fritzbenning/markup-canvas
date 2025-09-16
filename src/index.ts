@@ -1,9 +1,3 @@
-/**
- * Zoomable HTML Container
- * High-performance canvas with zoom and pan capabilities
- */
-
-// Import functions for internal use
 import { createCanvas } from "./lib/canvas.js";
 import {
 	setupKeyboardNavigation,
@@ -139,36 +133,39 @@ export function createMarkupCanvas(
 		});
 		cleanupFunctions.push(touchCleanup);
 
+		// Create extended canvas with additional methods
+		const _canvas = canvas as Canvas;
+
 		// Add exposed control functions for custom keyboard implementation
-		(canvas as any).panLeft = (distance: number = 50) => {
+		_canvas.panLeft = (distance: number = 50) => {
 			const newTransform: Partial<Transform> = {
 				translateX: canvas.transform.translateX + distance,
 			};
 			return canvas.updateTransform(newTransform);
 		};
 
-		(canvas as any).panRight = (distance: number = 50) => {
+		_canvas.panRight = (distance: number = 50) => {
 			const newTransform: Partial<Transform> = {
 				translateX: canvas.transform.translateX - distance,
 			};
 			return canvas.updateTransform(newTransform);
 		};
 
-		(canvas as any).panUp = (distance: number = 50) => {
+		_canvas.panUp = (distance: number = 50) => {
 			const newTransform: Partial<Transform> = {
 				translateY: canvas.transform.translateY + distance,
 			};
 			return canvas.updateTransform(newTransform);
 		};
 
-		(canvas as any).panDown = (distance: number = 50) => {
+		_canvas.panDown = (distance: number = 50) => {
 			const newTransform: Partial<Transform> = {
 				translateY: canvas.transform.translateY - distance,
 			};
 			return canvas.updateTransform(newTransform);
 		};
 
-		(canvas as any).zoomIn = (factor: number = 0.1) => {
+		_canvas.zoomIn = (factor: number = 0.1) => {
 			const newScale = clampZoom(canvas.transform.scale * (1 + factor));
 			const newTransform: Partial<Transform> = {
 				scale: newScale,
@@ -176,7 +173,7 @@ export function createMarkupCanvas(
 			return canvas.updateTransform(newTransform);
 		};
 
-		(canvas as any).zoomOut = (factor: number = 0.1) => {
+		_canvas.zoomOut = (factor: number = 0.1) => {
 			const newScale = clampZoom(canvas.transform.scale * (1 - factor));
 			const newTransform: Partial<Transform> = {
 				scale: newScale,
@@ -184,7 +181,7 @@ export function createMarkupCanvas(
 			return canvas.updateTransform(newTransform);
 		};
 
-		(canvas as any).resetZoom = (duration: number = 0) => {
+		_canvas.resetZoom = (duration: number = 0) => {
 			if (canvas.resetView) {
 				return canvas.resetView(duration);
 			}
@@ -192,20 +189,20 @@ export function createMarkupCanvas(
 		};
 
 		// Mouse drag control functions
-		(canvas as any).enableMouseDrag = () => {
+		_canvas.enableMouseDrag = () => {
 			return dragSetup.enable();
 		};
 
-		(canvas as any).disableMouseDrag = () => {
+		_canvas.disableMouseDrag = () => {
 			return dragSetup.disable();
 		};
 
-		(canvas as any).isMouseDragEnabled = () => {
+		_canvas.isMouseDragEnabled = () => {
 			return dragSetup.isEnabled();
 		};
 
 		// Additional utility functions
-		(canvas as any).centerContent = (duration: number = 300) => {
+		_canvas.centerContent = (duration: number = 300) => {
 			const bounds = canvas.getBounds();
 			const centerX =
 				(bounds.width - bounds.contentWidth * canvas.transform.scale) / 2;
@@ -232,17 +229,17 @@ export function createMarkupCanvas(
 			return result;
 		};
 
-		(canvas as any).fitToScreen = (duration: number = 300) => {
+		_canvas.fitToScreen = (duration: number = 300) => {
 			return canvas.zoomToFitContent(duration);
 		};
 
-		(canvas as any).getVisibleArea = () => {
+		_canvas.getVisibleArea = () => {
 			const bounds = canvas.getBounds();
 			return bounds.visibleArea;
 		};
 
-		(canvas as any).isPointVisible = (x: number, y: number) => {
-			const visibleArea = (canvas as any).getVisibleArea();
+		_canvas.isPointVisible = (x: number, y: number) => {
+			const visibleArea = _canvas.getVisibleArea();
 			return (
 				x >= visibleArea.x &&
 				x <= visibleArea.x + visibleArea.width &&
@@ -251,11 +248,7 @@ export function createMarkupCanvas(
 			);
 		};
 
-		(canvas as any).scrollToPoint = (
-			x: number,
-			y: number,
-			duration: number = 300,
-		) => {
+		_canvas.scrollToPoint = (x: number, y: number, duration: number = 300) => {
 			const bounds = canvas.getBounds();
 			const centerX = bounds.width / 2;
 			const centerY = bounds.height / 2;
@@ -285,14 +278,14 @@ export function createMarkupCanvas(
 		};
 
 		// Add cleanup method to canvas
-		(canvas as any).cleanup = () => {
+		_canvas.cleanup = () => {
 			cleanupFunctions.forEach((cleanup) => {
 				cleanup();
 			});
 		};
 
 		console.log("Zoomable container initialized successfully");
-		return canvas as Canvas;
+		return _canvas;
 	} catch (error) {
 		console.error("Failed to set up event handlers:", error);
 
