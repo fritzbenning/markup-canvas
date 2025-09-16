@@ -30,7 +30,7 @@ npm install markup-canvas
 ```javascript
 import { createMarkupCanvas } from "markup-canvas";
 
-const container = document.getElementById("mark-up-container");
+const container = document.getElementById("markup-canvas");
 const canvas = createMarkupCanvas(container, {
   contentWidth: 2000,
   contentHeight: 2000,
@@ -51,7 +51,7 @@ Add the `data-markup-canvas` attribute to automatically initialize:
 
 ### Main Functions
 
-#### `initializeMarkupCanvas(container, options)`
+#### `createMarkupCanvas(container, options)`
 
 Creates a complete markup canvas with all event handlers.
 
@@ -65,6 +65,7 @@ Creates a complete markup canvas with all event handlers.
 - `contentWidth` (number): Width of the content area (default: 8000)
 - `contentHeight` (number): Height of the content area (default: 8000)
 - `enableAcceleration` (boolean): Enable hardware acceleration (default: true)
+- `enableKeyboardControls` (boolean): Enable built-in keyboard navigation (default: true)
 - `enableLeftDrag` (boolean): Enable left mouse button dragging (default: true)
 - `enableMiddleDrag` (boolean): Enable middle mouse button dragging (default: true)
 - `requireSpaceForMouseDrag` (boolean): Require space key to be held for mouse dragging (default: false)
@@ -97,6 +98,27 @@ canvas.addContent(element, { x: 100, y: 100 });
 // Get canvas information
 const bounds = canvas.getBounds();
 
+// Exposed control functions for custom keyboard implementation
+canvas.panLeft(50); // Pan left by 50 pixels (default)
+canvas.panRight(100); // Pan right by 100 pixels
+canvas.panUp(75); // Pan up by 75 pixels
+canvas.panDown(25); // Pan down by 25 pixels
+canvas.zoomIn(0.1); // Zoom in by 10% (default)
+canvas.zoomOut(0.2); // Zoom out by 20%
+canvas.resetZoom(300); // Reset zoom with 300ms animation
+
+// Mouse drag control functions
+canvas.enableMouseDrag(); // Enable mouse dragging
+canvas.disableMouseDrag(); // Disable mouse dragging
+canvas.isMouseDragEnabled(); // Check if mouse drag is enabled
+
+// Additional utility functions
+canvas.centerContent(300); // Center content in canvas with animation
+canvas.fitToScreen(300); // Fit content to screen (alias for zoomToFitContent)
+canvas.getVisibleArea(); // Get currently visible area coordinates
+canvas.isPointVisible(x, y); // Check if a point is currently visible
+canvas.scrollToPoint(x, y, 300); // Scroll to center a specific point
+
 // Cleanup
 canvas.cleanup(); // Remove all event listeners
 ```
@@ -106,10 +128,10 @@ canvas.cleanup(); // Remove all event listeners
 Add dynamic rulers that show canvas dimensions and scale:
 
 ```javascript
-import { initializeMarkupCanvas, createRulers } from "markup-canvas";
+import { createMarkupCanvas, createRulers } from "markup-canvas";
 
 // Initialize canvas
-const canvas = initializeMarkupCanvas(container);
+const canvas = createMarkupCanvas(container);
 
 // Add rulers
 const rulers = createRulers(canvas, {
@@ -198,10 +220,10 @@ const rulers = createRulers(canvas);
 ### Basic Image Viewer
 
 ```javascript
-import { initializeMarkupCanvas } from "markup-canvas";
+import { createMarkupCanvas } from "markup-canvas";
 
 const container = document.getElementById("image-container");
-const canvas = initializeMarkupCanvas(container);
+const canvas = createMarkupCanvas(container);
 
 // Add an image
 const img = document.createElement("img");
@@ -215,7 +237,7 @@ img.onload = () => {
 ### Interactive Diagram
 
 ```javascript
-const canvas = initializeMarkupCanvas(container, {
+const canvas = createMarkupCanvas(container, {
   contentWidth: 5000,
   contentHeight: 3000,
   onTransformUpdate: (transform) => {
@@ -240,7 +262,7 @@ canvas.addContent(node, { x: 100, y: 100 });
 For applications where you want to prevent accidental dragging (e.g., when users are selecting text or interacting with UI elements), you can require the space key to be held down:
 
 ```javascript
-const canvas = initializeMarkupCanvas(container, {
+const canvas = createMarkupCanvas(container, {
   requireSpaceForMouseDrag: true,
   contentWidth: 2000,
   contentHeight: 2000,
@@ -255,7 +277,7 @@ const canvas = initializeMarkupCanvas(container, {
 For precise control over when click-to-zoom activates, you can require the Option/Alt key:
 
 ```javascript
-const canvas = initializeMarkupCanvas(container, {
+const canvas = createMarkupCanvas(container, {
   enableClickToZoom: true,
   clickZoomLevel: 1.0, // Zoom to 100% (actual size)
   requireOptionForClickZoom: true, // Require Option/Alt key
@@ -267,13 +289,127 @@ const canvas = initializeMarkupCanvas(container, {
 // Regular clicks will work normally for other interactions
 ```
 
+### Custom Keyboard Controls
+
+For applications with existing keyboard shortcut systems, you can disable built-in keyboard controls and implement your own:
+
+```javascript
+const canvas = createMarkupCanvas(container, {
+  enableKeyboardControls: false, // Disable built-in keyboard controls
+  contentWidth: 2000,
+  contentHeight: 2000,
+});
+
+// Implement your own keyboard handler
+document.addEventListener("keydown", (event) => {
+  if (document.activeElement !== canvas.container) return;
+
+  const fastPan = event.shiftKey;
+  const panDistance = fastPan ? 150 : 50;
+  const zoomFactor = fastPan ? 0.2 : 0.1;
+
+  switch (event.key.toLowerCase()) {
+    case "w":
+      canvas.panUp(panDistance);
+      event.preventDefault();
+      break;
+    case "s":
+      canvas.panDown(panDistance);
+      event.preventDefault();
+      break;
+    case "a":
+      canvas.panLeft(panDistance);
+      event.preventDefault();
+      break;
+    case "d":
+      canvas.panRight(panDistance);
+      event.preventDefault();
+      break;
+    case "q":
+      canvas.zoomOut(zoomFactor);
+      event.preventDefault();
+      break;
+    case "e":
+      canvas.zoomIn(zoomFactor);
+      event.preventDefault();
+      break;
+    case "r":
+      canvas.resetZoom(0);
+      event.preventDefault();
+      break;
+  }
+});
+```
+
+**Available Control Functions:**
+
+- `panLeft(distance)` - Pan left by specified pixels (default: 50)
+- `panRight(distance)` - Pan right by specified pixels (default: 50)
+- `panUp(distance)` - Pan up by specified pixels (default: 50)
+- `panDown(distance)` - Pan down by specified pixels (default: 50)
+- `zoomIn(factor)` - Zoom in by factor (default: 0.1 = 10%)
+- `zoomOut(factor)` - Zoom out by factor (default: 0.1 = 10%)
+- `resetZoom(duration)` - Reset to initial zoom with animation duration in ms (default: 0)
+
+### Dynamic Mouse Drag Control
+
+You can enable and disable mouse dragging at runtime, perfect for implementing custom space bar controls or mode switching:
+
+```javascript
+const canvas = createMarkupCanvas(container, {
+  enableKeyboardControls: false, // Use custom keyboard handling
+  contentWidth: 2000,
+  contentHeight: 2000,
+});
+
+// Custom space bar implementation
+let spacePressed = false;
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === " " && !spacePressed) {
+    spacePressed = true;
+    canvas.enableMouseDrag();
+    canvas.container.style.cursor = "grab";
+    event.preventDefault();
+  }
+});
+
+document.addEventListener("keyup", (event) => {
+  if (event.key === " " && spacePressed) {
+    spacePressed = false;
+    canvas.disableMouseDrag();
+    canvas.container.style.cursor = "default";
+    event.preventDefault();
+  }
+});
+
+// Check current state
+if (canvas.isMouseDragEnabled()) {
+  console.log("Mouse dragging is currently enabled");
+}
+```
+
+**Mouse Drag Control Functions:**
+
+- `enableMouseDrag()` - Enable mouse dragging functionality
+- `disableMouseDrag()` - Disable mouse dragging functionality
+- `isMouseDragEnabled()` - Returns true if mouse dragging is currently enabled
+
+**Additional Utility Functions:**
+
+- `centerContent(duration)` - Center content in the canvas viewport
+- `fitToScreen(duration)` - Fit content to screen (same as zoomToFitContent)
+- `getVisibleArea()` - Get the currently visible area as `{x, y, width, height}`
+- `isPointVisible(x, y)` - Check if a specific point is currently visible
+- `scrollToPoint(x, y, duration)` - Scroll to center a specific content point
+
 ### Framework Integration
 
 #### React
 
 ```jsx
 import { useEffect, useRef } from "react";
-import { initializeMarkupCanvas } from "markup-canvas";
+import { createMarkupCanvas } from "markup-canvas";
 
 function MarkupCanvasComponent() {
   const containerRef = useRef(null);
@@ -281,7 +417,7 @@ function MarkupCanvasComponent() {
 
   useEffect(() => {
     if (containerRef.current) {
-      canvasRef.current = initializeMarkupCanvas(containerRef.current);
+      canvasRef.current = createMarkupCanvas(containerRef.current);
     }
 
     return () => {
