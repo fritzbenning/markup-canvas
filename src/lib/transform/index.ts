@@ -1,12 +1,7 @@
-/**
- * Transform application exports
- * Functions for applying transformations to DOM elements
- */
-
+export * from "./constants.js";
+export { enableHardwareAcceleration } from "./hardware-acceleration.js";
 export { applyTransform } from "./matrix-application.js";
 export {
-  enableSmoothTransitions,
   disableSmoothTransitions,
+  enableSmoothTransitions,
 } from "./transitions.js";
-export { enableHardwareAcceleration } from "./hardware-acceleration.js";
-export * from "./constants.js";

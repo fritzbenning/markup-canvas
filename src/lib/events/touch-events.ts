@@ -1,24 +1,16 @@
-/**
- * Touch events functionality for mobile support
- */
-
+import type { EventCanvas as Canvas, TouchEventsOptions, TouchState, Transform } from "../../types/index.js";
 import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
 import { disableSmoothTransitions } from "../transform/index.js";
-import type { EventCanvas as Canvas, TouchEventsOptions, TouchState, Transform } from "../../types/index.js";
 import { DEFAULT_TOUCH_CONFIG } from "./constants.js";
 
-/**
- * Calculates distance between two touch points
- */
+// Calculates distance between two touch points
 function getTouchDistance(touch1: Touch, touch2: Touch): number {
   const dx = touch1.clientX - touch2.clientX;
   const dy = touch1.clientY - touch2.clientY;
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-/**
- * Calculates center point between two touches
- */
+// Calculates center point between two touches
 function getTouchCenter(touch1: Touch, touch2: Touch): { x: number; y: number } {
   return {
     x: (touch1.clientX + touch2.clientX) / 2,
@@ -26,9 +18,7 @@ function getTouchCenter(touch1: Touch, touch2: Touch): { x: number; y: number } 
   };
 }
 
-/**
- * Sets up basic touch events for mobile support
- */
+// Sets up basic touch events for mobile support
 export function setupTouchEvents(canvas: Canvas, options: TouchEventsOptions = {}): () => void {
   const config: Required<TouchEventsOptions> = {
     ...DEFAULT_TOUCH_CONFIG,

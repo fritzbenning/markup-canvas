@@ -1,15 +1,8 @@
-/**
- * Canvas Bounds
- * Functions for calculating canvas bounds and dimensions
- */
-
-import { calculateMatrix } from "../matrix/matrix-calculation.js";
-import { canvasToContent } from "../matrix/coordinate-conversion.js";
 import type { BaseCanvas, CanvasBounds } from "../../types/index.js";
+import { canvasToContent } from "../matrix/coordinate-conversion.js";
+import { calculateMatrix } from "../matrix/matrix-calculation.js";
 
-/**
- * Gets the current bounds and dimensions of a canvas
- */
+// Gets the current bounds and dimensions of a canvas
 export function getCanvasBounds(canvas: BaseCanvas): CanvasBounds {
   // Validate canvas
   if (!canvas?.container) {
@@ -88,9 +81,7 @@ export function getCanvasBounds(canvas: BaseCanvas): CanvasBounds {
   }
 }
 
-/**
- * Creates an empty bounds object for error cases
- */
+// Creates an empty bounds object for error cases
 function createEmptyBounds(): CanvasBounds {
   return {
     width: 0,
@@ -112,9 +103,7 @@ function createEmptyBounds(): CanvasBounds {
   };
 }
 
-/**
- * Calculates the visible area in content coordinates
- */
+// Calculates the visible area in content coordinates
 function calculateVisibleArea(
   canvasWidth: number,
   canvasHeight: number,

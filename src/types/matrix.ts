@@ -1,7 +1,3 @@
-/**
- * Matrix calculation type definitions
- */
-
 export interface Point {
   x: number;
   y: number;

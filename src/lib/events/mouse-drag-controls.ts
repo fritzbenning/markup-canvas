@@ -1,14 +1,8 @@
-/**
- * Mouse drag functionality with enable/disable controls
- */
-
-import { disableSmoothTransitions, enableSmoothTransitions } from "../transform/index.js";
 import type { EventCanvas as Canvas, MouseDragOptions, Transform } from "../../types/index.js";
-import { DEFAULT_MOUSE_DRAG_CONFIG, CLICK_THRESHOLDS } from "./constants.js";
+import { disableSmoothTransitions, enableSmoothTransitions } from "../transform/index.js";
+import { CLICK_THRESHOLDS, DEFAULT_MOUSE_DRAG_CONFIG } from "./constants.js";
 
-/**
- * Sets up mouse drag functionality with enable/disable controls
- */
+// Sets up mouse drag functionality with enable/disable controls
 export function setupMouseDragWithControls(
   canvas: Canvas,
   options: MouseDragOptions = {},

@@ -1,17 +1,11 @@
-/**
- * Wheel zoom functionality for canvas
- */
-
+import type { EventCanvas as Canvas, Transform, WheelZoomOptions } from "../../types/index.js";
 import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
 import { disableSmoothTransitions, enableSmoothTransitions } from "../transform/index.js";
-import type { EventCanvas as Canvas, WheelZoomOptions, Transform } from "../../types/index.js";
-import { DEFAULT_WHEEL_ZOOM_CONFIG, TRACKPAD_THRESHOLDS } from "./constants.js";
 import { getAdaptiveZoomSpeed } from "./adaptive-speed.js";
+import { DEFAULT_WHEEL_ZOOM_CONFIG, TRACKPAD_THRESHOLDS } from "./constants.js";
 import { detectTrackpadGesture } from "./gesture-detection.js";
 
-/**
- * Handles trackpad pan gestures
- */
+// Handles trackpad pan gestures
 function handleTrackpadPan(event: WheelEvent, canvas: Canvas): boolean {
   if (!event || !canvas?.updateTransform) {
     return false;
@@ -44,9 +38,7 @@ function handleTrackpadPan(event: WheelEvent, canvas: Canvas): boolean {
   }
 }
 
-/**
- * Handles wheel events for zooming
- */
+// Handles wheel events for zooming
 function handleWheel(event: WheelEvent, canvas: Canvas, config: Required<WheelZoomOptions>): boolean {
   // Validate inputs
   if (!event || typeof event.deltaY !== "number") {
@@ -150,9 +142,7 @@ function handleWheel(event: WheelEvent, canvas: Canvas, config: Required<WheelZo
   }
 }
 
-/**
- * Sets up wheel zoom functionality for a canvas
- */
+// Sets up wheel zoom functionality for a canvas
 export function setupWheelZoom(canvas: Canvas, options: WheelZoomOptions = {}): () => void {
   const config: Required<WheelZoomOptions> = {
     ...DEFAULT_WHEEL_ZOOM_CONFIG,

@@ -1,13 +1,6 @@
-/**
- * Container Setup
- * Functions for setting up the canvas container element
- */
-
 import { CSS_CLASSES } from "./constants.js";
 
-/**
- * Sets up the canvas container with proper styles and attributes
- */
+// Sets up the canvas container with proper styles and attributes
 export function setupCanvasContainer(container: HTMLElement): void {
   // Set up canvas container styles - preserve existing position and dimensions
   const currentPosition = getComputedStyle(container).position;
@@ -31,9 +24,7 @@ export function setupCanvasContainer(container: HTMLElement): void {
   }
 }
 
-/**
- * Ensures the container has proper dimensions set
- */
+// Ensures the container has proper dimensions set
 function ensureContainerDimensions(container: HTMLElement): void {
   const containerRect = container.getBoundingClientRect();
   const computedStyle = getComputedStyle(container);

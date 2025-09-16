@@ -1,8 +1,3 @@
-/**
- * Canvas Constants
- * Shared constants used across canvas functionality
- */
-
 // Default canvas dimensions
 export const DEFAULT_CANVAS_WIDTH = 8000;
 export const DEFAULT_CANVAS_HEIGHT = 8000;

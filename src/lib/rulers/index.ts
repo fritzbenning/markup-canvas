@@ -1,17 +1,10 @@
-/**
- * Dynamic Ruler System
- * Creates horizontal and vertical rulers that show canvas dimensions and scale
- */
-
 import type { RulerCanvas as Canvas, RulerOptions, RulerSystem } from "../../types/index.js";
 import { DEFAULT_RULER_CONFIG, RULER_SIZE } from "./constants.js";
 import { createRulerElements, type RulerElements } from "./ruler-elements.js";
 import { updateRulers } from "./ruler-updates.js";
 import { setupEventListeners } from "./event-listeners.js";
 
-/**
- * Creates dynamic rulers for a zoomable canvas
- */
+// Creates dynamic rulers for a zoomable canvas
 export function createRulers(canvas: Canvas, options: RulerOptions = {}): RulerSystem | null {
   if (!canvas?.container) {
     console.error("Invalid canvas provided to createRulers");

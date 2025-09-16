@@ -1,7 +1,3 @@
-/**
- * Canvas-related type definitions
- */
-
 export interface Transform {
   scale: number;
   translateX: number;

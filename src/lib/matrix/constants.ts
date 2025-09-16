@@ -1,8 +1,3 @@
-/**
- * Matrix Constants
- * Shared constants used across matrix functionality
- */
-
 // Zoom bounds
 export const MIN_ZOOM = 0.05; // 5%
 export const MAX_ZOOM = 4.0; // 400%

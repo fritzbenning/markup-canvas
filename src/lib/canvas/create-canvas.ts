@@ -1,19 +1,12 @@
-/**
- * Canvas Creation
- * Main function for creating and initializing canvases
- */
-
+import type { BaseCanvas, CanvasOptions, Transform } from "../../types/index.js";
 import { calculateMatrix } from "../matrix/matrix-calculation.js";
 import { applyTransform, enableHardwareAcceleration } from "../transform/index.js";
-import type { BaseCanvas, CanvasOptions, Transform } from "../../types/index.js";
-import { createCanvasConfig } from "./config.js";
-import { setupCanvasContainer } from "./setup-container.js";
-import { createCanvasLayers } from "./create-layers.js";
 import { createCanvasMethods } from "./canvas-methods.js";
+import { createCanvasConfig } from "./config.js";
+import { createCanvasLayers } from "./create-layers.js";
+import { setupCanvasContainer } from "./setup-container.js";
 
-/**
- * Creates and initializes a canvas with the required DOM structure
- */
+// Creates and initializes a canvas with the required DOM structure
 export function createCanvas(container: HTMLElement, options: CanvasOptions = {}): BaseCanvas | null {
   // Validate container
   if (!container?.appendChild) {

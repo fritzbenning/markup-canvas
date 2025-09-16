@@ -1,12 +1,6 @@
-/**
- * Grid overlay functionality
- */
-
 import { GRID_SETTINGS } from "./constants.js";
 
-/**
- * Update grid overlay based on current transform
- */
+// Update grid overlay based on current transform
 export function updateGrid(
   gridOverlay: HTMLElement,
   scale: number,

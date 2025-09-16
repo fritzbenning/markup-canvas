@@ -1,13 +1,7 @@
-/**
- * Gesture detection for trackpad and mouse wheel events
- */
-
 import type { GestureInfo } from "../../types/index.js";
 import { GESTURE_DETECTION_WEIGHTS, TRACKPAD_THRESHOLDS } from "./constants.js";
 
-/**
- * Detects trackpad gestures vs mouse wheel events
- */
+// Detects trackpad gestures vs mouse wheel events
 export function detectTrackpadGesture(event: WheelEvent): GestureInfo {
   const result: GestureInfo = {
     isTrackpad: false,

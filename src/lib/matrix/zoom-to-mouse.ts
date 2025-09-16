@@ -1,8 +1,3 @@
-/**
- * Zoom to Mouse
- * Functions for calculating zoom transformations that keep content under the mouse cursor
- */
-
 import type { Transform } from "../../types/index.js";
 import { calculateMatrix } from "./matrix-calculation.js";
 import { clampZoom } from "./zoom-clamping.js";
@@ -14,9 +9,7 @@ import {
   DEFAULT_TRANSLATE_Y,
 } from "./constants.js";
 
-/**
- * Calculates zoom-to-mouse transformation
- */
+// Calculates zoom-to-mouse transformation
 export function getZoomToMouseTransform(
   mouseX: number,
   mouseY: number,

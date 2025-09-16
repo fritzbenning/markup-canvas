@@ -1,7 +1,3 @@
-/**
- * Ruler system type definitions
- */
-
 import type { CanvasBounds, Transform } from "./canvas.js";
 
 export interface RulerOptions {

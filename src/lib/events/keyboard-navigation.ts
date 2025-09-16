@@ -1,15 +1,9 @@
-/**
- * Keyboard navigation functionality for canvas
- */
-
-import { clampZoom } from "../matrix/zoom-clamping.js";
 import type { EventCanvas as Canvas, KeyboardNavigationOptions, Transform } from "../../types/index.js";
-import { DEFAULT_KEYBOARD_CONFIG } from "./constants.js";
+import { clampZoom } from "../matrix/zoom-clamping.js";
 import { getAdaptiveZoomSpeed } from "./adaptive-speed.js";
+import { DEFAULT_KEYBOARD_CONFIG } from "./constants.js";
 
-/**
- * Sets up keyboard navigation for a canvas
- */
+// Sets up keyboard navigation for a canvas
 export function setupKeyboardNavigation(canvas: Canvas, options: KeyboardNavigationOptions = {}): () => void {
   const config: Required<KeyboardNavigationOptions> = {
     ...DEFAULT_KEYBOARD_CONFIG,

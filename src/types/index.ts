@@ -1,8 +1,3 @@
-/**
- * Main types export file
- * Re-exports all types from individual type files
- */
-
 // Canvas types
 export type {
   BaseCanvas,

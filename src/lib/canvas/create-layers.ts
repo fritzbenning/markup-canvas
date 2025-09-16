@@ -1,8 +1,3 @@
-/**
- * Layer Creation
- * Functions for creating and managing canvas layers
- */
-
 import type { CanvasOptions } from "../../types/index.js";
 import { CSS_CLASSES, SMOOTH_TRANSITION } from "./constants.js";
 
@@ -11,9 +6,7 @@ export interface CanvasLayers {
   contentLayer: HTMLElement;
 }
 
-/**
- * Creates the transform and content layers for the canvas
- */
+// Creates the transform and content layers for the canvas
 export function createCanvasLayers(container: HTMLElement, config: Required<CanvasOptions>): CanvasLayers {
   // Store existing content before creating new structure
   const existingContent = Array.from(container.children);
@@ -46,9 +39,7 @@ export function createCanvasLayers(container: HTMLElement, config: Required<Canv
   return { transformLayer, contentLayer };
 }
 
-/**
- * Sets up the transform layer with proper styles and dimensions
- */
+// Sets up the transform layer with proper styles and dimensions
 function setupTransformLayer(transformLayer: HTMLElement, config: Required<CanvasOptions>): void {
   transformLayer.style.position = "absolute";
 
@@ -67,9 +58,7 @@ function setupTransformLayer(transformLayer: HTMLElement, config: Required<Canva
   transformLayer.style.transition = SMOOTH_TRANSITION;
 }
 
-/**
- * Sets up the content layer with proper styles
- */
+// Sets up the content layer with proper styles
 function setupContentLayer(contentLayer: HTMLElement): void {
   contentLayer.style.position = "relative";
   contentLayer.style.width = "100%";
@@ -77,9 +66,7 @@ function setupContentLayer(contentLayer: HTMLElement): void {
   contentLayer.style.pointerEvents = "auto";
 }
 
-/**
- * Moves existing content into the content layer
- */
+// Moves existing content into the content layer
 function moveExistingContent(
   existingContent: Element[],
   contentLayer: HTMLElement,

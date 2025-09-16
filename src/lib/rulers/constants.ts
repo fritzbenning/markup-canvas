@@ -1,7 +1,3 @@
-/**
- * Constants and default configuration for the ruler system
- */
-
 import type { RulerOptions } from "../../types/index.js";
 
 // Static ruler size - always 24px

@@ -1,14 +1,7 @@
-/**
- * Content Management
- * Functions for adding and managing content in the canvas
- */
-
-import type { BaseCanvas, AddContentOptions } from "../../types/index.js";
+import type { AddContentOptions, BaseCanvas } from "../../types/index.js";
 import { getCanvasBounds } from "./bounds.js";
 
-/**
- * Adds an HTML element to the canvas's content layer
- */
+// Adds an HTML element to the canvas's content layer
 export function addContentToCanvas(
   canvas: BaseCanvas,
   element: HTMLElement,
@@ -57,9 +50,7 @@ export function addContentToCanvas(
   }
 }
 
-/**
- * Sets up positioning for an element
- */
+// Sets up positioning for an element
 function setupElementPositioning(element: HTMLElement, config: Required<AddContentOptions>): void {
   element.style.position = "absolute";
 
@@ -72,9 +63,7 @@ function setupElementPositioning(element: HTMLElement, config: Required<AddConte
   }
 }
 
-/**
- * Validates that element is positioned within content bounds
- */
+// Validates that element is positioned within content bounds
 function validateElementBounds(canvas: BaseCanvas, config: Required<AddContentOptions>): void {
   if (typeof config.x === "number" || typeof config.y === "number") {
     const bounds = getCanvasBounds(canvas);

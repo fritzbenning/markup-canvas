@@ -1,10 +1,4 @@
-/**
- * Hardware acceleration utilities
- */
-
-/**
- * Enables hardware acceleration hints on an element
- */
+// Enables hardware acceleration hints on an element
 export function enableHardwareAcceleration(element: HTMLElement): boolean {
   try {
     // Set CSS properties for hardware acceleration

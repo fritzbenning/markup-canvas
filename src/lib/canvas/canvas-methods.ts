@@ -1,21 +1,14 @@
-/**
- * Canvas Methods
- * All the methods that get attached to a canvas instance
- */
-
+import type { AddContentOptions, BaseCanvas, Transform } from "../../types/index.js";
+import { canvasToContent } from "../matrix/coordinate-conversion.js";
 import { calculateMatrix } from "../matrix/matrix-calculation.js";
 import { clampZoom } from "../matrix/zoom-clamping.js";
 import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
-import { canvasToContent } from "../matrix/coordinate-conversion.js";
 import { applyTransform, disableSmoothTransitions, enableSmoothTransitions } from "../transform/index.js";
-import type { Transform, BaseCanvas, AddContentOptions } from "../../types/index.js";
 import { getCanvasBounds } from "./bounds.js";
-import { addContentToCanvas } from "./content.js";
 import { DEFAULT_ANIMATION_DURATION, TRANSITION_CLEANUP_DELAY, ZOOM_FIT_PADDING } from "./constants.js";
+import { addContentToCanvas } from "./content.js";
 
-/**
- * Creates all the methods that will be attached to a canvas instance
- */
+// Creates all the methods that will be attached to a canvas instance
 export function createCanvasMethods() {
   return {
     // Utility methods

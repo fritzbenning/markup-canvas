@@ -1,12 +1,6 @@
-/**
- * Event listener setup and management for rulers
- */
-
 import type { Transform, RulerCanvas as Canvas } from "../../types/index.js";
 
-/**
- * Set up event listeners for ruler updates
- */
+// Set up event listeners for ruler updates
 export function setupEventListeners(canvas: Canvas, updateCallback: () => void): () => void {
   // Listen for canvas transform updates
   const originalUpdateTransform = canvas.updateTransform;

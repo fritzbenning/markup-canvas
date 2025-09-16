@@ -1,14 +1,7 @@
-/**
- * Zoom Clamping
- * Functions for constraining zoom levels within bounds
- */
-
 import type { ZoomBoundaryResult, ZoomBoundaryOptions } from "../../types/index.js";
 import { MIN_ZOOM, MAX_ZOOM, DEFAULT_MIN_ZOOM, DEFAULT_MAX_ZOOM, DEFAULT_SCALE } from "./constants.js";
 
-/**
- * Clamps zoom level to enforce 5%-400% bounds
- */
+// Clamps zoom level to enforce 5%-400% bounds
 export function clampZoom(scale: number): number {
   if (typeof scale !== "number" || !Number.isFinite(scale)) {
     return DEFAULT_SCALE; // Default to 100% if invalid
@@ -17,9 +10,7 @@ export function clampZoom(scale: number): number {
   return Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, scale));
 }
 
-/**
- * Enhanced zoom boundary management with user feedback
- */
+// Enhanced zoom boundary management with user feedback
 export function clampZoomWithFeedback(scale: number, options: ZoomBoundaryOptions = {}): ZoomBoundaryResult {
   const config: Required<ZoomBoundaryOptions> = {
     minZoom: DEFAULT_MIN_ZOOM,

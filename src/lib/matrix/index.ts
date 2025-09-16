@@ -1,8 +1,3 @@
-/**
- * Matrix Module
- * Modular matrix functionality with clean separation of concerns
- */
-
 // Matrix calculation functions
 export { calculateMatrix, createIdentityMatrix } from "./matrix-calculation.js";
 

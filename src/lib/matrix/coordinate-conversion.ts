@@ -1,13 +1,6 @@
-/**
- * Coordinate Conversion
- * Functions for converting between canvas and content coordinate systems
- */
-
 import type { Point } from "../../types/index.js";
 
-/**
- * Converts canvas coordinates to content coordinates
- */
+// Converts canvas coordinates to content coordinates
 export function canvasToContent(canvasX: number, canvasY: number, matrix: DOMMatrix): Point {
   // Validate inputs
   if (typeof canvasX !== "number" || !Number.isFinite(canvasX)) canvasX = 0;
@@ -33,9 +26,7 @@ export function canvasToContent(canvasX: number, canvasY: number, matrix: DOMMat
   }
 }
 
-/**
- * Converts content coordinates to canvas coordinates
- */
+// Converts content coordinates to canvas coordinates
 export function contentToCanvas(contentX: number, contentY: number, matrix: DOMMatrix): Point {
   // Validate inputs
   if (typeof contentX !== "number" || !Number.isFinite(contentX)) contentX = 0;

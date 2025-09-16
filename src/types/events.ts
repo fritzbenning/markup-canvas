@@ -1,8 +1,4 @@
-/**
- * Event handling type definitions
- */
-
-import type { Transform, CanvasBounds } from "./canvas.js";
+import type { CanvasBounds, Transform } from "./canvas.js";
 
 export interface WheelZoomOptions {
   zoomSpeed?: number;

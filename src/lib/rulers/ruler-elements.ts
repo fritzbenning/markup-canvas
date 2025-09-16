@@ -1,7 +1,3 @@
-/**
- * DOM element creation and styling for rulers
- */
-
 import type { RulerOptions } from "../../types/index.js";
 import { RULER_Z_INDEX, RULER_SIZE } from "./constants.js";
 
@@ -12,9 +8,7 @@ export interface RulerElements {
   gridOverlay?: HTMLElement;
 }
 
-/**
- * Creates all ruler DOM elements
- */
+// Creates all ruler DOM elements
 export function createRulerElements(container: HTMLElement, config: Required<RulerOptions>): RulerElements {
   const horizontalRuler = createHorizontalRuler(config);
   const verticalRuler = createVerticalRuler(config);

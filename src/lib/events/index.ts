@@ -1,8 +1,3 @@
-/**
- * Event handling exports
- * Core event handlers for mouse, keyboard, and touch interactions
- */
-
 export { setupWheelZoom } from "./wheel-zoom.js";
 export { setupMouseDrag } from "./mouse-drag.js";
 export { setupMouseDragWithControls } from "./mouse-drag-controls.js";

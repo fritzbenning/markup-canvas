@@ -1,8 +1,4 @@
-/**
- * Create Markup Canvas
- * Main function for creating a complete markup canvas with all event handlers
- */
-
+// Main function for creating a complete markup canvas with all event handlers
 import { createCanvas } from "./canvas/index.js";
 import {
   setupKeyboardNavigation,
@@ -17,9 +13,7 @@ import { enableSmoothTransitions, disableSmoothTransitions } from "./transform/i
 // Import types
 import type { Canvas, Transform, MarkupCanvasOptions } from "../types/index.js";
 
-/**
- * Initialize a complete markup canvas with all event handlers
- */
+// Initialize a complete markup canvas with all event handlers
 export function createMarkupCanvas(container: HTMLElement, options: MarkupCanvasOptions = {}): Canvas | null {
   if (!container) {
     console.error("Container element is required");

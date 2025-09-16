@@ -1,15 +1,9 @@
-/**
- * Ruler update logic and calculations
- */
-
 import type { RulerCanvas as Canvas, RulerOptions } from "../../types/index.js";
-import { calculateTickSpacing, createHorizontalTick, createVerticalTick } from "./tick-creation.js";
-import { updateGrid } from "./grid-overlay.js";
 import { RULER_SIZE } from "./constants.js";
+import { updateGrid } from "./grid-overlay.js";
+import { calculateTickSpacing, createHorizontalTick, createVerticalTick } from "./tick-creation.js";
 
-/**
- * Update ruler markings based on current canvas state
- */
+// Update ruler markings based on current canvas state
 export function updateRulers(
   canvas: Canvas,
   horizontalRuler: HTMLElement,
@@ -44,9 +38,7 @@ export function updateRulers(
   }
 }
 
-/**
- * Update horizontal ruler markings
- */
+// Update horizontal ruler markings
 function updateHorizontalRuler(
   ruler: HTMLElement,
   contentLeft: number,
@@ -77,9 +69,7 @@ function updateHorizontalRuler(
   }
 }
 
-/**
- * Update vertical ruler markings
- */
+// Update vertical ruler markings
 function updateVerticalRuler(
   ruler: HTMLElement,
   contentTop: number,

@@ -1,14 +1,8 @@
-/**
- * Mouse drag functionality for canvas
- */
-
 import { disableSmoothTransitions, enableSmoothTransitions } from "../transform/index.js";
 import type { EventCanvas as Canvas, MouseDragOptions, Transform } from "../../types/index.js";
 import { DEFAULT_MOUSE_DRAG_CONFIG, CLICK_THRESHOLDS } from "./constants.js";
 
-/**
- * Sets up mouse drag functionality for a canvas
- */
+// Sets up mouse drag functionality for a canvas
 export function setupMouseDrag(canvas: Canvas, options: MouseDragOptions = {}): () => void {
   const config: Required<MouseDragOptions> = {
     ...DEFAULT_MOUSE_DRAG_CONFIG,

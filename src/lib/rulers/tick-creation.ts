@@ -1,13 +1,7 @@
-/**
- * Tick mark and label creation utilities
- */
-
 import type { RulerOptions } from "../../types/index.js";
 import { TICK_SETTINGS } from "./constants.js";
 
-/**
- * Calculate appropriate tick spacing based on zoom level
- */
+// Calculate appropriate tick spacing based on zoom level
 export function calculateTickSpacing(contentSize: number, canvasSize: number): number {
   const targetTicks = Math.max(5, Math.min(20, canvasSize / 50));
   const rawSpacing = contentSize / targetTicks;
@@ -25,9 +19,7 @@ export function calculateTickSpacing(contentSize: number, canvasSize: number): n
   return niceSpacing * magnitude;
 }
 
-/**
- * Create horizontal tick mark and label
- */
+// Create horizontal tick mark and label
 export function createHorizontalTick(
   ruler: HTMLElement,
   position: number,
@@ -67,9 +59,7 @@ export function createHorizontalTick(
   }
 }
 
-/**
- * Create vertical tick mark and label
- */
+// Create vertical tick mark and label
 export function createVerticalTick(
   ruler: HTMLElement,
   position: number,

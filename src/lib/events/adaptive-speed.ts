@@ -1,13 +1,7 @@
-/**
- * Adaptive speed calculations for zoom and pan operations
- */
-
 import type { EventCanvas as Canvas } from "../../types/index.js";
-import { REFERENCE_DISPLAY_AREA, ADAPTIVE_ZOOM_CONSTANTS } from "./constants.js";
+import { ADAPTIVE_ZOOM_CONSTANTS, REFERENCE_DISPLAY_AREA } from "./constants.js";
 
-/**
- * Gets display-size adaptive zoom speed based on canvas dimensions
- */
+// Gets display-size adaptive zoom speed based on canvas dimensions
 export function getAdaptiveZoomSpeed(canvas: Canvas, baseSpeed: number): number {
   if (!canvas?.getBounds) {
     return baseSpeed;
