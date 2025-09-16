@@ -16,15 +16,14 @@ export const DEFAULT_ANIMATION_DURATION = 300;
 export const TRANSITION_CLEANUP_DELAY = 50;
 
 // CSS transition values
-export const SMOOTH_TRANSITION =
-	"transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+export const SMOOTH_TRANSITION = "transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
 
 // Zoom to fit padding factor
 export const ZOOM_FIT_PADDING = 0.9;
 
 // CSS class names
 export const CSS_CLASSES = {
-	CANVAS_CONTAINER: "canvas-container",
-	TRANSFORM_LAYER: "transform-layer",
-	CONTENT_LAYER: "content-layer",
+  CANVAS_CONTAINER: "canvas-container",
+  TRANSFORM_LAYER: "transform-layer",
+  CONTENT_LAYER: "content-layer",
 } as const;

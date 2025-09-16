@@ -5,8 +5,8 @@
 
 export { applyTransform } from "./matrix-application.js";
 export {
-	enableSmoothTransitions,
-	disableSmoothTransitions,
+  enableSmoothTransitions,
+  disableSmoothTransitions,
 } from "./transitions.js";
 export { enableHardwareAcceleration } from "./hardware-acceleration.js";
 export * from "./constants.js";

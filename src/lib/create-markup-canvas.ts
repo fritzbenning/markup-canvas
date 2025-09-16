@@ -12,10 +12,7 @@ import {
 } from "./events/index.js";
 import { clampZoom } from "./matrix/zoom-clamping.js";
 import { createRulers } from "./rulers/index.js";
-import {
-  enableSmoothTransitions,
-  disableSmoothTransitions,
-} from "./transform/index.js";
+import { enableSmoothTransitions, disableSmoothTransitions } from "./transform/index.js";
 
 // Import types
 import type { Canvas, Transform, MarkupCanvasOptions } from "../types/index.js";
@@ -23,10 +20,7 @@ import type { Canvas, Transform, MarkupCanvasOptions } from "../types/index.js";
 /**
  * Initialize a complete markup canvas with all event handlers
  */
-export function createMarkupCanvas(
-  container: HTMLElement,
-  options: MarkupCanvasOptions = {},
-): Canvas | null {
+export function createMarkupCanvas(container: HTMLElement, options: MarkupCanvasOptions = {}): Canvas | null {
   if (!container) {
     console.error("Container element is required");
     return null;
@@ -45,39 +39,22 @@ export function createMarkupCanvas(
   try {
     // Wheel zoom
     const wheelCleanup = setupWheelZoom(canvas, {
-      smoothTransition:
-        options.smoothTransition !== undefined
-          ? options.smoothTransition
-          : true,
+      smoothTransition: options.smoothTransition !== undefined ? options.smoothTransition : true,
       zoomSpeed: options.zoomSpeed !== undefined ? options.zoomSpeed : 0.4,
-      fineZoomSpeed:
-        options.fineZoomSpeed !== undefined ? options.fineZoomSpeed : 0.2,
+      fineZoomSpeed: options.fineZoomSpeed !== undefined ? options.fineZoomSpeed : 0.2,
     });
     cleanupFunctions.push(wheelCleanup);
 
     // Mouse drag with control functions
     const dragSetup = setupMouseDragWithControls(canvas, {
-      enableLeftDrag:
-        options.enableLeftDrag !== undefined ? options.enableLeftDrag : true,
-      enableMiddleDrag:
-        options.enableMiddleDrag !== undefined
-          ? options.enableMiddleDrag
-          : true,
+      enableLeftDrag: options.enableLeftDrag !== undefined ? options.enableLeftDrag : true,
+      enableMiddleDrag: options.enableMiddleDrag !== undefined ? options.enableMiddleDrag : true,
       requireSpaceForMouseDrag: options.requireSpaceForMouseDrag || false,
-      enableClickToZoom:
-        options.enableClickToZoom !== undefined
-          ? options.enableClickToZoom
-          : true,
-      clickZoomLevel:
-        options.clickZoomLevel !== undefined ? options.clickZoomLevel : 1.0,
-      clickZoomDuration:
-        options.clickZoomDuration !== undefined
-          ? options.clickZoomDuration
-          : 300,
+      enableClickToZoom: options.enableClickToZoom !== undefined ? options.enableClickToZoom : true,
+      clickZoomLevel: options.clickZoomLevel !== undefined ? options.clickZoomLevel : 1.0,
+      clickZoomDuration: options.clickZoomDuration !== undefined ? options.clickZoomDuration : 300,
       requireOptionForClickZoom:
-        options.requireOptionForClickZoom !== undefined
-          ? options.requireOptionForClickZoom
-          : false,
+        options.requireOptionForClickZoom !== undefined ? options.requireOptionForClickZoom : false,
     });
     cleanupFunctions.push(dragSetup.cleanup);
 
@@ -252,10 +229,8 @@ export function createMarkupCanvas(
     // Additional utility functions
     _canvas.centerContent = (duration: number = 300) => {
       const bounds = canvas.getBounds();
-      const centerX =
-        (bounds.width - bounds.contentWidth * canvas.transform.scale) / 2;
-      const centerY =
-        (bounds.height - bounds.contentHeight * canvas.transform.scale) / 2;
+      const centerX = (bounds.width - bounds.contentWidth * canvas.transform.scale) / 2;
+      const centerY = (bounds.height - bounds.contentHeight * canvas.transform.scale) / 2;
 
       if (duration > 0) {
         enableSmoothTransitions(canvas.transformLayer, duration / 1000);

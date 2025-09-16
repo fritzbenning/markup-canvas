@@ -1,184 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤿 Markup Canvas</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <div class="container" id="canvas">
-        <!-- Sample content items -->
-        <div class="content-item large" style="top: 200px; left: 300px">
-          <h3>🎯 Interactive Element</h3>
-          <p>
-            This is a large interactive element. You can zoom in to see more
-            details or pan around to explore the entire canvas.
-          </p>
-        </div>
+      <!-- Sample content items -->
+      <div class="content-item large" style="top: 200px; left: 300px">
+        <h3>🎯 Interactive Element</h3>
+        <p>
+          This is a large interactive element. You can zoom in to see more details or pan around to explore
+          the entire canvas.
+        </p>
+      </div>
 
-        <div
-          class="content-item medium interactive"
-          style="top: 500px; left: 800px"
+      <div class="content-item medium interactive" style="top: 500px; left: 800px">
+        <h3>🚀 Performance Test</h3>
+        <p>This container maintains 60+ FPS during all interactions using hardware-accelerated transforms.</p>
+      </div>
+
+      <div class="content-item small" style="top: 800px; left: 1200px">
+        <h3>📱 Touch Support</h3>
+        <p>Supports pinch-to-zoom and touch panning on mobile devices.</p>
+      </div>
+
+      <div class="content-item medium" style="top: 1200px; left: 500px">
+        <h3>⌨️ Keyboard Navigation</h3>
+        <p>
+          Use arrow keys to pan, +/- to zoom, 0 to reset, G to toggle grid, and R to toggle rulers. Try Ctrl+A
+          to fit content!
+        </p>
+      </div>
+
+      <div class="content-item large interactive" style="top: 1600px; left: 1800px">
+        <h3>🎨 CSS Transforms</h3>
+        <p>Uses modern CSS matrix3d transforms for hardware acceleration and smooth animations.</p>
+      </div>
+
+      <div class="content-item small" style="top: 2000px; left: 2200px">
+        <h3>🔧 Validation</h3>
+        <p>Comprehensive error handling and matrix validation ensure stability.</p>
+      </div>
+
+      <div class="content-item medium" style="top: 2400px; left: 1000px">
+        <h3>🌐 Cross-Browser</h3>
+        <p>Works across modern browsers with automatic fallback detection.</p>
+      </div>
+
+      <div class="content-item large" style="top: 2800px; left: 2800px">
+        <h3>📊 Performance Monitor</h3>
+        <p>Real-time performance monitoring ensures smooth operation.</p>
+      </div>
+
+      <div class="content-item small interactive" style="top: 3200px; left: 600px">
+        <h3>🎮 Mouse Controls</h3>
+        <p>Wheel to zoom, drag to pan, double-click to reset.</p>
+      </div>
+
+      <div class="content-item medium" style="top: 3600px; left: 3200px">
+        <h3>✨ Smooth Animations</h3>
+        <p>Buttery smooth zoom and pan animations with configurable easing.</p>
+      </div>
+
+      <!-- Additional content items -->
+      <div class="content-item small interactive" style="top: 1000px; left: 1200px">
+        <h3>🎪 Mini Circus</h3>
+        <p>Small traveling circus setup (1200, 1000)</p>
+      </div>
+
+      <div class="content-item medium" style="top: 1400px; left: 2600px">
+        <h3>🏰 Castle Tower</h3>
+        <p>Medieval castle tower structure (2600, 1400)</p>
+      </div>
+
+      <div class="content-item large interactive" style="top: 1800px; left: 400px">
+        <h3>🌊 Ocean View</h3>
+        <p>Scenic ocean viewpoint with waves (400, 1800)</p>
+      </div>
+
+      <div class="content-item small" style="top: 2200px; left: 3400px">
+        <h3>🎨 Art Studio</h3>
+        <p>Creative art studio workspace (3400, 2200)</p>
+      </div>
+
+      <div class="content-item medium interactive" style="top: 2600px; left: 1800px">
+        <h3>🎵 Music Hall</h3>
+        <p>Concert hall with acoustic design (1800, 2600)</p>
+      </div>
+
+      <div class="content-item large" style="top: 3000px; left: 200px">
+        <h3>🏞️ Nature Park</h3>
+        <p>Beautiful nature park with trails (200, 3000)</p>
+      </div>
+
+      <div class="image-item medium" style="top: 1100px; left: 2800px">
+        <img
+          src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=3000&h=1800&fit=crop&crop=center&q=100"
+          alt="Forest path"
         >
-          <h3>🚀 Performance Test</h3>
-          <p>
-            This container maintains 60+ FPS during all interactions using
-            hardware-accelerated transforms.
-          </p>
-        </div>
+        <div class="image-caption">Enchanted Forest Trail</div>
+      </div>
 
-        <div class="content-item small" style="top: 800px; left: 1200px">
-          <h3>📱 Touch Support</h3>
-          <p>Supports pinch-to-zoom and touch panning on mobile devices.</p>
-        </div>
-
-        <div class="content-item medium" style="top: 1200px; left: 500px">
-          <h3>⌨️ Keyboard Navigation</h3>
-          <p>
-            Use arrow keys to pan, +/- to zoom, 0 to reset, G to toggle grid, and R to toggle rulers.
-            Try Ctrl+A to fit content!
-          </p>
-        </div>
-
-        <div
-          class="content-item large interactive"
-          style="top: 1600px; left: 1800px"
+      <div class="image-item small" style="top: 1800px; left: 500px">
+        <img
+          src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=2000&h=1350&fit=crop&crop=center&q=100"
+          alt="Lake reflection"
         >
-          <h3>🎨 CSS Transforms</h3>
-          <p>
-            Uses modern CSS matrix3d transforms for hardware acceleration and
-            smooth animations.
-          </p>
-        </div>
+        <div class="image-caption">Serene Lake</div>
+      </div>
 
-        <div class="content-item small" style="top: 2000px; left: 2200px">
-          <h3>🔧 Validation</h3>
-          <p>
-            Comprehensive error handling and matrix validation ensure stability.
-          </p>
-        </div>
-
-        <div class="content-item medium" style="top: 2400px; left: 1000px">
-          <h3>🌐 Cross-Browser</h3>
-          <p>Works across modern browsers with automatic fallback detection.</p>
-        </div>
-
-        <div class="content-item large" style="top: 2800px; left: 2800px">
-          <h3>📊 Performance Monitor</h3>
-          <p>Real-time performance monitoring ensures smooth operation.</p>
-        </div>
-
-        <div
-          class="content-item small interactive"
-          style="top: 3200px; left: 600px"
+      <div class="image-item portrait" style="top: 2200px; left: 3600px">
+        <img
+          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2100&h=3000&fit=crop&crop=center&q=100"
+          alt="Waterfall"
         >
-          <h3>🎮 Mouse Controls</h3>
-          <p>Wheel to zoom, drag to pan, double-click to reset.</p>
-        </div>
+        <div class="image-caption">Cascading Waterfall</div>
+      </div>
 
-        <div class="content-item medium" style="top: 3600px; left: 3200px">
-          <h3>✨ Smooth Animations</h3>
-          <p>
-            Buttery smooth zoom and pan animations with configurable easing.
-          </p>
-        </div>
-
-        <!-- Additional content items -->
-        <div
-          class="content-item small interactive"
-          style="top: 1000px; left: 1200px"
+      <div class="image-item large" style="top: 2800px; left: 1200px">
+        <img
+          src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=2400&h=1800&fit=crop&crop=center&q=100"
+          alt="Sunset beach"
         >
-          <h3>🎪 Mini Circus</h3>
-          <p>Small traveling circus setup (1200, 1000)</p>
-        </div>
+        <div class="image-caption">Golden Beach Sunset</div>
+      </div>
 
-        <div class="content-item medium" style="top: 1400px; left: 2600px">
-          <h3>🏰 Castle Tower</h3>
-          <p>Medieval castle tower structure (2600, 1400)</p>
-        </div>
-
-        <div
-          class="content-item large interactive"
-          style="top: 1800px; left: 400px"
+      <div class="image-item medium" style="top: 600px; left: 4200px">
+        <img
+          src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=2400&h=1800&fit=crop&crop=center&q=100"
+          alt="City skyline"
         >
-          <h3>🌊 Ocean View</h3>
-          <p>Scenic ocean viewpoint with waves (400, 1800)</p>
-        </div>
+        <div class="image-caption">Modern City Skyline</div>
+      </div>
 
-        <div class="content-item small" style="top: 2200px; left: 3400px">
-          <h3>🎨 Art Studio</h3>
-          <p>Creative art studio workspace (3400, 2200)</p>
-        </div>
-
-        <div
-          class="content-item medium interactive"
-          style="top: 2600px; left: 1800px"
+      <div class="image-item small" style="top: 1400px; left: 5800px">
+        <img
+          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1800&h=1350&fit=crop&crop=center&q=100"
+          alt="Skyscrapers"
         >
-          <h3>🎵 Music Hall</h3>
-          <p>Concert hall with acoustic design (1800, 2600)</p>
-        </div>
+        <div class="image-caption">Urban Architecture</div>
+      </div>
 
-        <div class="content-item large" style="top: 3000px; left: 200px">
-          <h3>🏞️ Nature Park</h3>
-          <p>Beautiful nature park with trails (200, 3000)</p>
-        </div>
-
-        <div class="image-item medium" style="top: 1100px; left: 2800px">
-          <img
-            src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=3000&h=1800&fit=crop&crop=center&q=100"
-            alt="Forest path"
-          />
-          <div class="image-caption">Enchanted Forest Trail</div>
-        </div>
-
-        <div class="image-item small" style="top: 1800px; left: 500px">
-          <img
-            src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=2000&h=1350&fit=crop&crop=center&q=100"
-            alt="Lake reflection"
-          />
-          <div class="image-caption">Serene Lake</div>
-        </div>
-
-        <div class="image-item portrait" style="top: 2200px; left: 3600px">
-          <img
-            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2100&h=3000&fit=crop&crop=center&q=100"
-            alt="Waterfall"
-          />
-          <div class="image-caption">Cascading Waterfall</div>
-        </div>
-
-        <div class="image-item large" style="top: 2800px; left: 1200px">
-          <img
-            src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=2400&h=1800&fit=crop&crop=center&q=100"
-            alt="Sunset beach"
-          />
-          <div class="image-caption">Golden Beach Sunset</div>
-        </div>
-
-        <div class="image-item medium" style="top: 600px; left: 4200px">
-          <img
-            src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=2400&h=1800&fit=crop&crop=center&q=100"
-            alt="City skyline"
-          />
-          <div class="image-caption">Modern City Skyline</div>
-        </div>
-
-        <div class="image-item small" style="top: 1400px; left: 5800px">
-          <img
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1800&h=1350&fit=crop&crop=center&q=100"
-            alt="Skyscrapers"
-          />
-          <div class="image-caption">Urban Architecture</div>
-        </div>
-
-        <div class="image-item large" style="top: 2000px; left: 6400px">
-          <img
-            src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=2400&h=1800&fit=crop&crop=center&q=100"
-            alt="Historic building"
-          />
-          <div class="image-caption">Historic Architecture</div>
-        </div>
+      <div class="image-item large" style="top: 2000px; left: 6400px">
+        <img
+          src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=2400&h=1800&fit=crop&crop=center&q=100"
+          alt="Historic building"
+        >
+        <div class="image-caption">Historic Architecture</div>
+      </div>
     </div>
 
     <script src="../../dist/markup-canvas.umd.min.js"></script>

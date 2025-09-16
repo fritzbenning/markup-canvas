@@ -21,10 +21,10 @@ export const SCALE_CHANGE_THRESHOLD = 0.001;
 
 // Matrix array indices for DOMMatrix constructor
 export const MATRIX_INDICES = {
-	SCALE_X: 0,
-	SKEW_Y: 1,
-	SKEW_X: 4,
-	SCALE_Y: 5,
-	TRANSLATE_X: 12,
-	TRANSLATE_Y: 13,
+  SCALE_X: 0,
+  SKEW_Y: 1,
+  SKEW_X: 4,
+  SCALE_Y: 5,
+  TRANSLATE_X: 12,
+  TRANSLATE_Y: 13,
 } as const;

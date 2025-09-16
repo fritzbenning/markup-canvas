@@ -6,44 +6,41 @@ import type { RulerOptions } from "../../types/index.js";
 import { RULER_Z_INDEX, RULER_SIZE } from "./constants.js";
 
 export interface RulerElements {
-	horizontalRuler: HTMLElement;
-	verticalRuler: HTMLElement;
-	cornerBox: HTMLElement;
-	gridOverlay?: HTMLElement;
+  horizontalRuler: HTMLElement;
+  verticalRuler: HTMLElement;
+  cornerBox: HTMLElement;
+  gridOverlay?: HTMLElement;
 }
 
 /**
  * Creates all ruler DOM elements
  */
-export function createRulerElements(
-	container: HTMLElement,
-	config: Required<RulerOptions>,
-): RulerElements {
-	const horizontalRuler = createHorizontalRuler(config);
-	const verticalRuler = createVerticalRuler(config);
-	const cornerBox = createCornerBox(config);
-	const gridOverlay = config.showGrid ? createGridOverlay(config) : undefined;
+export function createRulerElements(container: HTMLElement, config: Required<RulerOptions>): RulerElements {
+  const horizontalRuler = createHorizontalRuler(config);
+  const verticalRuler = createVerticalRuler(config);
+  const cornerBox = createCornerBox(config);
+  const gridOverlay = config.showGrid ? createGridOverlay(config) : undefined;
 
-	// Add elements to container
-	container.appendChild(horizontalRuler);
-	container.appendChild(verticalRuler);
-	container.appendChild(cornerBox);
-	if (gridOverlay) {
-		container.appendChild(gridOverlay);
-	}
+  // Add elements to container
+  container.appendChild(horizontalRuler);
+  container.appendChild(verticalRuler);
+  container.appendChild(cornerBox);
+  if (gridOverlay) {
+    container.appendChild(gridOverlay);
+  }
 
-	return {
-		horizontalRuler,
-		verticalRuler,
-		cornerBox,
-		gridOverlay,
-	};
+  return {
+    horizontalRuler,
+    verticalRuler,
+    cornerBox,
+    gridOverlay,
+  };
 }
 
 function createHorizontalRuler(config: Required<RulerOptions>): HTMLElement {
-	const ruler = document.createElement("div");
-	ruler.className = "canvas-ruler horizontal-ruler";
-	ruler.style.cssText = `
+  const ruler = document.createElement("div");
+  ruler.className = "canvas-ruler horizontal-ruler";
+  ruler.style.cssText = `
 		position: absolute;
 		top: 0;
 		left: ${RULER_SIZE}px;
@@ -59,13 +56,13 @@ function createHorizontalRuler(config: Required<RulerOptions>): HTMLElement {
 		color: ${config.textColor};
 		overflow: hidden;
 	`;
-	return ruler;
+  return ruler;
 }
 
 function createVerticalRuler(config: Required<RulerOptions>): HTMLElement {
-	const ruler = document.createElement("div");
-	ruler.className = "canvas-ruler vertical-ruler";
-	ruler.style.cssText = `
+  const ruler = document.createElement("div");
+  ruler.className = "canvas-ruler vertical-ruler";
+  ruler.style.cssText = `
 		position: absolute;
 		top: ${RULER_SIZE}px;
 		left: 0;
@@ -81,13 +78,13 @@ function createVerticalRuler(config: Required<RulerOptions>): HTMLElement {
 		color: ${config.textColor};
 		overflow: hidden;
 	`;
-	return ruler;
+  return ruler;
 }
 
 function createCornerBox(config: Required<RulerOptions>): HTMLElement {
-	const corner = document.createElement("div");
-	corner.className = "canvas-ruler corner-box";
-	corner.style.cssText = `
+  const corner = document.createElement("div");
+  corner.className = "canvas-ruler corner-box";
+  corner.style.cssText = `
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -105,14 +102,14 @@ function createCornerBox(config: Required<RulerOptions>): HTMLElement {
 		color: ${config.textColor};
 		pointer-events: none;
 	`;
-	corner.textContent = config.units;
-	return corner;
+  corner.textContent = config.units;
+  return corner;
 }
 
 function createGridOverlay(config: Required<RulerOptions>): HTMLElement {
-	const grid = document.createElement("div");
-	grid.className = "canvas-ruler grid-overlay";
-	grid.style.cssText = `
+  const grid = document.createElement("div");
+  grid.className = "canvas-ruler grid-overlay";
+  grid.style.cssText = `
 		position: absolute;
 		top: ${RULER_SIZE}px;
 		left: ${RULER_SIZE}px;
@@ -126,5 +123,5 @@ function createGridOverlay(config: Required<RulerOptions>): HTMLElement {
 		background-size: 100px 100px;
 		opacity: 0.5;
 	`;
-	return grid;
+  return grid;
 }

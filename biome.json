@@ -6,12 +6,12 @@
     "useIgnoreFile": false
   },
   "files": {
-    "ignoreUnknown": false,
-    "ignore": ["**/*.html"]
+    "ignoreUnknown": true
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "space"
+    "indentStyle": "space",
+    "lineWidth": 110
   },
   "linter": {
     "enabled": true,
@@ -22,6 +22,11 @@
   "javascript": {
     "formatter": {
       "quoteStyle": "double"
+    }
+  },
+  "html": {
+    "formatter": {
+      "enabled": true
     }
   },
   "assist": {
