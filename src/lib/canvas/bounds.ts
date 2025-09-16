@@ -3,7 +3,8 @@
  * Functions for calculating canvas bounds and dimensions
  */
 
-import { calculateMatrix, canvasToContent } from "../matrix.js";
+import { calculateMatrix } from "../matrix/matrix-calculation.js";
+import { canvasToContent } from "../matrix/coordinate-conversion.js";
 import type { BaseCanvas, CanvasBounds } from "../../types/index.js";
 
 /**

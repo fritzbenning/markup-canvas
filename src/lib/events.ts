@@ -3,7 +3,8 @@
  * Core event handlers for mouse, keyboard, and touch interactions
  */
 
-import { clampZoom, getZoomToMouseTransform } from "./matrix.js";
+import { clampZoom } from "./matrix/zoom-clamping.js";
+import { getZoomToMouseTransform } from "./matrix/zoom-to-mouse.js";
 import {
 	disableSmoothTransitions,
 	enableSmoothTransitions,

@@ -3,7 +3,7 @@
  * Main function for creating and initializing canvases
  */
 
-import { calculateMatrix } from "../matrix.js";
+import { calculateMatrix } from "../matrix/matrix-calculation.js";
 import { applyTransform, enableHardwareAcceleration } from "../transform.js";
 import type {
 	BaseCanvas,

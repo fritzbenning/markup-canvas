@@ -5,7 +5,7 @@ import {
 	setupTouchEvents,
 	setupWheelZoom,
 } from "./lib/events.js";
-import { clampZoom } from "./lib/matrix.js";
+import { clampZoom } from "./lib/matrix/zoom-clamping.js";
 import {
 	enableSmoothTransitions,
 	disableSmoothTransitions,
@@ -17,13 +17,17 @@ import type { Canvas, Transform, MarkupCanvasOptions } from "./types/index.js";
 // Export matrix calculation functions
 export {
 	calculateMatrix,
+	createIdentityMatrix,
+} from "./lib/matrix/matrix-calculation.js";
+export {
 	clampZoom,
 	clampZoomWithFeedback,
-	contentToCanvas,
-	createIdentityMatrix,
-	getZoomToMouseTransform,
+} from "./lib/matrix/zoom-clamping.js";
+export {
 	canvasToContent,
-} from "./lib/matrix.js";
+	contentToCanvas,
+} from "./lib/matrix/coordinate-conversion.js";
+export { getZoomToMouseTransform } from "./lib/matrix/zoom-to-mouse.js";
 
 // Export transform application functions
 export {

@@ -3,12 +3,10 @@
  * All the methods that get attached to a canvas instance
  */
 
-import {
-	calculateMatrix,
-	clampZoom,
-	getZoomToMouseTransform,
-	canvasToContent,
-} from "../matrix.js";
+import { calculateMatrix } from "../matrix/matrix-calculation.js";
+import { clampZoom } from "../matrix/zoom-clamping.js";
+import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
+import { canvasToContent } from "../matrix/coordinate-conversion.js";
 import {
 	applyTransform,
 	disableSmoothTransitions,
