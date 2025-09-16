@@ -4,7 +4,7 @@ import {
 	setupMouseDragWithControls,
 	setupTouchEvents,
 	setupWheelZoom,
-} from "./lib/events.js";
+} from "./lib/events/index.js";
 import { clampZoom } from "./lib/matrix/zoom-clamping.js";
 import { createRulers } from "./lib/rulers.js";
 import {
@@ -53,7 +53,7 @@ export {
 	setupMouseDragWithControls,
 	setupTouchEvents,
 	setupWheelZoom,
-} from "./lib/events.js";
+} from "./lib/events/index.js";
 
 // Export ruler functions
 export { createRulers } from "./lib/rulers.js";

@@ -1,12 +1,12 @@
-# 🤿 Markup Canvas
+# Markup Canvas 🤿
 
 A high-performance canvas-like container for placing HTML elements with zoom and pan support.
 
 ## Features
 
-- ⚡️ **High Performance**: Hardware-accelerated transforms with optimized matrix calculations
-- 📦 **Zero Dependencies**: Pure Typescript, no external libraries required
-- 📝 **TypeScript Support**: Full type definitions available
+⚡️ **High Performance**: Hardware-accelerated transforms with optimized matrix calculations
+📦 **Zero Dependencies**: Pure Typescript, no external libraries required
+📝 **TypeScript Support**: Full type definitions available
 
 ## Installation
 
