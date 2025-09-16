@@ -4,6 +4,7 @@ import { calculateMatrix } from "../matrix/matrix-calculation.js";
 import { clampZoom } from "../matrix/zoom-clamping.js";
 import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
 import { applyTransform, disableSmoothTransitions, enableSmoothTransitions } from "../transform/index.js";
+import { RULER_SIZE } from "./../rulers/constants";
 import { getCanvasBounds } from "./bounds.js";
 import { DEFAULT_ANIMATION_DURATION, TRANSITION_CLEANUP_DELAY, ZOOM_FIT_PADDING } from "./constants.js";
 import { addContentToCanvas } from "./content.js";
@@ -115,8 +116,8 @@ export function createCanvasMethods() {
 
       const resetTransform: Transform = {
         scale: 1.0,
-        translateX: 0,
-        translateY: 0,
+        translateX: RULER_SIZE * -1,
+        translateY: RULER_SIZE * -1,
       };
       const result = this.updateTransform(resetTransform);
 

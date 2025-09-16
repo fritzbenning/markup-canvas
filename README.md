@@ -62,7 +62,7 @@ Creates a complete markup canvas with all event handlers.
 - `clickZoomLevel` (number): Zoom level when clicking on content (default: 1.0 for 100% zoom)
 - `clickZoomDuration` (number): Duration in milliseconds for click-to-zoom animation (default: 300)
 - `requireOptionForClickZoom` (boolean): Require Option/Alt key to be held for click-to-zoom (default: false)
-- `showRulers` (boolean): Enable rulers and grid (default: true, rulers are always 24px when enabled)
+- `enableRulers` (boolean): Enable rulers and grid (default: true, rulers are always 24px when enabled)
 - `showGrid` (boolean): Show grid overlay when rulers are enabled (default: true)
 - `gridColor` (string): Grid line color (default: 'rgba(0, 123, 255, 0.1)')
 - `onTransformUpdate` (function): Callback for transform changes
@@ -153,7 +153,6 @@ rulers.destroy();
 
 **Ruler Options:**
 
-- Rulers are always 24px when enabled
 - `backgroundColor` (string): Background color of rulers (default: 'rgba(255, 255, 255, 0.95)')
 - `borderColor` (string): Border color (default: '#ddd')
 - `textColor` (string): Text color for labels (default: '#666')

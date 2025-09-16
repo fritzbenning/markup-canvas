@@ -1,4 +1,5 @@
 import type { CanvasOptions } from "../../types/index.js";
+import { RULER_SIZE } from "../rulers/constants.js";
 import { CSS_CLASSES, SMOOTH_TRANSITION } from "./constants.js";
 
 export interface CanvasLayers {
@@ -43,10 +44,7 @@ export function createCanvasLayers(container: HTMLElement, config: Required<Canv
 function setupTransformLayer(transformLayer: HTMLElement, config: Required<CanvasOptions>): void {
   transformLayer.style.position = "absolute";
 
-  // Check if rulers exist by looking for ruler elements in the container
-  const container = transformLayer.parentElement;
-  const hasRulers = container?.querySelector(".canvas-ruler") !== null;
-  const rulerOffset = hasRulers ? 24 : 0; // Static ruler size
+  const rulerOffset = RULER_SIZE;
 
   transformLayer.style.top = `${rulerOffset}px`;
   transformLayer.style.left = `${rulerOffset}px`;

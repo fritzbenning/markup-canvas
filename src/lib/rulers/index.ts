@@ -1,8 +1,8 @@
 import type { RulerCanvas as Canvas, RulerOptions, RulerSystem } from "../../types/index.js";
-import { DEFAULT_RULER_CONFIG, RULER_SIZE } from "./constants.js";
+import { DEFAULT_RULER_CONFIG } from "./constants.js";
+import { setupEventListeners } from "./event-listeners.js";
 import { createRulerElements, type RulerElements } from "./ruler-elements.js";
 import { updateRulers } from "./ruler-updates.js";
-import { setupEventListeners } from "./event-listeners.js";
 
 // Creates dynamic rulers for a zoomable canvas
 export function createRulers(canvas: Canvas, options: RulerOptions = {}): RulerSystem | null {
@@ -31,12 +31,6 @@ export function createRulers(canvas: Canvas, options: RulerOptions = {}): RulerS
     elements = createRulerElements(canvas.container, config);
     cleanupEvents = setupEventListeners(canvas, safeUpdate);
 
-    // Position transform layer to account for rulers
-    if (canvas.transformLayer) {
-      canvas.transformLayer.style.top = `${RULER_SIZE}px`;
-      canvas.transformLayer.style.left = `${RULER_SIZE}px`;
-    }
-
     safeUpdate();
 
     // Return ruler system object
@@ -55,12 +49,6 @@ export function createRulers(canvas: Canvas, options: RulerOptions = {}): RulerS
         if (elements.verticalRuler) elements.verticalRuler.style.display = "block";
         if (elements.cornerBox) elements.cornerBox.style.display = "flex";
         if (elements.gridOverlay) elements.gridOverlay.style.display = "block";
-
-        // Adjust transform layer positioning
-        if (canvas.transformLayer) {
-          canvas.transformLayer.style.top = `${RULER_SIZE}px`;
-          canvas.transformLayer.style.left = `${RULER_SIZE}px`;
-        }
       },
 
       hide: () => {
@@ -68,12 +56,6 @@ export function createRulers(canvas: Canvas, options: RulerOptions = {}): RulerS
         if (elements.verticalRuler) elements.verticalRuler.style.display = "none";
         if (elements.cornerBox) elements.cornerBox.style.display = "none";
         if (elements.gridOverlay) elements.gridOverlay.style.display = "none";
-
-        // Reset transform layer positioning
-        if (canvas.transformLayer) {
-          canvas.transformLayer.style.top = "0px";
-          canvas.transformLayer.style.left = "0px";
-        }
       },
 
       // Toggle grid
@@ -102,12 +84,6 @@ export function createRulers(canvas: Canvas, options: RulerOptions = {}): RulerS
         }
         if (elements.gridOverlay?.parentNode) {
           elements.gridOverlay.parentNode.removeChild(elements.gridOverlay);
-        }
-
-        // Restore canvas transform layer positioning
-        if (canvas.transformLayer) {
-          canvas.transformLayer.style.top = "0";
-          canvas.transformLayer.style.left = "0";
         }
       },
     };

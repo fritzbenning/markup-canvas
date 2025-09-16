@@ -1,4 +1,5 @@
 import type { BaseCanvas, CanvasOptions, Transform } from "../../types/index.js";
+import { DEFAULT_SCALE, DEFAULT_TRANSLATE_X, DEFAULT_TRANSLATE_Y } from "../matrix/constants.js";
 import { calculateMatrix } from "../matrix/matrix-calculation.js";
 import { applyTransform, enableHardwareAcceleration } from "../transform/index.js";
 import { createCanvasMethods } from "./canvas-methods.js";
@@ -31,9 +32,9 @@ export function createCanvas(container: HTMLElement, options: CanvasOptions = {}
 
     // Initialize transform state
     const initialTransform: Transform = {
-      scale: 1.0,
-      translateX: 0,
-      translateY: 0,
+      scale: DEFAULT_SCALE,
+      translateX: DEFAULT_TRANSLATE_X,
+      translateY: DEFAULT_TRANSLATE_Y,
     };
 
     // Apply initial transform

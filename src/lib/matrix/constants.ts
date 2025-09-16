@@ -8,8 +8,8 @@ export const DEFAULT_MAX_ZOOM = 3.5; // 350%
 
 // Default transform values
 export const DEFAULT_SCALE = 1.0;
-export const DEFAULT_TRANSLATE_X = 0;
-export const DEFAULT_TRANSLATE_Y = 0;
+export const DEFAULT_TRANSLATE_X = -24;
+export const DEFAULT_TRANSLATE_Y = -24;
 
 // Validation thresholds
 export const SCALE_CHANGE_THRESHOLD = 0.001;
