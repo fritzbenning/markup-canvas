@@ -85,6 +85,11 @@ export interface Canvas extends BaseCanvas {
 	enableMouseDrag: () => boolean;
 	disableMouseDrag: () => boolean;
 	isMouseDragEnabled: () => boolean;
+	// Grid control functions
+	toggleGrid?: () => boolean;
+	showGrid?: () => boolean;
+	hideGrid?: () => boolean;
+	isGridVisible?: () => boolean;
 	// Additional utility functions
 	centerContent: (duration?: number) => boolean;
 	fitToScreen: (duration?: number) => boolean;
@@ -110,5 +115,7 @@ export interface MarkupCanvasOptions {
 	clickZoomDuration?: number;
 	requireOptionForClickZoom?: boolean;
 	rulerSize?: number;
+	showGrid?: boolean;
+	gridColor?: string;
 	onTransformUpdate?: (transform: Transform) => void;
 }

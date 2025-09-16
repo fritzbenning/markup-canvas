@@ -62,6 +62,9 @@ Creates a complete markup canvas with all event handlers.
 - `clickZoomLevel` (number): Zoom level when clicking on content (default: 1.0 for 100% zoom)
 - `clickZoomDuration` (number): Duration in milliseconds for click-to-zoom animation (default: 300)
 - `requireOptionForClickZoom` (boolean): Require Option/Alt key to be held for click-to-zoom (default: false)
+- `rulerSize` (number): Size of rulers in pixels, enables rulers and grid when > 0 (default: 0)
+- `showGrid` (boolean): Show grid overlay when rulers are enabled (default: true)
+- `gridColor` (string): Grid line color (default: 'rgba(0, 123, 255, 0.1)')
 - `onTransformUpdate` (function): Callback for transform changes
 
 **Returns:** Canvas object
@@ -100,6 +103,12 @@ canvas.resetZoom(300); // Reset zoom with 300ms animation
 canvas.enableMouseDrag(); // Enable mouse dragging
 canvas.disableMouseDrag(); // Disable mouse dragging
 canvas.isMouseDragEnabled(); // Check if mouse drag is enabled
+
+// Grid control functions (when rulers are enabled)
+canvas.toggleGrid(); // Toggle grid visibility
+canvas.showGrid(); // Show grid
+canvas.hideGrid(); // Hide grid
+canvas.isGridVisible(); // Check if grid is visible
 
 // Additional utility functions
 canvas.centerContent(300); // Center content in canvas with animation
@@ -197,6 +206,7 @@ const rulers = createRulers(canvas);
 - **+ / =**: Zoom in
 - **-**: Zoom out
 - **0**: Reset view
+- **G**: Toggle grid (when rulers are enabled)
 
 ### Touch/Trackpad (Mobile)
 

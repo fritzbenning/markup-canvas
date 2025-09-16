@@ -12,7 +12,6 @@ import {
 import type {
 	Transform,
 	EventCanvas as Canvas,
-	CanvasBounds,
 	WheelZoomOptions,
 	MouseDragOptions,
 	KeyboardNavigationOptions,
@@ -575,6 +574,13 @@ export function setupKeyboardNavigation(
 			case "0":
 				if (canvas.resetView) {
 					canvas.resetView(0); // No transition for keyboard reset
+				}
+				handled = true;
+				break;
+			case "g":
+			case "G":
+				if (canvas.toggleGrid) {
+					canvas.toggleGrid();
 				}
 				handled = true;
 				break;

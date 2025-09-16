@@ -36,8 +36,8 @@
         <div class="content-item medium" style="top: 1200px; left: 500px">
           <h3>⌨️ Keyboard Navigation</h3>
           <p>
-            Use arrow keys to pan, +/- to zoom, and 0 to reset. Try Ctrl+A to
-            fit content!
+            Use arrow keys to pan, +/- to zoom, 0 to reset, and G to toggle grid.
+            Try Ctrl+A to fit content!
           </p>
         </div>
 
@@ -194,7 +194,7 @@
           width: 20000,
           height: 15000,
           enableAcceleration: true,
-          enableKeyboardControls: true, // Enable built-in keyboard controls
+          enableKeyboardControls: true, // Enable built-in keyboard controls (includes G for grid toggle)
           requireSpaceForMouseDrag: true,
           enableClickToZoom: true,
           zoomSpeed: 0.4,
@@ -202,17 +202,10 @@
           clickZoomLevel: 1.0,
           clickZoomDuration: 300,
           requireOptionForClickZoom: true,
-          rulerSize: 24, // Account for ruler space
+          rulerSize: 24, // Enable rulers and grid
+          showGrid: true, // Show grid by default
+          gridColor: "rgba(0, 0, 0, 0.08)", // Grid color
         });
-
-        // Add rulers to the canvas
-        if (canvas && MarkupCanvas.createRulers) {
-          rulers = MarkupCanvas.createRulers(canvas, {
-            rulerSize: 24, // Match the canvas ruler size
-            showGrid: true, // Enable grid display
-            gridColor: "rgba(0, 0, 0, 0.08)",
-          });
-        }
 
         // Focus the container to enable keyboard events
         if (canvas && canvas.container) {

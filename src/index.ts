@@ -1,4 +1,4 @@
-import { createCanvas } from "./lib/canvas.js";
+import { createCanvas } from "./lib/canvas/index.js";
 import {
 	setupKeyboardNavigation,
 	setupMouseDragWithControls,
@@ -6,6 +6,7 @@ import {
 	setupWheelZoom,
 } from "./lib/events.js";
 import { clampZoom } from "./lib/matrix/zoom-clamping.js";
+import { createRulers } from "./lib/rulers.js";
 import {
 	enableSmoothTransitions,
 	disableSmoothTransitions,
@@ -43,7 +44,7 @@ export {
 	addContentToCanvas,
 	createCanvas,
 	getCanvasBounds,
-} from "./lib/canvas.js";
+} from "./lib/canvas/index.js";
 
 // Export event handling functions
 export {
@@ -137,6 +138,21 @@ export function createMarkupCanvas(
 		});
 		cleanupFunctions.push(touchCleanup);
 
+		// Set up rulers and grid (if enabled)
+		let rulers: ReturnType<typeof createRulers> | null = null;
+		if (options.rulerSize !== undefined && options.rulerSize > 0) {
+			rulers = createRulers(canvas, {
+				rulerSize: options.rulerSize,
+				showGrid: options.showGrid !== false, // Default to true
+				gridColor: options.gridColor || "rgba(0, 123, 255, 0.1)",
+			});
+			cleanupFunctions.push(() => {
+				if (rulers) {
+					rulers.destroy();
+				}
+			});
+		}
+
 		// Create extended canvas with additional methods
 		const _canvas = canvas as Canvas;
 
@@ -203,6 +219,38 @@ export function createMarkupCanvas(
 
 		_canvas.isMouseDragEnabled = () => {
 			return dragSetup.isEnabled();
+		};
+
+		// Grid control functions
+		_canvas.toggleGrid = () => {
+			if (rulers?.toggleGrid) {
+				rulers.toggleGrid();
+				return true;
+			}
+			return false;
+		};
+
+		_canvas.showGrid = () => {
+			if (rulers?.gridOverlay) {
+				rulers.gridOverlay.style.display = "block";
+				return true;
+			}
+			return false;
+		};
+
+		_canvas.hideGrid = () => {
+			if (rulers?.gridOverlay) {
+				rulers.gridOverlay.style.display = "none";
+				return true;
+			}
+			return false;
+		};
+
+		_canvas.isGridVisible = () => {
+			if (rulers?.gridOverlay) {
+				return rulers.gridOverlay.style.display !== "none";
+			}
+			return false;
 		};
 
 		// Additional utility functions

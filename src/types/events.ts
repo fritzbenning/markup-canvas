@@ -57,4 +57,5 @@ export interface EventCanvas {
 	getBounds?: () => CanvasBounds;
 	canvasToContent: (x: number, y: number) => { x: number; y: number };
 	resetView?: (duration?: number) => boolean;
+	toggleGrid?: () => boolean;
 }
