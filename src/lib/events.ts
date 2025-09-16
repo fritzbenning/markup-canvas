@@ -10,13 +10,13 @@ import {
 } from "./transform.js";
 
 // Type definitions
-interface Viewport {
+interface Canvas {
 	container: HTMLElement;
 	transformLayer: HTMLElement;
 	transform: Transform;
 	updateTransform: (newTransform: Partial<Transform>) => boolean;
-	getBounds?: () => ViewportBounds;
-	viewportToContent: (x: number, y: number) => { x: number; y: number };
+	getBounds?: () => CanvasBounds;
+	canvasToContent: (x: number, y: number) => { x: number; y: number };
 	resetView?: (duration?: number) => boolean;
 }
 
@@ -26,7 +26,7 @@ interface Transform {
 	translateY: number;
 }
 
-interface ViewportBounds {
+interface CanvasBounds {
 	width: number;
 	height: number;
 	scale?: number;
@@ -79,15 +79,15 @@ interface TouchState {
 }
 
 /**
- * Gets display-size adaptive zoom speed based on viewport dimensions
+ * Gets display-size adaptive zoom speed based on canvas dimensions
  */
-function getAdaptiveZoomSpeed(viewport: Viewport, baseSpeed: number): number {
-	if (!viewport?.getBounds) {
+function getAdaptiveZoomSpeed(canvas: Canvas, baseSpeed: number): number {
+	if (!canvas?.getBounds) {
 		return baseSpeed;
 	}
 
 	try {
-		const bounds = viewport.getBounds();
+		const bounds = canvas.getBounds();
 		const displayArea = bounds.width * bounds.height;
 
 		// Reference area based on common desktop resolution (1920x1080)
@@ -111,10 +111,10 @@ function getAdaptiveZoomSpeed(viewport: Viewport, baseSpeed: number): number {
 }
 
 /**
- * Sets up wheel zoom functionality for a viewport
+ * Sets up wheel zoom functionality for a canvas
  */
 export function setupWheelZoom(
-	viewport: Viewport,
+	canvas: Canvas,
 	options: WheelZoomOptions = {},
 ): () => void {
 	const config: Required<WheelZoomOptions> = {
@@ -193,14 +193,14 @@ export function setupWheelZoom(
 		return result;
 	}
 
-	function handleTrackpadPan(event: WheelEvent, viewport: Viewport): boolean {
-		if (!event || !viewport?.updateTransform) {
+	function handleTrackpadPan(event: WheelEvent, canvas: Canvas): boolean {
+		if (!event || !canvas?.updateTransform) {
 			return false;
 		}
 
 		try {
 			// Get current transform
-			const currentTransform = viewport.transform;
+			const currentTransform = canvas.transform;
 
 			// Calculate pan delta based on trackpad scroll
 			const panSensitivity = 1.0;
@@ -215,10 +215,10 @@ export function setupWheelZoom(
 			};
 
 			// Disable smooth transitions for real-time panning
-			disableSmoothTransitions(viewport.transformLayer);
+			disableSmoothTransitions(canvas.transformLayer);
 
 			// Apply the new transform
-			return viewport.updateTransform(newTransform);
+			return canvas.updateTransform(newTransform);
 		} catch (error) {
 			console.error("Error handling trackpad pan:", error);
 			return false;
@@ -232,8 +232,8 @@ export function setupWheelZoom(
 			return false;
 		}
 
-		if (!viewport?.updateTransform) {
-			console.warn("Invalid viewport provided to handleWheelEvent");
+		if (!canvas?.updateTransform) {
+			console.warn("Invalid canvas provided to handleWheelEvent");
 			return false;
 		}
 
@@ -241,8 +241,8 @@ export function setupWheelZoom(
 			// Prevent default scrolling behavior
 			event.preventDefault();
 
-			// Get mouse position relative to viewport
-			const rect = viewport.container.getBoundingClientRect();
+			// Get mouse position relative to canvas
+			const rect = canvas.container.getBoundingClientRect();
 			const mouseX = event.clientX - rect.left;
 			const mouseY = event.clientY - rect.top;
 
@@ -254,7 +254,7 @@ export function setupWheelZoom(
 
 			// Apply display-size adaptive scaling if enabled
 			const currentZoomSpeed = config.enableAdaptiveSpeed
-				? getAdaptiveZoomSpeed(viewport, baseZoomSpeed)
+				? getAdaptiveZoomSpeed(canvas, baseZoomSpeed)
 				: baseZoomSpeed;
 
 			// Calculate zoom delta based on wheel direction with exponential scaling
@@ -266,7 +266,7 @@ export function setupWheelZoom(
 			// Handle different gesture types
 			if (gestureInfo.isTrackpadScroll) {
 				// Handle trackpad scroll as pan
-				return handleTrackpadPan(event, viewport);
+				return handleTrackpadPan(event, canvas);
 			}
 
 			if (!gestureInfo.isZoomGesture) {
@@ -281,7 +281,7 @@ export function setupWheelZoom(
 				// Trackpad pinch-to-zoom needs slower speed, but still apply adaptive scaling
 				const baseTrackpadSpeed = config.zoomSpeed * 0.25;
 				deviceZoomSpeed = config.enableAdaptiveSpeed
-					? getAdaptiveZoomSpeed(viewport, baseTrackpadSpeed)
+					? getAdaptiveZoomSpeed(canvas, baseTrackpadSpeed)
 					: baseTrackpadSpeed;
 			} else if (gestureInfo.isMouseWheel) {
 				// Mouse wheel uses the already calculated adaptive speed
@@ -300,7 +300,7 @@ export function setupWheelZoom(
 			const zoomFactor = zoomMultiplier;
 
 			// Get current transform state
-			const currentTransform = viewport.transform;
+			const currentTransform = canvas.transform;
 
 			// Calculate new transform using zoom-to-mouse algorithm
 			const newTransform = getZoomToMouseTransform(
@@ -317,15 +317,15 @@ export function setupWheelZoom(
 			}
 
 			// Enable smooth transitions for zoom operations
-			enableSmoothTransitions(viewport.transformLayer, 0.15);
+			enableSmoothTransitions(canvas.transformLayer, 0.15);
 
 			// Apply the new transform with smooth transition
-			const result = viewport.updateTransform(newTransform);
+			const result = canvas.updateTransform(newTransform);
 
 			// Disable transitions after a short delay to avoid interfering with subsequent operations
 			setTimeout(() => {
-				if (viewport.transformLayer) {
-					disableSmoothTransitions(viewport.transformLayer);
+				if (canvas.transformLayer) {
+					disableSmoothTransitions(canvas.transformLayer);
 				}
 			}, 200);
 
@@ -336,17 +336,17 @@ export function setupWheelZoom(
 		}
 	}
 
-	viewport.container.addEventListener("wheel", handleWheel, { passive: false });
+	canvas.container.addEventListener("wheel", handleWheel, { passive: false });
 
 	return () => {
-		viewport.container.removeEventListener("wheel", handleWheel);
+		canvas.container.removeEventListener("wheel", handleWheel);
 	};
 }
 /**
- * Sets up mouse drag functionality for a viewport
+ * Sets up mouse drag functionality for a canvas
  */
 export function setupMouseDrag(
-	viewport: Viewport,
+	canvas: Canvas,
 	options: MouseDragOptions = {},
 ): () => void {
 	const config: Required<MouseDragOptions> = {
@@ -374,7 +374,7 @@ export function setupMouseDrag(
 
 	// Set initial cursor state
 	if (config.requireSpaceForMouseDrag) {
-		viewport.container.style.cursor = "default";
+		canvas.container.style.cursor = "default";
 	}
 
 	function handleKeyDown(event: KeyboardEvent): void {
@@ -382,7 +382,7 @@ export function setupMouseDrag(
 			isSpacePressed = true;
 			// Update cursor to indicate drag is available
 			if (!isDragging) {
-				viewport.container.style.cursor = "grab";
+				canvas.container.style.cursor = "grab";
 			}
 		}
 	}
@@ -392,13 +392,13 @@ export function setupMouseDrag(
 			isSpacePressed = false;
 			// Reset cursor if not dragging
 			if (!isDragging) {
-				viewport.container.style.cursor = "default";
+				canvas.container.style.cursor = "default";
 			}
 			// Stop dragging if currently dragging
 			if (isDragging) {
 				isDragging = false;
 				dragButton = -1;
-				viewport.container.style.cursor = "default";
+				canvas.container.style.cursor = "default";
 			}
 		}
 	}
@@ -429,8 +429,8 @@ export function setupMouseDrag(
 			lastMouseX = event.clientX;
 			lastMouseY = event.clientY;
 
-			viewport.container.style.cursor = "grabbing";
-			disableSmoothTransitions(viewport.transformLayer);
+			canvas.container.style.cursor = "grabbing";
+			disableSmoothTransitions(canvas.transformLayer);
 		}
 	}
 
@@ -452,11 +452,11 @@ export function setupMouseDrag(
 		const deltaY = event.clientY - lastMouseY;
 
 		const newTransform: Partial<Transform> = {
-			translateX: viewport.transform.translateX + deltaX,
-			translateY: viewport.transform.translateY + deltaY,
+			translateX: canvas.transform.translateX + deltaX,
+			translateY: canvas.transform.translateY + deltaY,
 		};
 
-		viewport.updateTransform(newTransform);
+		canvas.updateTransform(newTransform);
 
 		lastMouseX = event.clientX;
 		lastMouseY = event.clientY;
@@ -466,7 +466,7 @@ export function setupMouseDrag(
 		if (isDragging && event.button === dragButton) {
 			isDragging = false;
 			dragButton = -1;
-			viewport.container.style.cursor = "grab";
+			canvas.container.style.cursor = "grab";
 		}
 
 		// Handle click-to-zoom for left button
@@ -483,25 +483,25 @@ export function setupMouseDrag(
 			if (clickDuration < 300 && !hasDragged && !isDragging && shouldZoom) {
 				event.preventDefault();
 
-				// Get click position relative to viewport
-				const rect = viewport.container.getBoundingClientRect();
+				// Get click position relative to canvas
+				const rect = canvas.container.getBoundingClientRect();
 				const clickX = event.clientX - rect.left;
 				const clickY = event.clientY - rect.top;
 
-				// Convert viewport coordinates to content coordinates at current scale
-				const contentCoords = viewport.viewportToContent(clickX, clickY);
+				// Convert canvas coordinates to content coordinates at current scale
+				const contentCoords = canvas.canvasToContent(clickX, clickY);
 
-				// Calculate the center of the viewport
-				const viewportCenterX = rect.width / 2;
-				const viewportCenterY = rect.height / 2;
+				// Calculate the center of the canvas
+				const canvasCenterX = rect.width / 2;
+				const canvasCenterY = rect.height / 2;
 
 				// Calculate the new transform to zoom and center the clicked point
 				const newScale = config.clickZoomLevel;
 
 				// Calculate where the clicked content point should be positioned
-				// to appear at the center of the viewport after zooming
-				const newTranslateX = viewportCenterX - contentCoords.x * newScale;
-				const newTranslateY = viewportCenterY - contentCoords.y * newScale;
+				// to appear at the center of the canvas after zooming
+				const newTranslateX = canvasCenterX - contentCoords.x * newScale;
+				const newTranslateY = canvasCenterY - contentCoords.y * newScale;
 
 				const newTransform: Partial<Transform> = {
 					scale: newScale,
@@ -511,14 +511,14 @@ export function setupMouseDrag(
 
 				// Enable smooth transitions for click-to-zoom
 				const duration = config.clickZoomDuration / 1000; // Convert to seconds
-				enableSmoothTransitions(viewport.transformLayer, duration);
+				enableSmoothTransitions(canvas.transformLayer, duration);
 
-				viewport.updateTransform(newTransform);
+				canvas.updateTransform(newTransform);
 
 				// Disable transitions after animation completes
 				setTimeout(() => {
-					if (viewport.transformLayer) {
-						disableSmoothTransitions(viewport.transformLayer);
+					if (canvas.transformLayer) {
+						disableSmoothTransitions(canvas.transformLayer);
 					}
 				}, config.clickZoomDuration + 50);
 			}
@@ -535,14 +535,14 @@ export function setupMouseDrag(
 		if (isDragging) {
 			isDragging = false;
 			dragButton = -1;
-			viewport.container.style.cursor = "grab";
+			canvas.container.style.cursor = "grab";
 		}
 	}
 
-	viewport.container.addEventListener("mousedown", handleMouseDown);
+	canvas.container.addEventListener("mousedown", handleMouseDown);
 	document.addEventListener("mousemove", handleMouseMove);
 	document.addEventListener("mouseup", handleMouseUp);
-	viewport.container.addEventListener("mouseleave", handleMouseLeave);
+	canvas.container.addEventListener("mouseleave", handleMouseLeave);
 
 	// Add keyboard listeners if space requirement is enabled
 	if (config.requireSpaceForMouseDrag) {
@@ -551,10 +551,10 @@ export function setupMouseDrag(
 	}
 
 	return () => {
-		viewport.container.removeEventListener("mousedown", handleMouseDown);
+		canvas.container.removeEventListener("mousedown", handleMouseDown);
 		document.removeEventListener("mousemove", handleMouseMove);
 		document.removeEventListener("mouseup", handleMouseUp);
-		viewport.container.removeEventListener("mouseleave", handleMouseLeave);
+		canvas.container.removeEventListener("mouseleave", handleMouseLeave);
 
 		if (config.requireSpaceForMouseDrag) {
 			document.removeEventListener("keydown", handleKeyDown);
@@ -564,10 +564,10 @@ export function setupMouseDrag(
 }
 
 /**
- * Sets up keyboard navigation for a viewport
+ * Sets up keyboard navigation for a canvas
  */
 export function setupKeyboardNavigation(
-	viewport: Viewport,
+	canvas: Canvas,
 	options: KeyboardNavigationOptions = {},
 ): () => void {
 	const config: Required<KeyboardNavigationOptions> = {
@@ -579,8 +579,8 @@ export function setupKeyboardNavigation(
 	};
 
 	function handleKeyDown(event: KeyboardEvent): void {
-		// Only handle if viewport container is focused
-		if (document.activeElement !== viewport.container) return;
+		// Only handle if canvas container is focused
+		if (document.activeElement !== canvas.container) return;
 
 		const isFastPan = event.shiftKey;
 		const panDistance =
@@ -591,29 +591,29 @@ export function setupKeyboardNavigation(
 
 		switch (event.key) {
 			case "ArrowLeft":
-				newTransform.translateX = viewport.transform.translateX + panDistance;
+				newTransform.translateX = canvas.transform.translateX + panDistance;
 				handled = true;
 				break;
 			case "ArrowRight":
-				newTransform.translateX = viewport.transform.translateX - panDistance;
+				newTransform.translateX = canvas.transform.translateX - panDistance;
 				handled = true;
 				break;
 			case "ArrowUp":
-				newTransform.translateY = viewport.transform.translateY + panDistance;
+				newTransform.translateY = canvas.transform.translateY + panDistance;
 				handled = true;
 				break;
 			case "ArrowDown":
-				newTransform.translateY = viewport.transform.translateY - panDistance;
+				newTransform.translateY = canvas.transform.translateY - panDistance;
 				handled = true;
 				break;
 			case "=":
 			case "+":
 				{
 					const adaptiveZoomStep = config.enableAdaptiveSpeed
-						? getAdaptiveZoomSpeed(viewport, config.zoomStep)
+						? getAdaptiveZoomSpeed(canvas, config.zoomStep)
 						: config.zoomStep;
 					newTransform.scale = clampZoom(
-						viewport.transform.scale * (1 + adaptiveZoomStep),
+						canvas.transform.scale * (1 + adaptiveZoomStep),
 					);
 					handled = true;
 				}
@@ -621,17 +621,17 @@ export function setupKeyboardNavigation(
 			case "-":
 				{
 					const adaptiveZoomStep = config.enableAdaptiveSpeed
-						? getAdaptiveZoomSpeed(viewport, config.zoomStep)
+						? getAdaptiveZoomSpeed(canvas, config.zoomStep)
 						: config.zoomStep;
 					newTransform.scale = clampZoom(
-						viewport.transform.scale * (1 - adaptiveZoomStep),
+						canvas.transform.scale * (1 - adaptiveZoomStep),
 					);
 					handled = true;
 				}
 				break;
 			case "0":
-				if (viewport.resetView) {
-					viewport.resetView(0); // No transition for keyboard reset
+				if (canvas.resetView) {
+					canvas.resetView(0); // No transition for keyboard reset
 				}
 				handled = true;
 				break;
@@ -640,15 +640,15 @@ export function setupKeyboardNavigation(
 		if (handled) {
 			event.preventDefault();
 			if (Object.keys(newTransform).length > 0) {
-				viewport.updateTransform(newTransform);
+				canvas.updateTransform(newTransform);
 			}
 		}
 	}
 
-	viewport.container.addEventListener("keydown", handleKeyDown);
+	canvas.container.addEventListener("keydown", handleKeyDown);
 
 	return () => {
-		viewport.container.removeEventListener("keydown", handleKeyDown);
+		canvas.container.removeEventListener("keydown", handleKeyDown);
 	};
 }
 
@@ -656,7 +656,7 @@ export function setupKeyboardNavigation(
  * Sets up basic touch events for mobile support
  */
 export function setupTouchEvents(
-	viewport: Viewport,
+	canvas: Canvas,
 	options: TouchEventsOptions = {},
 ): () => void {
 	const config: Required<TouchEventsOptions> = {
@@ -703,7 +703,7 @@ export function setupTouchEvents(
 			);
 		}
 
-		disableSmoothTransitions(viewport.transformLayer);
+		disableSmoothTransitions(canvas.transformLayer);
 	}
 
 	function handleTouchMove(event: TouchEvent): void {
@@ -720,11 +720,11 @@ export function setupTouchEvents(
 					currentTouches[0].clientY - touchState.touches[0].clientY;
 
 				const newTransform: Partial<Transform> = {
-					translateX: viewport.transform.translateX + deltaX,
-					translateY: viewport.transform.translateY + deltaY,
+					translateX: canvas.transform.translateX + deltaX,
+					translateY: canvas.transform.translateY + deltaY,
 				};
 
-				viewport.updateTransform(newTransform);
+				canvas.updateTransform(newTransform);
 			}
 		} else if (currentTouches.length === 2 && config.enableMultiTouch) {
 			// Two finger pinch zoom
@@ -740,19 +740,19 @@ export function setupTouchEvents(
 			if (touchState.lastDistance > 0) {
 				const zoomFactor = currentDistance / touchState.lastDistance;
 
-				// Get center relative to viewport
-				const rect = viewport.container.getBoundingClientRect();
+				// Get center relative to canvas
+				const rect = canvas.container.getBoundingClientRect();
 				const centerX = currentCenter.x - rect.left;
 				const centerY = currentCenter.y - rect.top;
 
 				const newTransform = getZoomToMouseTransform(
 					centerX,
 					centerY,
-					viewport.transform,
+					canvas.transform,
 					zoomFactor,
 				);
 
-				viewport.updateTransform(newTransform);
+				canvas.updateTransform(newTransform);
 			}
 
 			touchState.lastDistance = currentDistance;
@@ -770,19 +770,19 @@ export function setupTouchEvents(
 		}
 	}
 
-	viewport.container.addEventListener("touchstart", handleTouchStart, {
+	canvas.container.addEventListener("touchstart", handleTouchStart, {
 		passive: false,
 	});
-	viewport.container.addEventListener("touchmove", handleTouchMove, {
+	canvas.container.addEventListener("touchmove", handleTouchMove, {
 		passive: false,
 	});
-	viewport.container.addEventListener("touchend", handleTouchEnd, {
+	canvas.container.addEventListener("touchend", handleTouchEnd, {
 		passive: false,
 	});
 
 	return () => {
-		viewport.container.removeEventListener("touchstart", handleTouchStart);
-		viewport.container.removeEventListener("touchmove", handleTouchMove);
-		viewport.container.removeEventListener("touchend", handleTouchEnd);
+		canvas.container.removeEventListener("touchstart", handleTouchStart);
+		canvas.container.removeEventListener("touchmove", handleTouchMove);
+		canvas.container.removeEventListener("touchend", handleTouchEnd);
 	};
 }

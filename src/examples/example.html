@@ -150,7 +150,7 @@
     </style>
   </head>
   <body>
-    <div class="container" id="viewport">
+    <div class="container" id="canvas">
       <div class="sample-content">
         <!-- Sample content items -->
         <div class="content-item large" style="top: 200px; left: 300px">
@@ -333,9 +333,9 @@
       let rulers;
 
       function initDemo() {
-        const container = document.getElementById("viewport");
+        const container = document.getElementById("canvas");
 
-        // Create viewport with clean configuration
+        // Create canvas with clean configuration
         canvas = MarkupCanvas.createMarkupCanvas(container, {
           contentWidth: 20000,
           contentHeight: 15000,
@@ -354,7 +354,7 @@
           canvas.container.focus();
         }
 
-        // Add rulers to the viewport
+        // Add rulers to the canvas
         if (canvas && MarkupCanvas.createRulers) {
           rulers = MarkupCanvas.createRulers(canvas, {
             showGrid: true, // Enable grid display

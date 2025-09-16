@@ -203,27 +203,25 @@ export function clampZoomWithFeedback(
 }
 
 /**
- * Converts viewport coordinates to content coordinates
+ * Converts canvas coordinates to content coordinates
  */
-export function viewportToContent(
-	viewportX: number,
-	viewportY: number,
+export function canvasToContent(
+	canvasX: number,
+	canvasY: number,
 	matrix: DOMMatrix,
 ): Point {
 	// Validate inputs
-	if (typeof viewportX !== "number" || !Number.isFinite(viewportX))
-		viewportX = 0;
-	if (typeof viewportY !== "number" || !Number.isFinite(viewportY))
-		viewportY = 0;
+	if (typeof canvasX !== "number" || !Number.isFinite(canvasX)) canvasX = 0;
+	if (typeof canvasY !== "number" || !Number.isFinite(canvasY)) canvasY = 0;
 
 	if (!matrix || typeof matrix.inverse !== "function") {
-		return { x: viewportX, y: viewportY };
+		return { x: canvasX, y: canvasY };
 	}
 
 	try {
-		// Use inverse matrix to convert from viewport to content space
+		// Use inverse matrix to convert from canvas to content space
 		const inverseMatrix = matrix.inverse();
-		const point = new DOMPoint(viewportX, viewportY);
+		const point = new DOMPoint(canvasX, canvasY);
 		const transformed = point.matrixTransform(inverseMatrix);
 
 		return {
@@ -232,14 +230,14 @@ export function viewportToContent(
 		};
 	} catch (error) {
 		console.warn("Matrix inversion failed:", error);
-		return { x: viewportX, y: viewportY };
+		return { x: canvasX, y: canvasY };
 	}
 }
 
 /**
- * Converts content coordinates to viewport coordinates
+ * Converts content coordinates to canvas coordinates
  */
-export function contentToViewport(
+export function contentToCanvas(
 	contentX: number,
 	contentY: number,
 	matrix: DOMMatrix,
@@ -307,7 +305,7 @@ export function getZoomToMouseTransform(
 	const currentMatrix = calculateMatrix(currentScale, currentTx, currentTy);
 
 	// Convert mouse position to content coordinates
-	const contentPoint = viewportToContent(mouseX, mouseY, currentMatrix);
+	const contentPoint = canvasToContent(mouseX, mouseY, currentMatrix);
 
 	// Calculate new translation to keep the content point under the mouse
 	const newTx = mouseX - contentPoint.x * newScale;

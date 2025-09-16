@@ -1,15 +1,15 @@
 /**
  * Dynamic Ruler System
- * Creates horizontal and vertical rulers that show viewport dimensions and scale
+ * Creates horizontal and vertical rulers that show canvas dimensions and scale
  */
 
 // Type definitions
-interface Viewport {
+interface Canvas {
 	container: HTMLElement;
 	transformLayer?: HTMLElement;
 	transform: Transform;
 	updateTransform: (newTransform: Partial<Transform>) => boolean;
-	getBounds: () => ViewportBounds;
+	getBounds: () => CanvasBounds;
 }
 
 interface Transform {
@@ -18,7 +18,7 @@ interface Transform {
 	translateY: number;
 }
 
-interface ViewportBounds {
+interface CanvasBounds {
 	width: number;
 	height: number;
 	scale?: number;
@@ -53,14 +53,14 @@ interface RulerSystem {
 }
 
 /**
- * Creates dynamic rulers for a zoomable viewport
+ * Creates dynamic rulers for a zoomable canvas
  */
 export function createRulers(
-	viewport: Viewport,
+	canvas: Canvas,
 	options: RulerOptions = {},
 ): RulerSystem | null {
-	if (!viewport?.container) {
-		console.error("Invalid viewport provided to createRulers");
+	if (!canvas?.container) {
+		console.error("Invalid canvas provided to createRulers");
 		return null;
 	}
 
@@ -87,11 +87,11 @@ export function createRulers(
 
 	// Create ruler elements
 	function createRulerElements(): void {
-		const container = viewport.container;
+		const container = canvas.container;
 
 		// Horizontal ruler
 		horizontalRuler = document.createElement("div");
-		horizontalRuler.className = "viewport-ruler horizontal-ruler";
+		horizontalRuler.className = "canvas-ruler horizontal-ruler";
 		horizontalRuler.style.cssText = `
 			position: absolute;
 			top: 0;
@@ -111,7 +111,7 @@ export function createRulers(
 
 		// Vertical ruler
 		verticalRuler = document.createElement("div");
-		verticalRuler.className = "viewport-ruler vertical-ruler";
+		verticalRuler.className = "canvas-ruler vertical-ruler";
 		verticalRuler.style.cssText = `
 			position: absolute;
 			top: ${config.rulerSize}px;
@@ -131,7 +131,7 @@ export function createRulers(
 
 		// Corner box
 		cornerBox = document.createElement("div");
-		cornerBox.className = "viewport-ruler corner-box";
+		cornerBox.className = "canvas-ruler corner-box";
 		cornerBox.style.cssText = `
 			position: absolute;
 			top: 0;
@@ -155,7 +155,7 @@ export function createRulers(
 		// Grid overlay (optional)
 		if (config.showGrid) {
 			gridOverlay = document.createElement("div");
-			gridOverlay.className = "viewport-ruler grid-overlay";
+			gridOverlay.className = "canvas-ruler grid-overlay";
 			gridOverlay.style.cssText = `
 				position: absolute;
 				top: ${config.rulerSize}px;
@@ -180,39 +180,39 @@ export function createRulers(
 			container.appendChild(gridOverlay);
 		}
 
-		// Adjust viewport content area
-		if (viewport.transformLayer) {
-			viewport.transformLayer.style.top = `${config.rulerSize}px`;
-			viewport.transformLayer.style.left = `${config.rulerSize}px`;
-			viewport.transformLayer.style.width = `calc(100% - ${config.rulerSize}px)`;
-			viewport.transformLayer.style.height = `calc(100% - ${config.rulerSize}px)`;
+		// Adjust canvas content area
+		if (canvas.transformLayer) {
+			canvas.transformLayer.style.top = `${config.rulerSize}px`;
+			canvas.transformLayer.style.left = `${config.rulerSize}px`;
+			canvas.transformLayer.style.width = `calc(100% - ${config.rulerSize}px)`;
+			canvas.transformLayer.style.height = `calc(100% - ${config.rulerSize}px)`;
 		}
 	}
 
-	// Update ruler markings based on current viewport state
+	// Update ruler markings based on current canvas state
 	function updateRulers(): void {
 		if (isDestroyed || !horizontalRuler || !verticalRuler) return;
 
-		const bounds = viewport.getBounds();
+		const bounds = canvas.getBounds();
 		const scale = bounds.scale || 1;
 		const translateX = bounds.translateX || 0;
 		const translateY = bounds.translateY || 0;
 
 		// Calculate visible content area
-		const viewportWidth = bounds.width - config.rulerSize;
-		const viewportHeight = bounds.height - config.rulerSize;
+		const canvasWidth = bounds.width - config.rulerSize;
+		const canvasHeight = bounds.height - config.rulerSize;
 
 		// Calculate content coordinates of visible area
 		const contentLeft = -translateX / scale;
 		const contentTop = -translateY / scale;
-		const contentRight = contentLeft + viewportWidth / scale;
-		const contentBottom = contentTop + viewportHeight / scale;
+		const contentRight = contentLeft + canvasWidth / scale;
+		const contentBottom = contentTop + canvasHeight / scale;
 
 		// Update horizontal ruler
-		updateHorizontalRuler(contentLeft, contentRight, viewportWidth, scale);
+		updateHorizontalRuler(contentLeft, contentRight, canvasWidth, scale);
 
 		// Update vertical ruler
-		updateVerticalRuler(contentTop, contentBottom, viewportHeight, scale);
+		updateVerticalRuler(contentTop, contentBottom, canvasHeight, scale);
 
 		// Update grid if enabled
 		if (gridOverlay) {
@@ -224,10 +224,10 @@ export function createRulers(
 	function updateHorizontalRuler(
 		contentLeft: number,
 		contentRight: number,
-		viewportWidth: number,
+		canvasWidth: number,
 		scale: number,
 	): void {
-		const rulerWidth = viewportWidth;
+		const rulerWidth = canvasWidth;
 		const contentWidth = contentRight - contentLeft;
 
 		// Calculate appropriate tick spacing
@@ -253,10 +253,10 @@ export function createRulers(
 	function updateVerticalRuler(
 		contentTop: number,
 		contentBottom: number,
-		viewportHeight: number,
+		canvasHeight: number,
 		scale: number,
 	): void {
-		const rulerHeight = viewportHeight;
+		const rulerHeight = canvasHeight;
 		const contentHeight = contentBottom - contentTop;
 
 		// Calculate appropriate tick spacing
@@ -281,9 +281,9 @@ export function createRulers(
 	// Calculate appropriate tick spacing based on zoom level
 	function calculateTickSpacing(
 		contentSize: number,
-		viewportSize: number,
+		canvasSize: number,
 	): number {
-		const targetTicks = Math.max(5, Math.min(20, viewportSize / 50));
+		const targetTicks = Math.max(5, Math.min(20, canvasSize / 50));
 		const rawSpacing = contentSize / targetTicks;
 
 		// Round to nice numbers
@@ -403,9 +403,9 @@ export function createRulers(
 
 	// Set up event listeners
 	function setupEventListeners(): () => void {
-		// Listen for viewport transform updates
-		const originalUpdateTransform = viewport.updateTransform;
-		viewport.updateTransform = function (
+		// Listen for canvas transform updates
+		const originalUpdateTransform = canvas.updateTransform;
+		canvas.updateTransform = function (
 			newTransform: Partial<Transform>,
 		): boolean {
 			const result = originalUpdateTransform.call(this, newTransform);
@@ -424,7 +424,7 @@ export function createRulers(
 		// Store cleanup function
 		return () => {
 			window.removeEventListener("resize", resizeHandler);
-			viewport.updateTransform = originalUpdateTransform;
+			canvas.updateTransform = originalUpdateTransform;
 		};
 	}
 
@@ -485,12 +485,12 @@ export function createRulers(
 					gridOverlay.parentNode.removeChild(gridOverlay);
 				}
 
-				// Restore viewport transform layer positioning
-				if (viewport.transformLayer) {
-					viewport.transformLayer.style.top = "0";
-					viewport.transformLayer.style.left = "0";
-					viewport.transformLayer.style.width = "100%";
-					viewport.transformLayer.style.height = "100%";
+				// Restore canvas transform layer positioning
+				if (canvas.transformLayer) {
+					canvas.transformLayer.style.top = "0";
+					canvas.transformLayer.style.left = "0";
+					canvas.transformLayer.style.width = "100%";
+					canvas.transformLayer.style.height = "100%";
 				}
 			},
 		};

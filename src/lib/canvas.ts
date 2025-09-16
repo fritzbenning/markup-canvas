@@ -1,13 +1,13 @@
 /**
- * Viewport Management Functions
- * Functions for creating and managing zoomable viewports
+ * Canvas Management Functions
+ * Functions for creating and managing zoomable canvases
  */
 
 import {
 	calculateMatrix,
 	clampZoom,
 	getZoomToMouseTransform,
-	viewportToContent,
+	canvasToContent,
 } from "./matrix.js";
 import {
 	applyTransform,
@@ -28,7 +28,7 @@ interface Point {
 	y: number;
 }
 
-interface ViewportBounds {
+interface CanvasBounds {
 	width: number;
 	height: number;
 	contentWidth: number;
@@ -52,7 +52,7 @@ interface ViewportBounds {
 	canZoomOut: boolean;
 }
 
-interface ViewportOptions {
+interface CanvasOptions {
 	contentWidth?: number;
 	contentHeight?: number;
 	enableAcceleration?: boolean;
@@ -66,20 +66,20 @@ interface AddContentOptions {
 	absolute?: boolean;
 }
 
-interface Viewport {
+interface Canvas {
 	container: HTMLElement;
 	transformLayer: HTMLElement;
 	contentLayer: HTMLElement;
-	config: Required<ViewportOptions>;
+	config: Required<CanvasOptions>;
 	transform: Transform;
-	getBounds: () => ViewportBounds;
+	getBounds: () => CanvasBounds;
 	addContent: (element: HTMLElement, options?: AddContentOptions) => boolean;
 	updateTransform: (newTransform: Partial<Transform>) => boolean;
 	reset: () => boolean;
 	handleResize: () => boolean;
 	setZoom: (zoomLevel: number) => boolean;
 	setInteractionMode: (mode: string) => boolean;
-	viewportToContent: (x: number, y: number) => Point;
+	canvasToContent: (x: number, y: number) => Point;
 	zoomToPoint: (
 		x: number,
 		y: number,
@@ -91,20 +91,20 @@ interface Viewport {
 }
 
 /**
- * Creates and initializes a viewport with the required DOM structure
+ * Creates and initializes a canvas with the required DOM structure
  */
-export function createViewport(
+export function createCanvas(
 	container: HTMLElement,
-	options: ViewportOptions = {},
-): Viewport | null {
+	options: CanvasOptions = {},
+): Canvas | null {
 	// Validate container
 	if (!container?.appendChild) {
-		console.error("Invalid container element provided to createViewport");
+		console.error("Invalid container element provided to createCanvas");
 		return null;
 	}
 
 	// Set default options
-	const config: Required<ViewportOptions> = {
+	const config: Required<CanvasOptions> = {
 		contentWidth: 8000,
 		contentHeight: 8000,
 		enableAcceleration: true,
@@ -125,7 +125,7 @@ export function createViewport(
 	}
 
 	try {
-		// Set up viewport container styles - preserve existing position and dimensions
+		// Set up canvas container styles - preserve existing position and dimensions
 		const currentPosition = getComputedStyle(container).position;
 		if (currentPosition === "static") {
 			container.style.position = "relative";
@@ -152,9 +152,9 @@ export function createViewport(
 			container.style.width = "100vw";
 		}
 
-		// Add viewport-specific classes if not present
-		if (!container.classList.contains("viewport-container")) {
-			container.classList.add("viewport-container");
+		// Add canvas-specific classes if not present
+		if (!container.classList.contains("canvas-container")) {
+			container.classList.add("canvas-container");
 		}
 
 		// Store existing content before creating new structure
@@ -230,8 +230,8 @@ export function createViewport(
 		);
 		applyTransform(transformLayer, initialMatrix);
 
-		// Create viewport object
-		const viewport: Viewport = {
+		// Create canvas object
+		const canvas: Canvas = {
 			// DOM references
 			container,
 			transformLayer,
@@ -244,23 +244,23 @@ export function createViewport(
 			transform: initialTransform,
 
 			// Utility methods
-			getBounds: () => getViewportBounds(viewport),
+			getBounds: () => getCanvasBounds(canvas),
 			addContent: (element: HTMLElement, options?: AddContentOptions) =>
-				addContentToViewport(viewport, element, options),
+				addContentToCanvas(canvas, element, options),
 
 			// Transform methods
 			updateTransform: (newTransform: Partial<Transform>) => {
-				viewport.transform = { ...viewport.transform, ...newTransform };
+				canvas.transform = { ...canvas.transform, ...newTransform };
 				const matrix = calculateMatrix(
-					viewport.transform.scale,
-					viewport.transform.translateX,
-					viewport.transform.translateY,
+					canvas.transform.scale,
+					canvas.transform.translateX,
+					canvas.transform.translateY,
 				);
-				const result = applyTransform(viewport.transformLayer, matrix);
+				const result = applyTransform(canvas.transformLayer, matrix);
 
 				// Call update callback if provided
 				if (config.onTransformUpdate) {
-					config.onTransformUpdate(viewport.transform);
+					config.onTransformUpdate(canvas.transform);
 				}
 
 				return result;
@@ -273,14 +273,14 @@ export function createViewport(
 					translateX: 0,
 					translateY: 0,
 				};
-				return viewport.updateTransform(resetTransform);
+				return canvas.updateTransform(resetTransform);
 			},
 
-			// Handle viewport resize
+			// Handle canvas resize
 			handleResize: () => {
-				// Update viewport bounds and ensure proper dimensions
+				// Update canvas bounds and ensure proper dimensions
 				const newRect = container.getBoundingClientRect();
-				console.log("Viewport resized:", {
+				console.log("Canvas resized:", {
 					width: newRect.width,
 					height: newRect.height,
 				});
@@ -292,7 +292,7 @@ export function createViewport(
 			// Set zoom level
 			setZoom: (zoomLevel: number) => {
 				const newScale = clampZoom(zoomLevel);
-				return viewport.updateTransform({ scale: newScale });
+				return canvas.updateTransform({ scale: newScale });
 			},
 
 			// Set interaction mode (placeholder for demo compatibility)
@@ -301,14 +301,14 @@ export function createViewport(
 				return true;
 			},
 
-			// Convert viewport coordinates to content coordinates
-			viewportToContent: (x: number, y: number) => {
+			// Convert canvas coordinates to content coordinates
+			canvasToContent: (x: number, y: number) => {
 				const matrix = calculateMatrix(
-					viewport.transform.scale,
-					viewport.transform.translateX,
-					viewport.transform.translateY,
+					canvas.transform.scale,
+					canvas.transform.translateX,
+					canvas.transform.translateY,
 				);
-				return viewportToContent(x, y, matrix);
+				return canvasToContent(x, y, matrix);
 			},
 
 			// Zoom to a specific point with animation
@@ -319,21 +319,21 @@ export function createViewport(
 				duration = 300,
 			) => {
 				// Enable smooth transitions for programmatic zoom
-				enableSmoothTransitions(viewport.transformLayer, duration / 1000);
+				enableSmoothTransitions(canvas.transformLayer, duration / 1000);
 
 				const newTransform = getZoomToMouseTransform(
 					x,
 					y,
-					viewport.transform,
-					targetScale / viewport.transform.scale,
+					canvas.transform,
+					targetScale / canvas.transform.scale,
 				);
 
-				const result = viewport.updateTransform(newTransform);
+				const result = canvas.updateTransform(newTransform);
 
 				// Disable transitions after animation completes
 				setTimeout(() => {
-					if (viewport.transformLayer) {
-						disableSmoothTransitions(viewport.transformLayer);
+					if (canvas.transformLayer) {
+						disableSmoothTransitions(canvas.transformLayer);
 					}
 				}, duration + 50);
 
@@ -343,31 +343,31 @@ export function createViewport(
 			// Reset view with animation
 			resetView: (duration = 300) => {
 				// Enable smooth transitions for reset
-				enableSmoothTransitions(viewport.transformLayer, duration / 1000);
+				enableSmoothTransitions(canvas.transformLayer, duration / 1000);
 
 				const resetTransform: Transform = {
 					scale: 1.0,
 					translateX: 0,
 					translateY: 0,
 				};
-				const result = viewport.updateTransform(resetTransform);
+				const result = canvas.updateTransform(resetTransform);
 
 				// Disable transitions after animation completes
 				setTimeout(() => {
-					if (viewport.transformLayer) {
-						disableSmoothTransitions(viewport.transformLayer);
+					if (canvas.transformLayer) {
+						disableSmoothTransitions(canvas.transformLayer);
 					}
 				}, duration + 50);
 
 				return result;
 			},
 
-			// Zoom to fit content in viewport
+			// Zoom to fit content in canvas
 			zoomToFitContent: (duration = 300) => {
 				// Enable smooth transitions for zoom to fit
-				enableSmoothTransitions(viewport.transformLayer, duration / 1000);
+				enableSmoothTransitions(canvas.transformLayer, duration / 1000);
 
-				const bounds = viewport.getBounds();
+				const bounds = canvas.getBounds();
 				const scaleX = bounds.width / config.contentWidth;
 				const scaleY = bounds.height / config.contentHeight;
 				const fitScale = clampZoom(Math.min(scaleX, scaleY) * 0.9); // 90% to add padding
@@ -378,7 +378,7 @@ export function createViewport(
 				const centerX = (bounds.width - scaledWidth) / 2;
 				const centerY = (bounds.height - scaledHeight) / 2;
 
-				const result = viewport.updateTransform({
+				const result = canvas.updateTransform({
 					scale: fitScale,
 					translateX: centerX,
 					translateY: centerY,
@@ -386,8 +386,8 @@ export function createViewport(
 
 				// Disable transitions after animation completes
 				setTimeout(() => {
-					if (viewport.transformLayer) {
-						disableSmoothTransitions(viewport.transformLayer);
+					if (canvas.transformLayer) {
+						disableSmoothTransitions(canvas.transformLayer);
 					}
 				}, duration + 50);
 
@@ -395,26 +395,26 @@ export function createViewport(
 			},
 		};
 
-		console.log("Viewport created successfully:", {
+		console.log("Canvas created successfully:", {
 			contentSize: `${config.contentWidth}x${config.contentHeight}`,
 			acceleration: config.enableAcceleration,
 			eventHandling: config.enableEventHandling,
 		});
 
-		return viewport;
+		return canvas;
 	} catch (error) {
-		console.error("Failed to create viewport:", error);
+		console.error("Failed to create canvas:", error);
 		return null;
 	}
 }
 
 /**
- * Gets the current bounds and dimensions of a viewport
+ * Gets the current bounds and dimensions of a canvas
  */
-export function getViewportBounds(viewport: Viewport): ViewportBounds {
-	// Validate viewport
-	if (!viewport?.container) {
-		console.warn("Invalid viewport provided to getViewportBounds");
+export function getCanvasBounds(canvas: Canvas): CanvasBounds {
+	// Validate canvas
+	if (!canvas?.container) {
+		console.warn("Invalid canvas provided to getCanvasBounds");
 		return {
 			width: 0,
 			height: 0,
@@ -436,25 +436,25 @@ export function getViewportBounds(viewport: Viewport): ViewportBounds {
 	}
 
 	try {
-		const container = viewport.container;
-		const config = viewport.config;
-		const transform = viewport.transform || {
+		const container = canvas.container;
+		const config = canvas.config;
+		const transform = canvas.transform || {
 			scale: 1.0,
 			translateX: 0,
 			translateY: 0,
 		};
 
-		// Get viewport dimensions
+		// Get canvas dimensions
 		const containerRect = container.getBoundingClientRect();
-		const viewportWidth = containerRect.width || container.clientWidth || 0;
-		const viewportHeight = containerRect.height || container.clientHeight || 0;
+		const canvasWidth = containerRect.width || container.clientWidth || 0;
+		const canvasHeight = containerRect.height || container.clientHeight || 0;
 
 		// Get content dimensions
 		const contentWidth = config.contentWidth || 8000;
 		const contentHeight = config.contentHeight || 8000;
 
 		// Calculate visible area in content coordinates
-		const topLeft = viewportToContent(
+		const topLeft = canvasToContent(
 			0,
 			0,
 			calculateMatrix(
@@ -464,9 +464,9 @@ export function getViewportBounds(viewport: Viewport): ViewportBounds {
 			),
 		);
 
-		const bottomRight = viewportToContent(
-			viewportWidth,
-			viewportHeight,
+		const bottomRight = canvasToContent(
+			canvasWidth,
+			canvasHeight,
 			calculateMatrix(
 				transform.scale,
 				transform.translateX,
@@ -488,9 +488,9 @@ export function getViewportBounds(viewport: Viewport): ViewportBounds {
 		};
 
 		return {
-			// Viewport dimensions
-			width: viewportWidth,
-			height: viewportHeight,
+			// Canvas dimensions
+			width: canvasWidth,
+			height: canvasHeight,
 
 			// Content dimensions
 			contentWidth,
@@ -511,17 +511,17 @@ export function getViewportBounds(viewport: Viewport): ViewportBounds {
 			// Bounds checking
 			canPanLeft: transform.translateX < 0,
 			canPanRight:
-				transform.translateX + contentWidth * transform.scale > viewportWidth,
+				transform.translateX + contentWidth * transform.scale > canvasWidth,
 			canPanUp: transform.translateY < 0,
 			canPanDown:
-				transform.translateY + contentHeight * transform.scale > viewportHeight,
+				transform.translateY + contentHeight * transform.scale > canvasHeight,
 
 			// Zoom bounds
 			canZoomIn: transform.scale < 3.5,
 			canZoomOut: transform.scale > 0.1,
 		};
 	} catch (error) {
-		console.error("Failed to calculate viewport bounds:", error);
+		console.error("Failed to calculate canvas bounds:", error);
 		return {
 			width: 0,
 			height: 0,
@@ -544,21 +544,21 @@ export function getViewportBounds(viewport: Viewport): ViewportBounds {
 }
 
 /**
- * Adds an HTML element to the viewport's content layer
+ * Adds an HTML element to the canvas's content layer
  */
-export function addContentToViewport(
-	viewport: Viewport,
+export function addContentToCanvas(
+	canvas: Canvas,
 	element: HTMLElement,
 	options: AddContentOptions = {},
 ): boolean {
 	// Validate inputs
-	if (!viewport?.contentLayer) {
-		console.error("Invalid viewport provided to addContentToViewport");
+	if (!canvas?.contentLayer) {
+		console.error("Invalid canvas provided to addContentToCanvas");
 		return false;
 	}
 
 	if (!element?.style) {
-		console.error("Invalid element provided to addContentToViewport");
+		console.error("Invalid element provided to addContentToCanvas");
 		return false;
 	}
 
@@ -593,11 +593,11 @@ export function addContentToViewport(
 		}
 
 		// Add element to content layer
-		viewport.contentLayer.appendChild(element);
+		canvas.contentLayer.appendChild(element);
 
 		// Validate bounds if position was specified
 		if (typeof config.x === "number" || typeof config.y === "number") {
-			const bounds = getViewportBounds(viewport);
+			const bounds = getCanvasBounds(canvas);
 			const x = config.x || 0;
 			const y = config.y || 0;
 
@@ -613,7 +613,7 @@ export function addContentToViewport(
 
 		return true;
 	} catch (error) {
-		console.error("Failed to add element to viewport:", error);
+		console.error("Failed to add element to canvas:", error);
 		return false;
 	}
 }

@@ -538,7 +538,7 @@
       </div>
     </div>
 
-    <div class="demo-container" id="viewport">
+    <div class="demo-container" id="canvas">
       <div class="sample-content">
         <div class="grid-overlay" id="gridOverlay"></div>
         <div class="coordinates-display" id="coordinates">
@@ -2581,16 +2581,16 @@
       }
 
       // Demo application logic
-      let viewport;
+      let canvas;
       let performanceMonitor;
       let gridVisible = true;
 
       // Initialize the demo
       function initDemo() {
-        const container = document.getElementById("viewport");
+        const container = document.getElementById("canvas");
 
-        // Create viewport with demo configuration
-        viewport = MarkupCanvas.createMarkupCanvas(container, {
+        // Create canvas with demo configuration
+        canvas = MarkupCanvas.createMarkupCanvas(container, {
           contentWidth: 8000,
           contentHeight: 8000,
           enableAcceleration: true,
@@ -2607,14 +2607,14 @@
         });
 
         // Focus the container to enable keyboard events
-        if (viewport && viewport.container) {
-          viewport.container.focus();
+        if (canvas && canvas.container) {
+          canvas.container.focus();
           console.log("Container focused for keyboard events");
         }
 
-        // Add rulers to the viewport
-        if (viewport && MarkupCanvas.createRulers) {
-          window.rulers = MarkupCanvas.createRulers(viewport, {
+        // Add rulers to the canvas
+        if (canvas && MarkupCanvas.createRulers) {
+          window.rulers = MarkupCanvas.createRulers(canvas, {
             rulerSize: 25,
             showGrid: false, // Start with grid off since demo has its own grid
             backgroundColor: "rgba(248, 249, 250, 0.95)",
@@ -2655,8 +2655,8 @@
         // Zoom input
         document.getElementById("zoomInput").addEventListener("input", (e) => {
           const zoom = parseFloat(e.target.value) / 100;
-          if (viewport) {
-            viewport.setZoom(zoom);
+          if (canvas) {
+            canvas.setZoom(zoom);
           }
         });
 
@@ -2664,15 +2664,15 @@
         document
           .getElementById("modeSelect")
           .addEventListener("change", (e) => {
-            if (viewport) {
-              viewport.setInteractionMode(e.target.value);
+            if (canvas) {
+              canvas.setInteractionMode(e.target.value);
             }
           });
 
         // Mouse position tracking
         document.addEventListener("mousemove", (e) => {
-          if (viewport) {
-            const rect = viewport.container.getBoundingClientRect();
+          if (canvas) {
+            const rect = canvas.container.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
 
@@ -2681,7 +2681,7 @@
             ).textContent = `${Math.round(mouseX)}, ${Math.round(mouseY)}`;
 
             // Convert to content coordinates
-            const contentCoords = viewport.viewportToContent(mouseX, mouseY);
+            const contentCoords = canvas.canvasToContent(mouseX, mouseY);
             document.getElementById(
               "contentPosition"
             ).textContent = `${Math.round(contentCoords.x)}, ${Math.round(
@@ -2691,16 +2691,16 @@
         });
 
         // Add immediate scrollbar updates for mouse/touch events
-        const container = document.getElementById("viewport");
+        const container = document.getElementById("canvas");
         let isInteracting = false;
         let animationId = null;
 
         if (container) {
           // Continuous update function during interaction
           function continuousUpdate() {
-            if (isInteracting && viewport && viewport.transform) {
-              updateScrollbars(viewport.transform);
-              updatePositionIndicator(viewport.transform);
+            if (isInteracting && canvas && canvas.transform) {
+              updateScrollbars(canvas.transform);
+              updatePositionIndicator(canvas.transform);
               animationId = requestAnimationFrame(continuousUpdate);
             }
           }
@@ -2736,9 +2736,9 @@
               });
 
               // Final smooth update
-              if (viewport && viewport.transform) {
-                updateScrollbars(viewport.transform);
-                updatePositionIndicator(viewport.transform);
+              if (canvas && canvas.transform) {
+                updateScrollbars(canvas.transform);
+                updatePositionIndicator(canvas.transform);
               }
             }, 50); // Small delay to ensure interaction has fully stopped
           }
@@ -2792,8 +2792,8 @@
             const itemCenterX = rect.left + rect.width / 2;
             const itemCenterY = rect.top + rect.height / 2;
 
-            if (viewport) {
-              viewport.zoomToPoint(itemCenterX, itemCenterY, 2.0, 500);
+            if (canvas) {
+              canvas.zoomToPoint(itemCenterX, itemCenterY, 2.0, 500);
             }
           });
         });
@@ -2813,10 +2813,10 @@
             ) {
               // Extract transform values from the style
               const style = transformLayer.style.transform;
-              if (style && viewport && viewport.transform) {
+              if (style && canvas && canvas.transform) {
                 // Immediate scrollbar update
-                updateScrollbars(viewport.transform);
-                updatePositionIndicator(viewport.transform);
+                updateScrollbars(canvas.transform);
+                updatePositionIndicator(canvas.transform);
               }
             }
           });
@@ -2830,11 +2830,11 @@
         // Also monitor using a high-frequency interval as backup
         let lastTransform = null;
         setInterval(() => {
-          if (viewport && viewport.transform) {
-            const currentTransform = JSON.stringify(viewport.transform);
+          if (canvas && canvas.transform) {
+            const currentTransform = JSON.stringify(canvas.transform);
             if (currentTransform !== lastTransform) {
-              updateScrollbars(viewport.transform);
-              updatePositionIndicator(viewport.transform);
+              updateScrollbars(canvas.transform);
+              updatePositionIndicator(canvas.transform);
               lastTransform = currentTransform;
             }
           }
@@ -2955,9 +2955,9 @@
 
       function startAdaptiveZoomMonitoring() {
         function updateAdaptiveZoomDisplay() {
-          if (!viewport) return;
+          if (!canvas) return;
 
-          const bounds = viewport.getBounds();
+          const bounds = canvas.getBounds();
           const displayArea = bounds.width * bounds.height;
           const referenceArea = 1920 * 1080;
           const rawScaleFactor = Math.pow(displayArea / referenceArea, 0.85);
@@ -3038,16 +3038,16 @@
 
       // Demo control functions
       function resetView() {
-        if (viewport) {
+        if (canvas) {
           // Instant reset without transition
-          viewport.resetView(0);
+          canvas.resetView(0);
         }
       }
 
       function zoomToFit() {
-        if (viewport) {
+        if (canvas) {
           // Instant fit without transition
-          viewport.zoomToFitContent(0);
+          canvas.zoomToFitContent(0);
         }
       }
 
@@ -3102,8 +3102,8 @@
           const itemCenterX = rect.left + rect.width / 2;
           const itemCenterY = rect.top + rect.height / 2;
 
-          if (viewport) {
-            viewport.zoomToPoint(itemCenterX, itemCenterY, 2.0, 500);
+          if (canvas) {
+            canvas.zoomToPoint(itemCenterX, itemCenterY, 2.0, 500);
           }
         });
 
@@ -3136,11 +3136,11 @@
         const canvasWidth = 8000;
         const canvasHeight = 8000;
 
-        if (!viewport || !viewport.container) return;
+        if (!canvas || !canvas.container) return;
 
-        const containerRect = viewport.container.getBoundingClientRect();
-        const viewportWidth = containerRect.width;
-        const viewportHeight = containerRect.height;
+        const containerRect = canvas.container.getBoundingClientRect();
+        const canvasWidth = containerRect.width;
+        const canvasHeight = containerRect.height;
 
         // Calculate visible area in content coordinates
         const scaledContentWidth = canvasWidth * transform.scale;
@@ -3159,15 +3159,15 @@
         if (horizontalThumb && horizontalScrollbar) {
           const scrollbarWidth = horizontalScrollbar.offsetWidth;
 
-          if (scaledContentWidth > viewportWidth) {
-            // Calculate thumb size based on viewport to content ratio
+          if (scaledContentWidth > canvasWidth) {
+            // Calculate thumb size based on canvas to content ratio
             const thumbWidth = Math.max(
               15,
-              (viewportWidth / scaledContentWidth) * scrollbarWidth
+              (canvasWidth / scaledContentWidth) * scrollbarWidth
             );
 
             // Calculate thumb position
-            const maxScroll = scaledContentWidth - viewportWidth;
+            const maxScroll = scaledContentWidth - canvasWidth;
             const scrollProgress = Math.max(
               0,
               Math.min(1, contentX / maxScroll)
@@ -3193,15 +3193,15 @@
         if (verticalThumb && verticalScrollbar) {
           const scrollbarHeight = verticalScrollbar.offsetHeight;
 
-          if (scaledContentHeight > viewportHeight) {
-            // Calculate thumb size based on viewport to content ratio
+          if (scaledContentHeight > canvasHeight) {
+            // Calculate thumb size based on canvas to content ratio
             const thumbHeight = Math.max(
               15,
-              (viewportHeight / scaledContentHeight) * scrollbarHeight
+              (canvasHeight / scaledContentHeight) * scrollbarHeight
             );
 
             // Calculate thumb position
-            const maxScroll = scaledContentHeight - viewportHeight;
+            const maxScroll = scaledContentHeight - canvasHeight;
             const scrollProgress = Math.max(
               0,
               Math.min(1, contentY / maxScroll)
@@ -3235,10 +3235,10 @@
 
         if (canvasBounds) {
           const visibleWidth = Math.round(
-            viewport?.container?.offsetWidth / transform.scale || 0
+            canvas?.container?.offsetWidth / transform.scale || 0
           );
           const visibleHeight = Math.round(
-            viewport?.container?.offsetHeight / transform.scale || 0
+            canvas?.container?.offsetHeight / transform.scale || 0
           );
 
           canvasBounds.textContent = `Canvas: 8000×8000px | Visible: ${visibleWidth}×${visibleHeight}px`;
@@ -3336,7 +3336,7 @@
 
         // Global mouse move handler
         document.addEventListener("mousemove", (e) => {
-          if (!isDragging || !viewport) return;
+          if (!isDragging || !canvas) return;
 
           if (dragType === "horizontal") {
             const deltaX = e.clientX - dragStartX;
@@ -3406,36 +3406,36 @@
       }
 
       function updateContentFromScrollbar(direction, scrollProgress) {
-        if (!viewport || !viewport.transform) return;
+        if (!canvas || !canvas.transform) return;
 
-        const canvasWidth = 8000;
-        const canvasHeight = 8000;
-        const containerRect = viewport.container.getBoundingClientRect();
-        const viewportWidth = containerRect.width;
-        const viewportHeight = containerRect.height;
+        const contentWidth = 8000;
+        const contentHeight = 8000;
+        const containerRect = canvas.container.getBoundingClientRect();
+        const containerWidth = containerRect.width;
+        const containerHeight = containerRect.height;
 
-        const currentTransform = viewport.transform;
-        const scaledContentWidth = canvasWidth * currentTransform.scale;
-        const scaledContentHeight = canvasHeight * currentTransform.scale;
+        const currentTransform = canvas.transform;
+        const scaledContentWidth = contentWidth * currentTransform.scale;
+        const scaledContentHeight = contentHeight * currentTransform.scale;
 
         let newTransform = { ...currentTransform };
 
         if (direction === "horizontal") {
-          if (scaledContentWidth > viewportWidth) {
-            const maxScroll = scaledContentWidth - viewportWidth;
+          if (scaledContentWidth > containerWidth) {
+            const maxScroll = scaledContentWidth - containerWidth;
             const newContentX = scrollProgress * maxScroll;
             newTransform.translateX = -newContentX;
           }
         } else if (direction === "vertical") {
-          if (scaledContentHeight > viewportHeight) {
-            const maxScroll = scaledContentHeight - viewportHeight;
+          if (scaledContentHeight > containerHeight) {
+            const maxScroll = scaledContentHeight - containerHeight;
             const newContentY = scrollProgress * maxScroll;
             newTransform.translateY = -newContentY;
           }
         }
 
         // Apply the new transform
-        viewport.updateTransform({
+        canvas.updateTransform({
           scale: newTransform.scale,
           translateX: newTransform.translateX,
           translateY: newTransform.translateY,
@@ -3444,9 +3444,9 @@
 
       // Test adaptive zoom functionality
       function testAdaptiveZoom() {
-        if (!viewport) return;
+        if (!canvas) return;
 
-        const bounds = viewport.getBounds();
+        const bounds = canvas.getBounds();
         const displayArea = bounds.width * bounds.height;
         const referenceArea = 1920 * 1080;
         const rawScaleFactor = Math.pow(displayArea / referenceArea, 0.85);
@@ -3526,8 +3526,8 @@
 
       // Handle window resize
       window.addEventListener("resize", () => {
-        if (viewport) {
-          viewport.handleResize();
+        if (canvas) {
+          canvas.handleResize();
         }
       });
     </script>

@@ -31,7 +31,7 @@ npm install markup-canvas
 import { createMarkupCanvas } from "markup-canvas";
 
 const container = document.getElementById("mark-up-container");
-const viewport = createMarkupCanvas(container, {
+const canvas = createMarkupCanvas(container, {
   contentWidth: 2000,
   contentHeight: 2000,
 });
@@ -74,45 +74,45 @@ Creates a complete markup canvas with all event handlers.
 - `requireOptionForClickZoom` (boolean): Require Option/Alt key to be held for click-to-zoom (default: false)
 - `onTransformUpdate` (function): Callback for transform changes
 
-**Returns:** Viewport object or null if initialization fails
+**Returns:** Canvas object or null if initialization fails
 
-### Viewport Methods
+### Canvas Methods
 
 ```javascript
 // Zoom controls
-viewport.setZoom(1.5); // Set zoom to 150%
-viewport.zoomToPoint(400, 300, 2.0); // Zoom to 200% at point (400, 300)
-viewport.zoomToFitContent(); // Fit content in viewport
+canvas.setZoom(1.5); // Set zoom to 150%
+canvas.zoomToPoint(400, 300, 2.0); // Zoom to 200% at point (400, 300)
+canvas.zoomToFitContent(); // Fit content in canvas
 
 // View controls
-viewport.resetView(); // Reset to initial state
-viewport.reset(); // Same as resetView
+canvas.resetView(); // Reset to initial state
+canvas.reset(); // Same as resetView
 
 // Coordinate conversion
-const contentCoords = viewport.viewportToContent(mouseX, mouseY);
+const contentCoords = canvas.canvasToContent(mouseX, mouseY);
 
 // Add content
-viewport.addContent(element, { x: 100, y: 100 });
+canvas.addContent(element, { x: 100, y: 100 });
 
-// Get viewport information
-const bounds = viewport.getBounds();
+// Get canvas information
+const bounds = canvas.getBounds();
 
 // Cleanup
-viewport.cleanup(); // Remove all event listeners
+canvas.cleanup(); // Remove all event listeners
 ```
 
 ### Dynamic Rulers
 
-Add dynamic rulers that show viewport dimensions and scale:
+Add dynamic rulers that show canvas dimensions and scale:
 
 ```javascript
 import { initializeMarkupCanvas, createRulers } from "markup-canvas";
 
-// Initialize viewport
-const viewport = initializeMarkupCanvas(container);
+// Initialize canvas
+const canvas = initializeMarkupCanvas(container);
 
 // Add rulers
-const rulers = createRulers(viewport, {
+const rulers = createRulers(canvas, {
   rulerSize: 30,
   showGrid: true,
   backgroundColor: "rgba(255, 255, 255, 0.95)",
@@ -146,26 +146,26 @@ You can also use individual components:
 
 ```javascript
 import {
-  createViewport,
+  createCanvas,
   setupWheelZoom,
   setupMouseDrag,
   setupKeyboardNavigation,
   createRulers,
 } from "markup-canvas";
 
-// Create viewport without automatic event handling
-const viewport = createViewport(container, {
+// Create canvas without automatic event handling
+const canvas = createCanvas(container, {
   contentWidth: 2000,
   contentHeight: 2000,
   enableEventHandling: false,
 });
 
 // Set up only the events you need
-const wheelCleanup = setupWheelZoom(viewport);
-const dragCleanup = setupMouseDrag(viewport);
+const wheelCleanup = setupWheelZoom(canvas);
+const dragCleanup = setupMouseDrag(canvas);
 
 // Add rulers
-const rulers = createRulers(viewport);
+const rulers = createRulers(canvas);
 ```
 
 ## Controls
@@ -201,21 +201,21 @@ const rulers = createRulers(viewport);
 import { initializeMarkupCanvas } from "markup-canvas";
 
 const container = document.getElementById("image-container");
-const viewport = initializeMarkupCanvas(container);
+const canvas = initializeMarkupCanvas(container);
 
 // Add an image
 const img = document.createElement("img");
 img.src = "large-image.jpg";
 img.onload = () => {
-  viewport.addContent(img, { x: 0, y: 0 });
-  viewport.zoomToFitContent();
+  canvas.addContent(img, { x: 0, y: 0 });
+  canvas.zoomToFitContent();
 };
 ```
 
 ### Interactive Diagram
 
 ```javascript
-const viewport = initializeMarkupCanvas(container, {
+const canvas = initializeMarkupCanvas(container, {
   contentWidth: 5000,
   contentHeight: 3000,
   onTransformUpdate: (transform) => {
@@ -229,10 +229,10 @@ node.className = "diagram-node";
 node.style.width = "100px";
 node.style.height = "100px";
 node.addEventListener("click", () => {
-  viewport.zoomToPoint(150, 150, 2.0); // Zoom to this node
+  canvas.zoomToPoint(150, 150, 2.0); // Zoom to this node
 });
 
-viewport.addContent(node, { x: 100, y: 100 });
+canvas.addContent(node, { x: 100, y: 100 });
 ```
 
 ### Space-Required Mouse Dragging
@@ -240,7 +240,7 @@ viewport.addContent(node, { x: 100, y: 100 });
 For applications where you want to prevent accidental dragging (e.g., when users are selecting text or interacting with UI elements), you can require the space key to be held down:
 
 ```javascript
-const viewport = initializeMarkupCanvas(container, {
+const canvas = initializeMarkupCanvas(container, {
   requireSpaceForMouseDrag: true,
   contentWidth: 2000,
   contentHeight: 2000,
@@ -255,7 +255,7 @@ const viewport = initializeMarkupCanvas(container, {
 For precise control over when click-to-zoom activates, you can require the Option/Alt key:
 
 ```javascript
-const viewport = initializeMarkupCanvas(container, {
+const canvas = initializeMarkupCanvas(container, {
   enableClickToZoom: true,
   clickZoomLevel: 1.0, // Zoom to 100% (actual size)
   requireOptionForClickZoom: true, // Require Option/Alt key
@@ -277,16 +277,16 @@ import { initializeMarkupCanvas } from "markup-canvas";
 
 function MarkupCanvasComponent() {
   const containerRef = useRef(null);
-  const viewportRef = useRef(null);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     if (containerRef.current) {
-      viewportRef.current = initializeMarkupCanvas(containerRef.current);
+      canvasRef.current = initializeMarkupCanvas(containerRef.current);
     }
 
     return () => {
-      if (viewportRef.current) {
-        viewportRef.current.cleanup();
+      if (canvasRef.current) {
+        canvasRef.current.cleanup();
       }
     };
   }, []);
@@ -311,7 +311,7 @@ function MarkupCanvasComponent() {
 1. **Hardware Acceleration**: Enabled by default, provides smooth 60fps transforms
 2. **Content Size**: Larger content areas may impact performance on older devices
 3. **Event Handling**: Use modular imports to include only needed functionality
-4. **Memory Management**: Call `viewport.cleanup()` when removing components
+4. **Memory Management**: Call `canvas.cleanup()` when removing components
 
 ## License
 
