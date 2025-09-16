@@ -87,6 +87,13 @@ export function setupKeyboardNavigation(
 				}
 				handled = true;
 				break;
+			case "r":
+			case "R":
+				if (canvas.toggleRulers) {
+					canvas.toggleRulers();
+				}
+				handled = true;
+				break;
 		}
 
 		if (handled) {

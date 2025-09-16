@@ -90,6 +90,11 @@ export interface Canvas extends BaseCanvas {
 	showGrid?: () => boolean;
 	hideGrid?: () => boolean;
 	isGridVisible?: () => boolean;
+	// Ruler control functions
+	toggleRulers?: () => boolean;
+	showRulers?: () => boolean;
+	hideRulers?: () => boolean;
+	areRulersVisible?: () => boolean;
 	// Additional utility functions
 	centerContent: (duration?: number) => boolean;
 	fitToScreen: (duration?: number) => boolean;

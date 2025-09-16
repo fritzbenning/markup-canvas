@@ -252,6 +252,43 @@ export function createMarkupCanvas(
 			return false;
 		};
 
+		// Ruler control functions
+		_canvas.toggleRulers = () => {
+			if (rulers) {
+				const areVisible = _canvas.areRulersVisible?.() ?? false;
+				if (areVisible) {
+					rulers.hide();
+				} else {
+					rulers.show();
+				}
+				return true;
+			}
+			return false;
+		};
+
+		_canvas.showRulers = () => {
+			if (rulers) {
+				rulers.show();
+				return true;
+			}
+			return false;
+		};
+
+		_canvas.hideRulers = () => {
+			if (rulers) {
+				rulers.hide();
+				return true;
+			}
+			return false;
+		};
+
+		_canvas.areRulersVisible = () => {
+			if (rulers?.horizontalRuler) {
+				return rulers.horizontalRuler.style.display !== "none";
+			}
+			return false;
+		};
+
 		// Additional utility functions
 		_canvas.centerContent = (duration: number = 300) => {
 			const bounds = canvas.getBounds();

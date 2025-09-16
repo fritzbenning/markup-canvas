@@ -110,6 +110,12 @@ canvas.showGrid(); // Show grid
 canvas.hideGrid(); // Hide grid
 canvas.isGridVisible(); // Check if grid is visible
 
+// Ruler control functions (when rulers are enabled)
+canvas.toggleRulers(); // Toggle ruler visibility
+canvas.showRulers(); // Show rulers
+canvas.hideRulers(); // Hide rulers
+canvas.areRulersVisible(); // Check if rulers are visible
+
 // Additional utility functions
 canvas.centerContent(300); // Center content in canvas with animation
 canvas.fitToScreen(300); // Fit content to screen (alias for zoomToFitContent)
@@ -207,6 +213,7 @@ const rulers = createRulers(canvas);
 - **-**: Zoom out
 - **0**: Reset view
 - **G**: Toggle grid (when rulers are enabled)
+- **R**: Toggle rulers (when rulers are enabled)
 
 ### Touch/Trackpad (Mobile)
 
