@@ -7,7 +7,6 @@
 import { createCanvas } from "./lib/canvas.js";
 import {
 	setupKeyboardNavigation,
-	setupMouseDrag,
 	setupMouseDragWithControls,
 	setupTouchEvents,
 	setupWheelZoom,
