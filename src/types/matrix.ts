@@ -25,28 +25,3 @@ export interface ZoomBoundaryOptions {
 		clampedScale: number,
 	) => void;
 }
-
-export interface MatrixValidationResult {
-	isValid: boolean;
-	errors: string[];
-	warnings: string[];
-	correctedValues: {
-		scale: number;
-		translateX: number;
-		translateY: number;
-	};
-}
-
-export interface SafeMatrixResult {
-	matrix: DOMMatrix;
-	isValid: boolean;
-	errors: string[];
-	warnings: string[];
-	usedFallback: boolean;
-}
-
-export interface SafeMatrixOptions {
-	throwOnError?: boolean;
-	logErrors?: boolean;
-	logWarnings?: boolean;
-}

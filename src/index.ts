@@ -18,12 +18,7 @@ import {
 } from "./lib/transform.js";
 
 // Import types
-import type {
-	BaseCanvas,
-	Canvas,
-	Transform,
-	MarkupCanvasOptions,
-} from "./types/index.js";
+import type { Canvas, Transform, MarkupCanvasOptions } from "./types/index.js";
 
 // Export matrix calculation functions
 export {
@@ -33,7 +28,6 @@ export {
 	contentToCanvas,
 	createIdentityMatrix,
 	getZoomToMouseTransform,
-	safeCalculateMatrix,
 	canvasToContent,
 } from "./lib/matrix.js";
 
@@ -43,7 +37,6 @@ export {
 	disableSmoothTransitions,
 	enableHardwareAcceleration,
 	enableSmoothTransitions,
-	safeApplyTransform,
 	validateMatrix,
 } from "./lib/transform.js";
 

@@ -8,9 +8,6 @@ import type {
 	Point,
 	ZoomBoundaryResult,
 	ZoomBoundaryOptions,
-	MatrixValidationResult,
-	SafeMatrixResult,
-	SafeMatrixOptions,
 } from "../types/index.js";
 
 /**
@@ -21,45 +18,36 @@ export function calculateMatrix(
 	translateX: number,
 	translateY: number,
 ): DOMMatrix {
-	// Fast path for real-time operations - skip extensive validation
-	if (
-		typeof scale === "number" &&
-		Number.isFinite(scale) &&
-		scale > 0 &&
-		typeof translateX === "number" &&
-		Number.isFinite(translateX) &&
-		typeof translateY === "number" &&
-		Number.isFinite(translateY)
-	) {
-		// Create matrix directly for better performance
-		return new DOMMatrix([
-			scale,
-			0,
-			0,
-			0,
-			0,
-			scale,
-			0,
-			0,
-			0,
-			0,
-			1,
-			0,
-			translateX,
-			translateY,
-			0,
-			1,
-		]);
+	// Validate inputs and use fallback values if invalid
+	if (typeof scale !== "number" || !Number.isFinite(scale) || scale <= 0) {
+		scale = 1.0;
+	}
+	if (typeof translateX !== "number" || !Number.isFinite(translateX)) {
+		translateX = 0;
+	}
+	if (typeof translateY !== "number" || !Number.isFinite(translateY)) {
+		translateY = 0;
 	}
 
-	// Fallback to safe calculation for invalid inputs
-	const result = safeCalculateMatrix(scale, translateX, translateY, {
-		throwOnError: false,
-		logErrors: false, // Reduce logging for performance
-		logWarnings: false,
-	});
-
-	return result.matrix;
+	// Create matrix directly for better performance
+	return new DOMMatrix([
+		scale,
+		0,
+		0,
+		0,
+		0,
+		scale,
+		0,
+		0,
+		0,
+		0,
+		1,
+		0,
+		translateX,
+		translateY,
+		0,
+		1,
+	]);
 }
 
 /**
@@ -277,175 +265,4 @@ export function getZoomToMouseTransform(
  */
 export function createIdentityMatrix(): DOMMatrix {
 	return new DOMMatrix([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
-}
-
-/**
- * Safely calculates transformation matrix with comprehensive validation
- */
-export function safeCalculateMatrix(
-	scale: number,
-	translateX: number,
-	translateY: number,
-	options: SafeMatrixOptions = {},
-): SafeMatrixResult {
-	const config: Required<SafeMatrixOptions> = {
-		throwOnError: false,
-		logErrors: true,
-		logWarnings: false,
-		...options,
-	};
-
-	const result: SafeMatrixResult = {
-		matrix: createIdentityMatrix(),
-		isValid: true,
-		errors: [],
-		warnings: [],
-		usedFallback: false,
-	};
-
-	try {
-		// Validate input parameters
-		const paramValidation = validateTransformParameters(
-			scale,
-			translateX,
-			translateY,
-		);
-
-		if (!paramValidation.isValid) {
-			result.isValid = false;
-			result.errors.push(...paramValidation.errors);
-			result.warnings.push(...paramValidation.warnings);
-
-			if (config.logErrors) {
-				console.warn("Invalid transform parameters:", paramValidation.errors);
-			}
-
-			if (config.throwOnError) {
-				throw new Error(
-					`Invalid transform parameters: ${paramValidation.errors.join(", ")}`,
-				);
-			}
-
-			// Use corrected values
-			scale = paramValidation.correctedValues.scale;
-			translateX = paramValidation.correctedValues.translateX;
-			translateY = paramValidation.correctedValues.translateY;
-			result.usedFallback = true;
-		}
-
-		// Create matrix
-		const matrix = new DOMMatrix([
-			scale,
-			0,
-			0,
-			0,
-			0,
-			scale,
-			0,
-			0,
-			0,
-			0,
-			1,
-			0,
-			translateX,
-			translateY,
-			0,
-			1,
-		]);
-
-		result.matrix = matrix;
-	} catch (error) {
-		result.isValid = false;
-		result.errors.push(
-			`Matrix calculation failed: ${(error as Error).message}`,
-		);
-		result.matrix = createIdentityMatrix();
-		result.usedFallback = true;
-
-		if (config.logErrors) {
-			console.error("Matrix calculation error:", error);
-		}
-
-		if (config.throwOnError) {
-			throw error;
-		}
-	}
-
-	return result;
-}
-
-/**
- * Validates transform parameters before matrix calculation
- */
-function validateTransformParameters(
-	scale: number,
-	translateX: number,
-	translateY: number,
-): MatrixValidationResult {
-	const result: MatrixValidationResult = {
-		isValid: true,
-		errors: [],
-		warnings: [],
-		correctedValues: {
-			scale: scale,
-			translateX: translateX,
-			translateY: translateY,
-		},
-	};
-
-	// Validate scale
-	if (typeof scale !== "number") {
-		result.isValid = false;
-		result.errors.push(`Scale is not a number: ${typeof scale}`);
-		result.correctedValues.scale = 1.0;
-	} else if (Number.isNaN(scale)) {
-		result.isValid = false;
-		result.errors.push("Scale is NaN");
-		result.correctedValues.scale = 1.0;
-	} else if (!Number.isFinite(scale)) {
-		result.isValid = false;
-		result.errors.push("Scale is Infinity");
-		result.correctedValues.scale = 1.0;
-	} else if (scale <= 0) {
-		result.isValid = false;
-		result.errors.push(`Scale must be positive: ${scale}`);
-		result.correctedValues.scale = 1.0;
-	} else if (scale < 0.1 || scale > 3.5) {
-		result.warnings.push(
-			`Scale outside recommended bounds (0.1-3.5): ${scale}`,
-		);
-		result.correctedValues.scale = clampZoom(scale);
-	}
-
-	// Validate translateX
-	if (typeof translateX !== "number") {
-		result.isValid = false;
-		result.errors.push(`TranslateX is not a number: ${typeof translateX}`);
-		result.correctedValues.translateX = 0;
-	} else if (Number.isNaN(translateX)) {
-		result.isValid = false;
-		result.errors.push("TranslateX is NaN");
-		result.correctedValues.translateX = 0;
-	} else if (!Number.isFinite(translateX)) {
-		result.isValid = false;
-		result.errors.push("TranslateX is Infinity");
-		result.correctedValues.translateX = 0;
-	}
-
-	// Validate translateY
-	if (typeof translateY !== "number") {
-		result.isValid = false;
-		result.errors.push(`TranslateY is not a number: ${typeof translateY}`);
-		result.correctedValues.translateY = 0;
-	} else if (Number.isNaN(translateY)) {
-		result.isValid = false;
-		result.errors.push("TranslateY is NaN");
-		result.correctedValues.translateY = 0;
-	} else if (!Number.isFinite(translateY)) {
-		result.isValid = false;
-		result.errors.push("TranslateY is Infinity");
-		result.correctedValues.translateY = 0;
-	}
-
-	return result;
 }
