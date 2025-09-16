@@ -3,54 +3,12 @@
  * Creates horizontal and vertical rulers that show canvas dimensions and scale
  */
 
-// Type definitions
-interface Canvas {
-	container: HTMLElement;
-	transformLayer?: HTMLElement;
-	transform: Transform;
-	updateTransform: (newTransform: Partial<Transform>) => boolean;
-	getBounds: () => CanvasBounds;
-}
-
-interface Transform {
-	scale: number;
-	translateX: number;
-	translateY: number;
-}
-
-interface CanvasBounds {
-	width: number;
-	height: number;
-	scale?: number;
-	translateX?: number;
-	translateY?: number;
-}
-
-interface RulerOptions {
-	rulerSize?: number;
-	backgroundColor?: string;
-	borderColor?: string;
-	textColor?: string;
-	majorTickColor?: string;
-	minorTickColor?: string;
-	fontSize?: number;
-	fontFamily?: string;
-	showGrid?: boolean;
-	gridColor?: string;
-	units?: string;
-}
-
-interface RulerSystem {
-	horizontalRuler: HTMLElement;
-	verticalRuler: HTMLElement;
-	cornerBox: HTMLElement;
-	gridOverlay?: HTMLElement;
-	update: () => void;
-	show: () => void;
-	hide: () => void;
-	toggleGrid: () => void;
-	destroy: () => void;
-}
+import type {
+	Transform,
+	RulerCanvas as Canvas,
+	RulerOptions,
+	RulerSystem,
+} from "../types/index.js";
 
 /**
  * Creates dynamic rulers for a zoomable canvas
@@ -178,14 +136,6 @@ export function createRulers(
 		container.appendChild(cornerBox);
 		if (gridOverlay) {
 			container.appendChild(gridOverlay);
-		}
-
-		// Adjust canvas content area
-		if (canvas.transformLayer) {
-			canvas.transformLayer.style.top = `${config.rulerSize}px`;
-			canvas.transformLayer.style.left = `${config.rulerSize}px`;
-			canvas.transformLayer.style.width = `calc(100% - ${config.rulerSize}px)`;
-			canvas.transformLayer.style.height = `calc(100% - ${config.rulerSize}px)`;
 		}
 	}
 
@@ -489,8 +439,6 @@ export function createRulers(
 				if (canvas.transformLayer) {
 					canvas.transformLayer.style.top = "0";
 					canvas.transformLayer.style.left = "0";
-					canvas.transformLayer.style.width = "100%";
-					canvas.transformLayer.style.height = "100%";
 				}
 			},
 		};

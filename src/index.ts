@@ -17,6 +17,14 @@ import {
 	disableSmoothTransitions,
 } from "./lib/transform.js";
 
+// Import types
+import type {
+	BaseCanvas,
+	Canvas,
+	Transform,
+	MarkupCanvasOptions,
+} from "./types/index.js";
+
 // Export matrix calculation functions
 export {
 	calculateMatrix,
@@ -58,74 +66,8 @@ export {
 // Export ruler functions
 export { createRulers } from "./lib/rulers.js";
 
-// Type definitions
-interface MarkupCanvasOptions {
-	width?: number;
-	height?: number;
-	enableAcceleration?: boolean;
-	enableEventHandling?: boolean;
-	enableKeyboardControls?: boolean;
-	smoothTransition?: boolean;
-	zoomSpeed?: number;
-	fineZoomSpeed?: number;
-	enableLeftDrag?: boolean;
-	enableMiddleDrag?: boolean;
-	requireSpaceForMouseDrag?: boolean;
-	enableClickToZoom?: boolean;
-	clickZoomLevel?: number;
-	clickZoomDuration?: number;
-	requireOptionForClickZoom?: boolean;
-	onTransformUpdate?: (transform: Transform) => void;
-}
-
-interface Transform {
-	scale: number;
-	translateX: number;
-	translateY: number;
-}
-
-interface Canvas {
-	container: HTMLElement;
-	transformLayer: HTMLElement;
-	contentLayer: HTMLElement;
-	config: any;
-	transform: Transform;
-	getBounds: () => any;
-	addContent: (element: HTMLElement, options?: any) => boolean;
-	updateTransform: (newTransform: Partial<Transform>) => boolean;
-	reset: () => boolean;
-	handleResize: () => boolean;
-	setZoom: (zoomLevel: number) => boolean;
-	setInteractionMode: (mode: string) => boolean;
-	canvasToContent: (x: number, y: number) => { x: number; y: number };
-	zoomToPoint: (
-		x: number,
-		y: number,
-		targetScale: number,
-		duration?: number,
-	) => boolean;
-	resetView: (duration?: number) => boolean;
-	zoomToFitContent: (duration?: number) => boolean;
-	cleanup?: () => void;
-	// Exposed control functions for custom keyboard implementation
-	panLeft: (distance?: number) => boolean;
-	panRight: (distance?: number) => boolean;
-	panUp: (distance?: number) => boolean;
-	panDown: (distance?: number) => boolean;
-	zoomIn: (factor?: number) => boolean;
-	zoomOut: (factor?: number) => boolean;
-	resetZoom: (duration?: number) => boolean;
-	// Mouse drag control functions
-	enableMouseDrag: () => boolean;
-	disableMouseDrag: () => boolean;
-	isMouseDragEnabled: () => boolean;
-	// Additional utility functions
-	centerContent: (duration?: number) => boolean;
-	fitToScreen: (duration?: number) => boolean;
-	getVisibleArea: () => { x: number; y: number; width: number; height: number };
-	isPointVisible: (x: number, y: number) => boolean;
-	scrollToPoint: (x: number, y: number, duration?: number) => boolean;
-}
+// Export types
+export type * from "./types/index.js";
 
 /**
  * Initialize a complete markup canvas with all event handlers

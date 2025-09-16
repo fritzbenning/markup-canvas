@@ -8,75 +8,17 @@ import {
 	disableSmoothTransitions,
 	enableSmoothTransitions,
 } from "./transform.js";
-
-// Type definitions
-interface Canvas {
-	container: HTMLElement;
-	transformLayer: HTMLElement;
-	transform: Transform;
-	updateTransform: (newTransform: Partial<Transform>) => boolean;
-	getBounds?: () => CanvasBounds;
-	canvasToContent: (x: number, y: number) => { x: number; y: number };
-	resetView?: (duration?: number) => boolean;
-}
-
-interface Transform {
-	scale: number;
-	translateX: number;
-	translateY: number;
-}
-
-interface CanvasBounds {
-	width: number;
-	height: number;
-	scale?: number;
-	translateX?: number;
-	translateY?: number;
-}
-
-interface WheelZoomOptions {
-	zoomSpeed?: number;
-	fineZoomSpeed?: number;
-	smoothTransition?: boolean;
-	enableAdaptiveSpeed?: boolean;
-}
-
-interface MouseDragOptions {
-	enableLeftDrag?: boolean;
-	enableMiddleDrag?: boolean;
-	requireSpaceForMouseDrag?: boolean;
-	enableClickToZoom?: boolean;
-	clickZoomLevel?: number;
-	clickZoomDuration?: number;
-	requireOptionForClickZoom?: boolean;
-}
-
-interface KeyboardNavigationOptions {
-	panStep?: number;
-	fastPanMultiplier?: number;
-	zoomStep?: number;
-	enableAdaptiveSpeed?: boolean;
-}
-
-interface TouchEventsOptions {
-	enableSingleTouchPan?: boolean;
-	enableMultiTouch?: boolean;
-}
-
-interface GestureInfo {
-	isTrackpad: boolean;
-	isTrackpadScroll: boolean;
-	isTrackpadPinch: boolean;
-	isMouseWheel: boolean;
-	isZoomGesture: boolean;
-	confidence: number;
-}
-
-interface TouchState {
-	touches: Touch[];
-	lastDistance: number;
-	lastCenter: { x: number; y: number };
-}
+import type {
+	Transform,
+	EventCanvas as Canvas,
+	CanvasBounds,
+	WheelZoomOptions,
+	MouseDragOptions,
+	KeyboardNavigationOptions,
+	TouchEventsOptions,
+	GestureInfo,
+	TouchState,
+} from "../types/index.js";
 
 /**
  * Gets display-size adaptive zoom speed based on canvas dimensions

@@ -19,16 +19,12 @@ body {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: #fff;
+	background: #f6f6f6;
 	overflow: hidden;
 }
 
-/* Sample Content Styles */
-.sample-content {
-	position: absolute;
-	width: 20000px;
-	height: 15000px;
-	background: #fff;
+.transform-layer {
+	background-color: #fff;
 }
 
 .content-item {

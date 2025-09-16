@@ -8,7 +8,6 @@
   </head>
   <body>
     <div class="container" id="canvas">
-      <div class="sample-content">
         <!-- Sample content items -->
         <div class="content-item large" style="top: 200px; left: 300px">
           <h3>🎯 Interactive Element</h3>
@@ -180,7 +179,6 @@
           />
           <div class="image-caption">Historic Architecture</div>
         </div>
-      </div>
     </div>
 
     <script src="../../dist/markup-canvas.umd.min.js"></script>
@@ -204,11 +202,13 @@
           clickZoomLevel: 1.0,
           clickZoomDuration: 300,
           requireOptionForClickZoom: true,
+          rulerSize: 24, // Account for ruler space
         });
 
         // Add rulers to the canvas
         if (canvas && MarkupCanvas.createRulers) {
           rulers = MarkupCanvas.createRulers(canvas, {
+            rulerSize: 24, // Match the canvas ruler size
             showGrid: true, // Enable grid display
             gridColor: "rgba(0, 0, 0, 0.08)",
           });

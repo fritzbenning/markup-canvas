@@ -4,27 +4,11 @@
  */
 
 import { createIdentityMatrix, safeCalculateMatrix } from "./matrix.js";
-
-// Type definitions
-interface Transform {
-	scale: number;
-	translateX: number;
-	translateY: number;
-}
-
-interface SafeTransformOptions {
-	logErrors?: boolean;
-	logWarnings?: boolean;
-	useRepair?: boolean;
-	fallbackToIdentity?: boolean;
-}
-
-interface SafeTransformResult {
-	success: boolean;
-	usedFallback: boolean;
-	errors: string[];
-	warnings: string[];
-}
+import type {
+	Transform,
+	SafeTransformOptions,
+	SafeTransformResult,
+} from "../types/index.js";
 
 /**
  * Applies transformation matrix to a DOM element

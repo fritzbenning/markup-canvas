@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruler Positioning Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .test-container {
+            width: 800px;
+            height: 600px;
+            border: 2px solid #333;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .content-item {
+            position: absolute;
+            padding: 20px;
+            background: rgba(0, 123, 255, 0.1);
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            min-width: 200px;
+        }
+        
+        .info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ruler Positioning Test</h1>
+    
+    <div class="info">
+        <h3>Test: Transform Layer Positioning with Rulers</h3>
+        <p>This test verifies that the transform layer is properly offset by the ruler size (24px) when rulers are enabled.</p>
+        <p><strong>Expected:</strong> The transform layer should be positioned at top: 24px, left: 24px to account for ruler space.</p>
+    </div>
+
+    <div class="test-container" id="canvas-with-rulers">
+        <div class="content-item" style="top: 50px; left: 50px;">
+            <h3>🎯 Test Content</h3>
+            <p>This content should be properly positioned relative to the rulers.</p>
+            <p>Check the transform layer positioning in dev tools.</p>
+        </div>
+    </div>
+
+    <div id="test-results"></div>
+
+    <script src="dist/markup-canvas.umd.min.js"></script>
+    <script>
+        function runTest() {
+            const container = document.getElementById('canvas-with-rulers');
+            const resultsDiv = document.getElementById('test-results');
+            
+            // Create canvas with ruler size
+            const canvas = MarkupCanvas.createMarkupCanvas(container, {
+                width: 2000,
+                height: 1500,
+                rulerSize: 24, // Set ruler size
+                enableAcceleration: true,
+            });
+
+            if (!canvas) {
+                resultsDiv.innerHTML = '<div style="color: red;">❌ Failed to create canvas</div>';
+                return;
+            }
+
+            // Create rulers
+            const rulers = MarkupCanvas.createRulers(canvas, {
+                rulerSize: 24,
+                showGrid: true,
+                gridColor: "rgba(0, 0, 0, 0.08)",
+            });
+
+            if (!rulers) {
+                resultsDiv.innerHTML = '<div style="color: red;">❌ Failed to create rulers</div>';
+                return;
+            }
+
+            // Check transform layer positioning
+            const transformLayer = canvas.transformLayer;
+            const computedStyle = getComputedStyle(transformLayer);
+            const top = computedStyle.top;
+            const left = computedStyle.left;
+
+            let results = '<div class="info"><h3>Test Results:</h3>';
+            
+            if (top === '24px' && left === '24px') {
+                results += '<p style="color: green;">✅ Transform layer correctly positioned at top: 24px, left: 24px</p>';
+            } else {
+                results += `<p style="color: red;">❌ Transform layer incorrectly positioned at top: ${top}, left: ${left}</p>`;
+                results += '<p>Expected: top: 24px, left: 24px</p>';
+            }
+
+            // Check if rulers are visible
+            const horizontalRuler = rulers.horizontalRuler;
+            const verticalRuler = rulers.verticalRuler;
+            const cornerBox = rulers.cornerBox;
+
+            if (horizontalRuler && verticalRuler && cornerBox) {
+                results += '<p style="color: green;">✅ All ruler elements created successfully</p>';
+                
+                // Check ruler positioning
+                const hRulerStyle = getComputedStyle(horizontalRuler);
+                const vRulerStyle = getComputedStyle(verticalRuler);
+                const cornerStyle = getComputedStyle(cornerBox);
+                
+                results += `<p>Horizontal ruler: top: ${hRulerStyle.top}, left: ${hRulerStyle.left}, height: ${hRulerStyle.height}</p>`;
+                results += `<p>Vertical ruler: top: ${vRulerStyle.top}, left: ${vRulerStyle.left}, width: ${vRulerStyle.width}</p>`;
+                results += `<p>Corner box: top: ${cornerStyle.top}, left: ${cornerStyle.left}, size: ${cornerStyle.width} x ${cornerStyle.height}</p>`;
+            } else {
+                results += '<p style="color: red;">❌ Some ruler elements missing</p>';
+            }
+
+            results += '</div>';
+            resultsDiv.innerHTML = results;
+
+            console.log('Canvas created with ruler size:', canvas.config.rulerSize);
+            console.log('Transform layer position:', { top, left });
+        }
+
+        // Run test when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', runTest);
+        } else {
+            runTest();
+        }
+    </script>
+</body>
+</html>

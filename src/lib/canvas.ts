@@ -15,80 +15,13 @@ import {
 	enableHardwareAcceleration,
 	enableSmoothTransitions,
 } from "./transform.js";
-
-// Type definitions
-interface Transform {
-	scale: number;
-	translateX: number;
-	translateY: number;
-}
-
-interface Point {
-	x: number;
-	y: number;
-}
-
-interface CanvasBounds {
-	width: number;
-	height: number;
-	contentWidth: number;
-	contentHeight: number;
-	scale: number;
-	translateX: number;
-	translateY: number;
-	visibleArea: {
-		x: number;
-		y: number;
-		width: number;
-		height: number;
-	};
-	scaledContentWidth: number;
-	scaledContentHeight: number;
-	canPanLeft: boolean;
-	canPanRight: boolean;
-	canPanUp: boolean;
-	canPanDown: boolean;
-	canZoomIn: boolean;
-	canZoomOut: boolean;
-}
-
-interface CanvasOptions {
-	width?: number;
-	height?: number;
-	enableAcceleration?: boolean;
-	enableEventHandling?: boolean;
-	onTransformUpdate?: (transform: Transform) => void;
-}
-
-interface AddContentOptions {
-	x?: number;
-	y?: number;
-	absolute?: boolean;
-}
-
-interface Canvas {
-	container: HTMLElement;
-	transformLayer: HTMLElement;
-	contentLayer: HTMLElement;
-	config: Required<CanvasOptions>;
-	transform: Transform;
-	getBounds: () => CanvasBounds;
-	addContent: (element: HTMLElement, options?: AddContentOptions) => boolean;
-	updateTransform: (newTransform: Partial<Transform>) => boolean;
-	reset: () => boolean;
-	handleResize: () => boolean;
-	setZoom: (zoomLevel: number) => boolean;
-	setInteractionMode: (mode: string) => boolean;
-	canvasToContent: (x: number, y: number) => Point;
-	zoomToPoint: (
-		x: number,
-		y: number,
-		targetScale: number,
-		duration?: number,
-	) => boolean;
-	resetView: (duration?: number) => boolean;
-	zoomToFitContent: (duration?: number) => boolean;
-}
+import type {
+	Transform,
+	BaseCanvas,
+	CanvasOptions,
+	CanvasBounds,
+	AddContentOptions,
+} from "../types/index.js";
 
 /**
  * Creates and initializes a canvas with the required DOM structure
@@ -96,7 +29,7 @@ interface Canvas {
 export function createCanvas(
 	container: HTMLElement,
 	options: CanvasOptions = {},
-): Canvas | null {
+): BaseCanvas | null {
 	// Validate container
 	if (!container?.appendChild) {
 		console.error("Invalid container element provided to createCanvas");
@@ -109,6 +42,7 @@ export function createCanvas(
 		height: 8000,
 		enableAcceleration: true,
 		enableEventHandling: true,
+		rulerSize: 0,
 		onTransformUpdate: () => {},
 		...options,
 	};
@@ -172,8 +106,8 @@ export function createCanvas(
 
 		// Set transform layer dimensions and properties
 		transformLayer.style.position = "absolute";
-		transformLayer.style.top = "0";
-		transformLayer.style.left = "0";
+		transformLayer.style.top = `${config.rulerSize}px`;
+		transformLayer.style.left = `${config.rulerSize}px`;
 		transformLayer.style.width = `${config.width}px`;
 		transformLayer.style.height = `${config.height}px`;
 		transformLayer.style.transformOrigin = "0 0";
@@ -231,7 +165,7 @@ export function createCanvas(
 		applyTransform(transformLayer, initialMatrix);
 
 		// Create canvas object
-		const canvas: Canvas = {
+		const canvas: BaseCanvas = {
 			// DOM references
 			container,
 			transformLayer,
@@ -411,7 +345,7 @@ export function createCanvas(
 /**
  * Gets the current bounds and dimensions of a canvas
  */
-export function getCanvasBounds(canvas: Canvas): CanvasBounds {
+export function getCanvasBounds(canvas: BaseCanvas): CanvasBounds {
 	// Validate canvas
 	if (!canvas?.container) {
 		console.warn("Invalid canvas provided to getCanvasBounds");
@@ -444,10 +378,13 @@ export function getCanvasBounds(canvas: Canvas): CanvasBounds {
 			translateY: 0,
 		};
 
-		// Get canvas dimensions
+		// Get canvas dimensions (subtract ruler size from available space)
 		const containerRect = container.getBoundingClientRect();
-		const canvasWidth = containerRect.width || container.clientWidth || 0;
-		const canvasHeight = containerRect.height || container.clientHeight || 0;
+		const totalWidth = containerRect.width || container.clientWidth || 0;
+		const totalHeight = containerRect.height || container.clientHeight || 0;
+		const rulerSize = config.rulerSize || 0;
+		const canvasWidth = Math.max(0, totalWidth - rulerSize);
+		const canvasHeight = Math.max(0, totalHeight - rulerSize);
 
 		// Get content dimensions
 		const contentWidth = config.width || 8000;
@@ -547,7 +484,7 @@ export function getCanvasBounds(canvas: Canvas): CanvasBounds {
  * Adds an HTML element to the canvas's content layer
  */
 export function addContentToCanvas(
-	canvas: Canvas,
+	canvas: BaseCanvas,
 	element: HTMLElement,
 	options: AddContentOptions = {},
 ): boolean {

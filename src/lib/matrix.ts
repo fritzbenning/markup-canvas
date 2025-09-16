@@ -3,61 +3,15 @@
  * Core transformation matrix operations for zoom and pan
  */
 
-// Type definitions
-interface Transform {
-	scale: number;
-	translateX: number;
-	translateY: number;
-}
-
-interface Point {
-	x: number;
-	y: number;
-}
-
-interface ZoomBoundaryResult {
-	scale: number;
-	clamped: boolean;
-	hitBoundary: "min" | "max" | "invalid" | null;
-	message: string | null;
-}
-
-interface ZoomBoundaryOptions {
-	minZoom?: number;
-	maxZoom?: number;
-	provideFeedback?: boolean;
-	logBoundaryHits?: boolean;
-	onBoundaryHit?: (
-		boundary: string,
-		originalScale: number,
-		clampedScale: number,
-	) => void;
-}
-
-interface MatrixValidationResult {
-	isValid: boolean;
-	errors: string[];
-	warnings: string[];
-	correctedValues: {
-		scale: number;
-		translateX: number;
-		translateY: number;
-	};
-}
-
-interface SafeMatrixResult {
-	matrix: DOMMatrix;
-	isValid: boolean;
-	errors: string[];
-	warnings: string[];
-	usedFallback: boolean;
-}
-
-interface SafeMatrixOptions {
-	throwOnError?: boolean;
-	logErrors?: boolean;
-	logWarnings?: boolean;
-}
+import type {
+	Transform,
+	Point,
+	ZoomBoundaryResult,
+	ZoomBoundaryOptions,
+	MatrixValidationResult,
+	SafeMatrixResult,
+	SafeMatrixOptions,
+} from "../types/index.js";
 
 /**
  * Calculates a transformation matrix for scale and translation
