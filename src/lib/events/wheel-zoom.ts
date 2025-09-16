@@ -6,7 +6,7 @@ import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
 import {
 	disableSmoothTransitions,
 	enableSmoothTransitions,
-} from "../transform.js";
+} from "../transform/index.js";
 import type {
 	EventCanvas as Canvas,
 	WheelZoomOptions,

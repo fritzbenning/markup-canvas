@@ -10,7 +10,7 @@ import { createRulers } from "./lib/rulers.js";
 import {
 	enableSmoothTransitions,
 	disableSmoothTransitions,
-} from "./lib/transform.js";
+} from "./lib/transform/index.js";
 
 // Import types
 import type { Canvas, Transform, MarkupCanvasOptions } from "./types/index.js";
@@ -36,8 +36,7 @@ export {
 	disableSmoothTransitions,
 	enableHardwareAcceleration,
 	enableSmoothTransitions,
-	validateMatrix,
-} from "./lib/transform.js";
+} from "./lib/transform/index.js";
 
 // Export canvas management functions
 export {

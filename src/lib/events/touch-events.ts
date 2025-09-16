@@ -3,7 +3,7 @@
  */
 
 import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
-import { disableSmoothTransitions } from "../transform.js";
+import { disableSmoothTransitions } from "../transform/index.js";
 import type {
 	EventCanvas as Canvas,
 	TouchEventsOptions,

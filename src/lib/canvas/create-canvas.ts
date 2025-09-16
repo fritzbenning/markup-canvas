@@ -4,7 +4,10 @@
  */
 
 import { calculateMatrix } from "../matrix/matrix-calculation.js";
-import { applyTransform, enableHardwareAcceleration } from "../transform.js";
+import {
+	applyTransform,
+	enableHardwareAcceleration,
+} from "../transform/index.js";
 import type {
 	BaseCanvas,
 	CanvasOptions,

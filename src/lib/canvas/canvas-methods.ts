@@ -11,7 +11,7 @@ import {
 	applyTransform,
 	disableSmoothTransitions,
 	enableSmoothTransitions,
-} from "../transform.js";
+} from "../transform/index.js";
 import type {
 	Transform,
 	BaseCanvas,
