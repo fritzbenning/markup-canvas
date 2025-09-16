@@ -6,7 +6,7 @@ import {
 	setupWheelZoom,
 } from "./lib/events/index.js";
 import { clampZoom } from "./lib/matrix/zoom-clamping.js";
-import { createRulers } from "./lib/rulers.js";
+import { createRulers } from "./lib/rulers/index.js";
 import {
 	enableSmoothTransitions,
 	disableSmoothTransitions,
@@ -55,7 +55,7 @@ export {
 } from "./lib/events/index.js";
 
 // Export ruler functions
-export { createRulers } from "./lib/rulers.js";
+export { createRulers } from "./lib/rulers/index.js";
 
 // Export types
 export type * from "./types/index.js";
