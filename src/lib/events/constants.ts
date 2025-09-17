@@ -37,9 +37,9 @@ export const DEFAULT_TOUCH_CONFIG: Required<TouchEventsOptions> = {
 export const REFERENCE_DISPLAY_AREA = 1920 * 1080;
 
 export const ADAPTIVE_ZOOM_CONSTANTS = {
-  POWER_FACTOR: 0.85,
+  POWER_FACTOR: 1.15,
   MIN_SCALE_FACTOR: 0.2,
-  MAX_SCALE_FACTOR: 3.0,
+  MAX_SCALE_FACTOR: 3.5,
 } as const;
 
 export const CLICK_THRESHOLDS = {

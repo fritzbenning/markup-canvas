@@ -1,5 +1,5 @@
 import type { RulerCanvas as Canvas, RulerOptions } from "../../types/index.js";
-import { RULER_SIZE } from "./constants.js";
+import { RULER_SIZE } from "../constants.js";
 import { updateGrid } from "./grid-overlay.js";
 import { calculateTickSpacing, createHorizontalTick, createVerticalTick } from "./tick-creation.js";
 

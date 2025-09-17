@@ -1,18 +1,12 @@
-import { DEFAULT_TRANSITION_DURATION, SMOOTH_EASING } from "./constants.js";
-
-// Creates a CSS transition value string
-function createTransitionValue(duration: number, easing: string): string {
-  return `transform ${duration}s ${easing}`;
-}
+import { EASING, TRANSITION_DURATION } from "../constants";
 
 // Enables smooth transitions on transform layer
 export function enableSmoothTransitions(
   element: HTMLElement,
-  duration: number = DEFAULT_TRANSITION_DURATION,
+  duration: number = TRANSITION_DURATION,
 ): boolean {
   try {
-    const transitionValue = createTransitionValue(duration, SMOOTH_EASING);
-    element.style.transition = transitionValue;
+    element.style.transition = `transform ${duration}s ${EASING}`;
     return true;
   } catch (error) {
     console.error("Failed to enable smooth transitions:", error);

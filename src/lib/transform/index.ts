@@ -1,7 +1,3 @@
-export * from "./constants.js";
+export { applyTransform } from "./calculate-matrix.js";
 export { enableHardwareAcceleration } from "./hardware-acceleration.js";
-export { applyTransform } from "./matrix-application.js";
-export {
-  disableSmoothTransitions,
-  enableSmoothTransitions,
-} from "./transitions.js";
+export { disableSmoothTransitions, enableSmoothTransitions } from "./transitions.js";

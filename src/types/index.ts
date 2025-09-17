@@ -1,35 +1,35 @@
 // Canvas types
 export type {
+  AddContentOptions,
   BaseCanvas,
   Canvas,
-  CanvasOptions,
   CanvasBounds,
-  AddContentOptions,
+  CanvasOptions,
   MarkupCanvasOptions,
   Transform,
 } from "./canvas.js";
-
+// Event types
+export type {
+  ClickState,
+  DragState,
+  EventCanvas,
+  GestureInfo,
+  KeyboardNavigationOptions,
+  MouseDragOptions,
+  TouchEventsOptions,
+  TouchState,
+  WheelZoomOptions,
+} from "./events.js";
 // Matrix types
 export type {
   Point,
-  ZoomBoundaryResult,
   ZoomBoundaryOptions,
+  ZoomBoundaryResult,
 } from "./matrix.js";
-
-// Event types
-export type {
-  WheelZoomOptions,
-  MouseDragOptions,
-  KeyboardNavigationOptions,
-  TouchEventsOptions,
-  GestureInfo,
-  TouchState,
-  EventCanvas,
-} from "./events.js";
 
 // Ruler types
 export type {
+  RulerCanvas,
   RulerOptions,
   RulerSystem,
-  RulerCanvas,
 } from "./rulers.js";

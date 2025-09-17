@@ -1,4 +1,4 @@
-import type { Transform, RulerCanvas as Canvas } from "../../types/index.js";
+import type { RulerCanvas as Canvas, Transform } from "../../types/index.js";
 
 // Set up event listeners for ruler updates
 export function setupEventListeners(canvas: Canvas, updateCallback: () => void): () => void {

@@ -1,4 +1,4 @@
-import { CSS_CLASSES } from "./constants.js";
+import { CSS_CLASSES } from "../constants.js";
 
 // Sets up the canvas container with proper styles and attributes
 export function setupCanvasContainer(container: HTMLElement): void {

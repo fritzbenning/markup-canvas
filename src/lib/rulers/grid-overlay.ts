@@ -1,4 +1,4 @@
-import { GRID_SETTINGS } from "./constants.js";
+import { GRID_SETTINGS } from "../constants";
 
 // Update grid overlay based on current transform
 export function updateGrid(

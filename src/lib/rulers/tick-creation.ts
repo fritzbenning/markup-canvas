@@ -1,5 +1,5 @@
 import type { RulerOptions } from "../../types/index.js";
-import { TICK_SETTINGS } from "./constants.js";
+import { TICK_SETTINGS } from "../constants.js";
 
 // Calculate appropriate tick spacing based on zoom level
 export function calculateTickSpacing(contentSize: number, canvasSize: number): number {

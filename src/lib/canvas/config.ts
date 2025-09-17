@@ -1,6 +1,6 @@
 // Canvas configuration and validation for canvas options
 import type { CanvasOptions } from "../../types/index.js";
-import { DEFAULT_CANVAS_HEIGHT, DEFAULT_CANVAS_WIDTH } from "./constants.js";
+import { DEFAULT_CANVAS_HEIGHT, DEFAULT_CANVAS_WIDTH } from "../constants.js";
 
 // Creates a validated configuration object with defaults
 export function createCanvasConfig(options: CanvasOptions = {}): Required<CanvasOptions> {

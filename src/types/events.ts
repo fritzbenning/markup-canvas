@@ -44,6 +44,21 @@ export interface TouchState {
   lastCenter: { x: number; y: number };
 }
 
+export interface DragState {
+  isDragging: boolean;
+  lastMouseX: number;
+  lastMouseY: number;
+  dragButton: number;
+  isSpacePressed: boolean;
+}
+
+export interface ClickState {
+  mouseDownTime: number;
+  mouseDownX: number;
+  mouseDownY: number;
+  hasDragged: boolean;
+}
+
 // Canvas interface for events (simplified version)
 export interface EventCanvas {
   container: HTMLElement;

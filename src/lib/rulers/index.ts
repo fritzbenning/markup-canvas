@@ -1,5 +1,5 @@
 import type { RulerCanvas as Canvas, RulerOptions, RulerSystem } from "../../types/index.js";
-import { DEFAULT_RULER_CONFIG } from "./constants.js";
+import { DEFAULT_RULER_CONFIG } from "./config.js";
 import { setupEventListeners } from "./event-listeners.js";
 import { createRulerElements, type RulerElements } from "./ruler-elements.js";
 import { updateRulers } from "./ruler-updates.js";

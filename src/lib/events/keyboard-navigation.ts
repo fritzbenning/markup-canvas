@@ -1,5 +1,6 @@
 import type { EventCanvas as Canvas, KeyboardNavigationOptions, Transform } from "../../types/index.js";
 import { clampZoom } from "../matrix/zoom-clamping.js";
+import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
 import { getAdaptiveZoomSpeed } from "./adaptive-speed.js";
 import { DEFAULT_KEYBOARD_CONFIG } from "./constants.js";
 
@@ -9,6 +10,16 @@ export function setupKeyboardNavigation(canvas: Canvas, options: KeyboardNavigat
     ...DEFAULT_KEYBOARD_CONFIG,
     ...options,
   };
+
+  // Track mouse position for zoom-to-cursor functionality
+  let lastMouseX = 0;
+  let lastMouseY = 0;
+
+  function handleMouseMove(event: MouseEvent): void {
+    const rect = canvas.container.getBoundingClientRect();
+    lastMouseX = event.clientX - rect.left;
+    lastMouseY = event.clientY - rect.top;
+  }
 
   function handleKeyDown(event: KeyboardEvent): void {
     // Only handle if canvas container is focused
@@ -57,10 +68,19 @@ export function setupKeyboardNavigation(canvas: Canvas, options: KeyboardNavigat
         }
         break;
       case "0":
-        if (canvas.resetView) {
-          canvas.resetView(0); // No transition for keyboard reset
+        // Reset zoom to 100% and center on mouse cursor on Cmd+0 (Mac) or Ctrl+0 (Windows/Linux)
+        if (event.metaKey || event.ctrlKey) {
+          // Calculate zoom factor to get to 100% (scale = 1.0)
+          const targetScale = 1.0;
+          const zoomFactor = targetScale / canvas.transform.scale;
+
+          // Get transform that zooms to mouse position
+          const zoomTransform = getZoomToMouseTransform(lastMouseX, lastMouseY, canvas.transform, zoomFactor);
+
+          // Apply the transform
+          Object.assign(newTransform, zoomTransform);
+          handled = true;
         }
-        handled = true;
         break;
       case "g":
       case "G":
@@ -87,8 +107,10 @@ export function setupKeyboardNavigation(canvas: Canvas, options: KeyboardNavigat
   }
 
   canvas.container.addEventListener("keydown", handleKeyDown);
+  canvas.container.addEventListener("mousemove", handleMouseMove);
 
   return () => {
     canvas.container.removeEventListener("keydown", handleKeyDown);
+    canvas.container.removeEventListener("mousemove", handleMouseMove);
   };
 }

@@ -1,12 +1,16 @@
 import type { AddContentOptions, BaseCanvas, Transform } from "../../types/index.js";
+import {
+  DEFAULT_ANIMATION_DURATION,
+  RULER_SIZE,
+  TRANSITION_CLEANUP_DELAY,
+  ZOOM_FIT_PADDING,
+} from "../constants.js";
 import { canvasToContent } from "../matrix/coordinate-conversion.js";
 import { calculateMatrix } from "../matrix/matrix-calculation.js";
 import { clampZoom } from "../matrix/zoom-clamping.js";
 import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
 import { applyTransform, disableSmoothTransitions, enableSmoothTransitions } from "../transform/index.js";
-import { RULER_SIZE } from "./../rulers/constants";
 import { getCanvasBounds } from "./bounds.js";
-import { DEFAULT_ANIMATION_DURATION, TRANSITION_CLEANUP_DELAY, ZOOM_FIT_PADDING } from "./constants.js";
 import { addContentToCanvas } from "./content.js";
 
 // Creates all the methods that will be attached to a canvas instance

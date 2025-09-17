@@ -1,13 +1,13 @@
 import type { Transform } from "../../types/index.js";
-import { calculateMatrix } from "./matrix-calculation.js";
-import { clampZoom } from "./zoom-clamping.js";
-import { canvasToContent } from "./coordinate-conversion.js";
 import {
-  SCALE_CHANGE_THRESHOLD,
-  DEFAULT_SCALE,
   DEFAULT_TRANSLATE_X,
   DEFAULT_TRANSLATE_Y,
-} from "./constants.js";
+  DEFAULT_ZOOM,
+  ZOOM_CHANGE_THRESHOLD,
+} from "../constants.js";
+import { canvasToContent } from "./coordinate-conversion.js";
+import { calculateMatrix } from "./matrix-calculation.js";
+import { clampZoom } from "./zoom-clamping.js";
 
 // Calculates zoom-to-mouse transformation
 export function getZoomToMouseTransform(
@@ -23,7 +23,7 @@ export function getZoomToMouseTransform(
 
   if (!currentTransform || typeof currentTransform !== "object") {
     currentTransform = {
-      scale: DEFAULT_SCALE,
+      scale: DEFAULT_ZOOM,
       translateX: DEFAULT_TRANSLATE_X,
       translateY: DEFAULT_TRANSLATE_Y,
     };
@@ -31,11 +31,11 @@ export function getZoomToMouseTransform(
 
   const { scale: currentScale, translateX: currentTx, translateY: currentTy } = currentTransform;
 
-  // Calculate new scale
+  // Calculate new zoom
   const newScale = clampZoom(currentScale * zoomDelta);
 
-  // If scale didn't change (hit bounds), return current transform
-  if (Math.abs(newScale - currentScale) < SCALE_CHANGE_THRESHOLD) {
+  // If zoom didn't change (hit bounds), return current transform
+  if (Math.abs(newScale - currentScale) < ZOOM_CHANGE_THRESHOLD) {
     return {
       scale: currentScale,
       translateX: currentTx,

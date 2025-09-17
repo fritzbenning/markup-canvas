@@ -46,7 +46,7 @@ export default [
 
   // UMD build for browsers
   {
-    input: "src/index.ts",
+    input: "src/umd.ts",
     output: {
       file: "dist/markup-canvas.umd.js",
       format: "umd",
@@ -63,7 +63,7 @@ export default [
 
   // Minified UMD build
   {
-    input: "src/index.ts",
+    input: "src/umd.ts",
     output: {
       file: "dist/markup-canvas.umd.min.js",
       format: "umd",

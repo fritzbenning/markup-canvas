@@ -27,10 +27,10 @@ npm install markup-canvas
 ### JavaScript
 
 ```javascript
-import { createMarkupCanvas } from "markup-canvas";
+import { MarkupCanvas } from "markup-canvas";
 
 const container = document.getElementById("markup-canvas");
-const canvas = createMarkupCanvas(container, {
+const canvas = new MarkupCanvas(container, {
   width: 8000,
   height: 8000,
 });
@@ -38,9 +38,9 @@ const canvas = createMarkupCanvas(container, {
 
 ## API Reference
 
-### Main Functions
+### Main Class
 
-#### `createMarkupCanvas(container, options)`
+#### `new MarkupCanvas(container, options)`
 
 Creates a complete markup canvas with all event handlers.
 
@@ -67,7 +67,7 @@ Creates a complete markup canvas with all event handlers.
 - `gridColor` (string): Grid line color (default: 'rgba(0, 123, 255, 0.1)')
 - `onTransformUpdate` (function): Callback for transform changes
 
-**Returns:** Canvas object
+**Returns:** MarkupCanvas instance
 
 ### Canvas Methods
 
@@ -125,6 +125,7 @@ canvas.scrollToPoint(x, y, 300); // Scroll to center a specific point
 
 // Cleanup
 canvas.cleanup(); // Remove all event listeners
+canvas.destroy(); // Alias for cleanup
 ```
 
 ### Dynamic Rulers
@@ -132,12 +133,12 @@ canvas.cleanup(); // Remove all event listeners
 Add dynamic rulers that show canvas dimensions and scale:
 
 ```javascript
-import { createMarkupCanvas, createRulers } from "markup-canvas";
+import { MarkupCanvas, createRulers } from "markup-canvas";
 
 // Initialize canvas
-const canvas = createMarkupCanvas(container);
+const canvas = new MarkupCanvas(container);
 
-// Add rulers
+// Add rulers (or use built-in rulers via constructor options)
 const rulers = createRulers(canvas, {
   showGrid: true,
   backgroundColor: "rgba(255, 255, 255, 0.95)",
@@ -224,7 +225,7 @@ const rulers = createRulers(canvas);
 
 ```jsx
 import { useEffect, useRef } from "react";
-import { createMarkupCanvas } from "markup-canvas";
+import { MarkupCanvas } from "markup-canvas";
 
 function MarkupCanvasComponent() {
   const containerRef = useRef(null);
@@ -232,12 +233,12 @@ function MarkupCanvasComponent() {
 
   useEffect(() => {
     if (containerRef.current) {
-      canvasRef.current = createMarkupCanvas(containerRef.current);
+      canvasRef.current = new MarkupCanvas(containerRef.current);
     }
 
     return () => {
       if (canvasRef.current) {
-        canvasRef.current.cleanup();
+        canvasRef.current.destroy();
       }
     };
   }, []);

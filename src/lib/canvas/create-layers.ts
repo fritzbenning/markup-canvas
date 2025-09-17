@@ -1,6 +1,5 @@
 import type { CanvasOptions } from "../../types/index.js";
-import { RULER_SIZE } from "../rulers/constants.js";
-import { CSS_CLASSES, SMOOTH_TRANSITION } from "./constants.js";
+import { CSS_CLASSES, EASING, RULER_SIZE, TRANSITION_DURATION } from "../constants.js";
 
 export interface CanvasLayers {
   transformLayer: HTMLElement;
@@ -53,7 +52,7 @@ function setupTransformLayer(transformLayer: HTMLElement, config: Required<Canva
   transformLayer.style.transformOrigin = "0 0";
 
   // Add smooth transitions for zoom operations
-  transformLayer.style.transition = SMOOTH_TRANSITION;
+  transformLayer.style.transition = `transform ${TRANSITION_DURATION}s ${EASING}`;
 }
 
 // Sets up the content layer with proper styles

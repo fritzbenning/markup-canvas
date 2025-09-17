@@ -4,153 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤿 Markup Canvas</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Anek+Tamil:wght@100..800&family=Herr+Von+Muellerhoff&family=Outfit:wght@100..900&display=swap');
+    </style>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <div class="container" id="canvas">
       <!-- Sample content items -->
-      <div class="content-item large" style="top: 200px; left: 300px">
-        <h3>🎯 Interactive Element</h3>
-        <p>
-          This is a large interactive element. You can zoom in to see more details or pan around to explore
-          the entire canvas.
-        </p>
+      <div class="intro">
+        <h1 class="headline-font">Markup Canvas</h1>
+        <sup class="decorative-font beta">beta</sup>
       </div>
 
-      <div class="content-item medium interactive" style="top: 500px; left: 800px">
-        <h3>🚀 Performance Test</h3>
-        <p>This container maintains 60+ FPS during all interactions using hardware-accelerated transforms.</p>
+      <div class="canvas-container" style="top: 700px; left: 200px">
+        <div class="feature yellow">
+          <h2>Pure HTML content</h2>
+          <p>Slam any HTML content or components from your framework of choice onto the canvas.</p>
+          <p>No worries about performance.</p>
+        </div>
+        <div class="feature lilac">
+          <h2>Navigate like a falcon</h2>
+          <p>Use your cursor, mouse wheel, keyboard or touch gestures to control the canvas.</p>
+          <p>Just behave like everywhere else.</p>
+        </div>
+        <div class="feature green">
+          <h2>60+ Frames per second </h2>
+          <p>Optimized for a super-smooth performance using RAF and GPU-accelerated CSS Matrix Transforms.</p>
+          <p>No worries about performance.</p>
+        </div>
       </div>
 
-      <div class="content-item small" style="top: 800px; left: 1200px">
-        <h3>📱 Touch Support</h3>
-        <p>Supports pinch-to-zoom and touch panning on mobile devices.</p>
+      <div class="canvas-container" style="bottom: 200px; right: 200px">
+        <h2 class="hero-headline">Thanks for exploring!</h2>
       </div>
 
-      <div class="content-item medium" style="top: 1200px; left: 500px">
-        <h3>⌨️ Keyboard Navigation</h3>
-        <p>
-          Use arrow keys to pan, +/- to zoom, 0 to reset, G to toggle grid, and R to toggle rulers. Try Ctrl+A
-          to fit content!
-        </p>
+      <div class="gradient yellow" style="top: 500px; left: 1000px"></div>
+
+      <div class="gradient lilac" style="bottom: 0px; right: 1000px"></div>
+
+      <div class="canvas-container" style="top: 7000px; left: 7000px">
+        <blockquote class="blockquote">
+          "Don’t Make Me Think"
+          <cite>Steve Krug</cite>
+        </blockquote>
       </div>
 
-      <div class="content-item large interactive" style="top: 1600px; left: 1800px">
-        <h3>🎨 CSS Transforms</h3>
-        <p>Uses modern CSS matrix3d transforms for hardware acceleration and smooth animations.</p>
-      </div>
+      <div class="emoji-sticker" style="top: 875px; left: 1250px">🦅</div>
 
-      <div class="content-item small" style="top: 2000px; left: 2200px">
-        <h3>🔧 Validation</h3>
-        <p>Comprehensive error handling and matrix validation ensure stability.</p>
-      </div>
-
-      <div class="content-item medium" style="top: 2400px; left: 1000px">
-        <h3>🌐 Cross-Browser</h3>
-        <p>Works across modern browsers with automatic fallback detection.</p>
-      </div>
-
-      <div class="content-item large" style="top: 2800px; left: 2800px">
-        <h3>📊 Performance Monitor</h3>
-        <p>Real-time performance monitoring ensures smooth operation.</p>
-      </div>
-
-      <div class="content-item small interactive" style="top: 3200px; left: 600px">
-        <h3>🎮 Mouse Controls</h3>
-        <p>Wheel to zoom, drag to pan, double-click to reset.</p>
-      </div>
-
-      <div class="content-item medium" style="top: 3600px; left: 3200px">
-        <h3>✨ Smooth Animations</h3>
-        <p>Buttery smooth zoom and pan animations with configurable easing.</p>
-      </div>
-
-      <!-- Additional content items -->
-      <div class="content-item small interactive" style="top: 1000px; left: 1200px">
-        <h3>🎪 Mini Circus</h3>
-        <p>Small traveling circus setup (1200, 1000)</p>
-      </div>
-
-      <div class="content-item medium" style="top: 1400px; left: 2600px">
-        <h3>🏰 Castle Tower</h3>
-        <p>Medieval castle tower structure (2600, 1400)</p>
-      </div>
-
-      <div class="content-item large interactive" style="top: 1800px; left: 400px">
-        <h3>🌊 Ocean View</h3>
-        <p>Scenic ocean viewpoint with waves (400, 1800)</p>
-      </div>
-
-      <div class="content-item small" style="top: 2200px; left: 3400px">
-        <h3>🎨 Art Studio</h3>
-        <p>Creative art studio workspace (3400, 2200)</p>
-      </div>
-
-      <div class="content-item medium interactive" style="top: 2600px; left: 1800px">
-        <h3>🎵 Music Hall</h3>
-        <p>Concert hall with acoustic design (1800, 2600)</p>
-      </div>
-
-      <div class="content-item large" style="top: 3000px; left: 200px">
-        <h3>🏞️ Nature Park</h3>
-        <p>Beautiful nature park with trails (200, 3000)</p>
-      </div>
-
-      <div class="image-item medium" style="top: 1100px; left: 2800px">
+      <div class="image-item medium" style="top: 1000px; left: 3000px">
         <img
           src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=3000&h=1800&fit=crop&crop=center&q=100"
           alt="Forest path"
         >
-        <div class="image-caption">Enchanted Forest Trail</div>
       </div>
 
-      <div class="image-item small" style="top: 1800px; left: 500px">
+      <div class="image-item small" style="top: 3000px; left: 8000px">
         <img
           src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=2000&h=1350&fit=crop&crop=center&q=100"
           alt="Lake reflection"
         >
-        <div class="image-caption">Serene Lake</div>
       </div>
 
-      <div class="image-item portrait" style="top: 2200px; left: 3600px">
+      <div class="image-item large" style="top: 4000px; left: 15000px">
         <img
           src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2100&h=3000&fit=crop&crop=center&q=100"
           alt="Waterfall"
         >
-        <div class="image-caption">Cascading Waterfall</div>
       </div>
 
-      <div class="image-item large" style="top: 2800px; left: 1200px">
+      <div class="image-item large" style="top: 6000px; left: 12000px">
         <img
           src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=2400&h=1800&fit=crop&crop=center&q=100"
           alt="Sunset beach"
         >
-        <div class="image-caption">Golden Beach Sunset</div>
       </div>
 
-      <div class="image-item medium" style="top: 600px; left: 4200px">
+      <div class="image-item medium" style="top: 10000px; left: 16000px">
         <img
           src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=2400&h=1800&fit=crop&crop=center&q=100"
           alt="City skyline"
         >
-        <div class="image-caption">Modern City Skyline</div>
       </div>
 
-      <div class="image-item small" style="top: 1400px; left: 5800px">
+      <div class="image-item small" style="top: 8000px; left: 3000px">
         <img
           src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1800&h=1350&fit=crop&crop=center&q=100"
           alt="Skyscrapers"
         >
-        <div class="image-caption">Urban Architecture</div>
       </div>
 
-      <div class="image-item large" style="top: 2000px; left: 6400px">
+      <div class="image-item large" style="top: 9000px; left: 5000px">
         <img
           src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=2400&h=1800&fit=crop&crop=center&q=100"
           alt="Historic building"
         >
-        <div class="image-caption">Historic Architecture</div>
       </div>
+    </div>
+
+    <!-- Zoom level indicator -->
+    <div id="zoom-indicator" class="zoom-indicator">
+      <span id="zoom-value">100%</span>
     </div>
 
     <script src="../../dist/markup-canvas.umd.min.js"></script>
@@ -162,18 +116,16 @@
         const container = document.getElementById("canvas");
 
         // Create canvas with clean configuration
-        canvas = MarkupCanvas.createMarkupCanvas(container, {
+        canvas = new MarkupCanvas(container, {
           width: 20000,
           height: 15000,
           enableAcceleration: true,
-          enableKeyboardControls: true, // Enable built-in keyboard controls (includes G for grid toggle)
-          requireSpaceForMouseDrag: true,
+          enableKeyboardControls: true,
+          requireSpaceForMouseDrag: false,
+          requireOptionForClickZoom: false,
           enableClickToZoom: true,
           zoomSpeed: 0.4,
           fineZoomSpeed: 0.2,
-          clickZoomLevel: 1.0,
-          clickZoomDuration: 300,
-          requireOptionForClickZoom: true,
           showRulers: true, // Enable rulers and grid
           showGrid: true, // Show grid by default
           gridColor: "rgba(0, 0, 0, 0.08)", // Grid color
@@ -189,7 +141,28 @@
           }
         }
 
+        // Set up zoom level indicator
+        setupZoomIndicator();
+
         console.log("Simple demo initialized successfully!");
+      }
+
+      function setupZoomIndicator() {
+        const zoomValueElement = document.getElementById('zoom-value');
+        
+        function updateZoomDisplay() {
+          if (canvas && canvas.transform) {
+            const zoomPercent = Math.round(canvas.transform.scale * 100);
+            zoomValueElement.textContent = `${zoomPercent}%`;
+          }
+        }
+
+        // Update zoom display initially
+        updateZoomDisplay();
+
+        // Update zoom display on transform changes
+        // We'll poll for changes since we don't have a direct event
+        setInterval(updateZoomDisplay, 100);
       }
 
       // Initialize when DOM is ready

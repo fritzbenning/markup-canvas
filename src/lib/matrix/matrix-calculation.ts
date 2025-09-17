@@ -1,10 +1,10 @@
-import { DEFAULT_SCALE, DEFAULT_TRANSLATE_X, DEFAULT_TRANSLATE_Y } from "./constants.js";
+import { DEFAULT_TRANSLATE_X, DEFAULT_TRANSLATE_Y, DEFAULT_ZOOM } from "../constants";
 
 // Calculates a transformation matrix for scale and translation
 export function calculateMatrix(scale: number, translateX: number, translateY: number): DOMMatrix {
   // Validate inputs and use fallback values if invalid
   if (typeof scale !== "number" || !Number.isFinite(scale) || scale <= 0) {
-    scale = DEFAULT_SCALE;
+    scale = DEFAULT_ZOOM;
   }
   if (typeof translateX !== "number" || !Number.isFinite(translateX)) {
     translateX = DEFAULT_TRANSLATE_X;

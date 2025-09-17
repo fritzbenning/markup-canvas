@@ -61,6 +61,7 @@ export interface BaseCanvas {
   zoomToFitContent: (duration?: number) => boolean;
 }
 
+// Legacy Canvas interface - kept for backwards compatibility with other parts of the codebase
 export interface Canvas extends BaseCanvas {
   cleanup?: () => void;
   // Exposed control functions for custom keyboard implementation
