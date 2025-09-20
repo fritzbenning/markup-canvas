@@ -21,7 +21,7 @@ export function calculateTickSpacing(contentSize: number, canvasSize: number): n
 
 // Create horizontal tick mark and label
 export function createHorizontalTick(
-  ruler: HTMLElement,
+  container: HTMLElement | DocumentFragment,
   position: number,
   pixelPos: number,
   tickSpacing: number,
@@ -40,10 +40,11 @@ export function createHorizontalTick(
 		background: ${isMajor ? config.majorTickColor : config.minorTickColor};
 	`;
 
-  ruler.appendChild(tick);
+  container.appendChild(tick);
 
-  // Add label for major ticks
-  if (isMajor) {
+  // Add label for major ticks or at regular intervals
+  const shouldShowLabel = isMajor || position % TICK_SETTINGS.LABEL_INTERVAL === 0;
+  if (shouldShowLabel) {
     const label = document.createElement("div");
     label.style.cssText = `
 			position: absolute;
@@ -55,13 +56,13 @@ export function createHorizontalTick(
 			pointer-events: none;
 		`;
     label.textContent = Math.round(position).toString();
-    ruler.appendChild(label);
+    container.appendChild(label);
   }
 }
 
 // Create vertical tick mark and label
 export function createVerticalTick(
-  ruler: HTMLElement,
+  container: HTMLElement | DocumentFragment,
   position: number,
   pixelPos: number,
   tickSpacing: number,
@@ -80,10 +81,11 @@ export function createVerticalTick(
 		background: ${isMajor ? config.majorTickColor : config.minorTickColor};
 	`;
 
-  ruler.appendChild(tick);
+  container.appendChild(tick);
 
-  // Add label for major ticks
-  if (isMajor) {
+  // Add label for major ticks or at regular intervals
+  const shouldShowLabel = isMajor || position % TICK_SETTINGS.LABEL_INTERVAL === 0;
+  if (shouldShowLabel) {
     const label = document.createElement("div");
     label.style.cssText = `
 			position: absolute;
@@ -97,6 +99,6 @@ export function createVerticalTick(
 			transform-origin: right center;
 		`;
     label.textContent = Math.round(position).toString();
-    ruler.appendChild(label);
+    container.appendChild(label);
   }
 }

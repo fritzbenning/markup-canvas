@@ -6,9 +6,9 @@ import type {
 } from "../../types/index.js";
 
 export const DEFAULT_WHEEL_ZOOM_CONFIG: Required<WheelZoomOptions> = {
-  zoomSpeed: 0.4,
-  fineZoomSpeed: 0.2,
-  smoothTransition: false,
+  zoomSpeed: 2,
+  fineZoomSpeed: 0.4,
+  smoothTransition: true,
   enableAdaptiveSpeed: true,
 };
 
@@ -36,11 +36,7 @@ export const DEFAULT_TOUCH_CONFIG: Required<TouchEventsOptions> = {
 
 export const REFERENCE_DISPLAY_AREA = 1920 * 1080;
 
-export const ADAPTIVE_ZOOM_CONSTANTS = {
-  POWER_FACTOR: 1.15,
-  MIN_SCALE_FACTOR: 0.2,
-  MAX_SCALE_FACTOR: 3.5,
-} as const;
+export const ADAPTIVE_ZOOM_FACTOR = 1.2;
 
 export const CLICK_THRESHOLDS = {
   MAX_DURATION: 300,
@@ -62,6 +58,6 @@ export const TRACKPAD_THRESHOLDS = {
   SMALL_DELTA: 50,
   LARGE_DELTA: 100,
   CONFIDENCE_THRESHOLD: 0.7,
-  PINCH_SPEED_MULTIPLIER: 0.25,
-  LOW_CONFIDENCE_MULTIPLIER: 0.8,
+  PINCH_SPEED_MULTIPLIER: 0.22, // Increased from 0.15 for more responsive zoom
+  LOW_CONFIDENCE_MULTIPLIER: 0.75, // Increased from 0.6 for less conservative zoom
 } as const;

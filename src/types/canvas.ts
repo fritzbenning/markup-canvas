@@ -51,6 +51,7 @@ export interface BaseCanvas {
   getBounds: () => CanvasBounds;
   addContent: (element: HTMLElement, options?: AddContentOptions) => boolean;
   updateTransform: (newTransform: Partial<Transform>) => boolean;
+  updateTransformRAF: (newTransform: Partial<Transform>) => boolean;
   reset: () => boolean;
   handleResize: () => boolean;
   setZoom: (zoomLevel: number) => boolean;

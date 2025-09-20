@@ -1,5 +1,11 @@
 import type { EventCanvas as Canvas, MouseDragOptions, Transform } from "../../types/index.js";
-import { disableSmoothTransitions, enableSmoothTransitions } from "../transform/index.js";
+import { RULER_SIZE } from "../constants.js";
+import {
+  disableSmoothTransitions,
+  enableSmoothTransitions,
+  scheduleTransitionCleanup,
+} from "../transform/index.js";
+import { rafThrottle } from "../utils/raf-scheduler.js";
 import { CLICK_THRESHOLDS, DEFAULT_MOUSE_DRAG_CONFIG } from "./constants.js";
 
 // Sets up mouse drag functionality with enable/disable controls
@@ -97,19 +103,9 @@ export function setupMouseDragWithControls(
     }
   }
 
-  function handleMouseMove(event: MouseEvent): void {
-    // Track if mouse has moved significantly (for click detection)
-    if (mouseDownTime > 0) {
-      const deltaX = Math.abs(event.clientX - mouseDownX);
-      const deltaY = Math.abs(event.clientY - mouseDownY);
-      if (deltaX > CLICK_THRESHOLDS.MAX_MOVEMENT || deltaY > CLICK_THRESHOLDS.MAX_MOVEMENT) {
-        hasDragged = true;
-      }
-    }
-
+  // RAF-throttled mouse move handler for smooth performance
+  const handleMouseMoveThrottled = rafThrottle((event: MouseEvent) => {
     if (!isDragging || !isDragEnabled) return;
-
-    event.preventDefault();
 
     const deltaX = event.clientX - lastMouseX;
     const deltaY = event.clientY - lastMouseY;
@@ -123,6 +119,22 @@ export function setupMouseDragWithControls(
 
     lastMouseX = event.clientX;
     lastMouseY = event.clientY;
+  });
+
+  function handleMouseMove(event: MouseEvent): void {
+    // Track if mouse has moved significantly (for click detection)
+    if (mouseDownTime > 0) {
+      const deltaX = Math.abs(event.clientX - mouseDownX);
+      const deltaY = Math.abs(event.clientY - mouseDownY);
+      if (deltaX > CLICK_THRESHOLDS.MAX_MOVEMENT || deltaY > CLICK_THRESHOLDS.MAX_MOVEMENT) {
+        hasDragged = true;
+      }
+    }
+
+    if (!isDragging || !isDragEnabled) return;
+
+    event.preventDefault();
+    handleMouseMoveThrottled(event);
   }
 
   function handleMouseUp(event: MouseEvent): void {
@@ -144,10 +156,17 @@ export function setupMouseDragWithControls(
       if (clickDuration < CLICK_THRESHOLDS.MAX_DURATION && !hasDragged && !isDragging && shouldZoom) {
         event.preventDefault();
 
-        // Get click position relative to canvas
+        // Get click position relative to canvas content area (accounting for rulers)
         const rect = canvas.container.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const clickY = event.clientY - rect.top;
+        let clickX = event.clientX - rect.left;
+        let clickY = event.clientY - rect.top;
+
+        // Account for ruler offset if rulers are present
+        const hasRulers = canvas.container.querySelector(".canvas-ruler") !== null;
+        if (hasRulers) {
+          clickX -= RULER_SIZE;
+          clickY -= RULER_SIZE;
+        }
 
         // Convert canvas coordinates to content coordinates at current scale
         const contentCoords = canvas.canvasToContent(clickX, clickY);
@@ -176,12 +195,8 @@ export function setupMouseDragWithControls(
 
         canvas.updateTransform(newTransform);
 
-        // Disable transitions after animation completes
-        setTimeout(() => {
-          if (canvas.transformLayer) {
-            disableSmoothTransitions(canvas.transformLayer);
-          }
-        }, config.clickZoomDuration + 50);
+        // Schedule RAF-based transition cleanup
+        scheduleTransitionCleanup(canvas.transformLayer, config.clickZoomDuration + 50);
       }
     }
 

@@ -1,41 +1,58 @@
 import type { EventCanvas as Canvas, Transform, WheelZoomOptions } from "../../types/index.js";
+import { RULER_SIZE } from "../constants.js";
 import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
-import { disableSmoothTransitions, enableSmoothTransitions } from "../transform/index.js";
+import {
+  disableSmoothTransitions,
+  enableSmoothTransitions,
+  scheduleTransitionCleanup,
+} from "../transform/index.js";
+import { rafThrottle } from "../utils/raf-scheduler.js";
 import { getAdaptiveZoomSpeed } from "./adaptive-speed.js";
 import { DEFAULT_WHEEL_ZOOM_CONFIG, TRACKPAD_THRESHOLDS } from "./constants.js";
 import { detectTrackpadGesture } from "./gesture-detection.js";
+import { limitZoomFactor } from "./zoom-factor-limiter.js";
+
+// RAF-throttled trackpad pan handler
+const createTrackpadPanHandler = (canvas: Canvas) =>
+  rafThrottle((event: WheelEvent) => {
+    if (!event || !canvas?.updateTransform) {
+      return false;
+    }
+
+    try {
+      // Get current transform
+      const currentTransform = canvas.transform;
+
+      // Calculate pan delta based on trackpad scroll
+      const panSensitivity = 1.0;
+      const deltaX = event.deltaX * panSensitivity;
+      const deltaY = event.deltaY * panSensitivity;
+
+      // Apply pan by adjusting translation
+      const newTransform: Partial<Transform> = {
+        scale: currentTransform.scale,
+        translateX: currentTransform.translateX - deltaX,
+        translateY: currentTransform.translateY - deltaY,
+      };
+
+      // Disable smooth transitions for real-time panning
+      disableSmoothTransitions(canvas.transformLayer);
+
+      // Apply the new transform
+      return canvas.updateTransform(newTransform);
+    } catch (error) {
+      console.error("Error handling trackpad pan:", error);
+      return false;
+    }
+  });
 
 // Handles trackpad pan gestures
-function handleTrackpadPan(event: WheelEvent, canvas: Canvas): boolean {
-  if (!event || !canvas?.updateTransform) {
-    return false;
-  }
-
-  try {
-    // Get current transform
-    const currentTransform = canvas.transform;
-
-    // Calculate pan delta based on trackpad scroll
-    const panSensitivity = 1.0;
-    const deltaX = event.deltaX * panSensitivity;
-    const deltaY = event.deltaY * panSensitivity;
-
-    // Apply pan by adjusting translation
-    const newTransform: Partial<Transform> = {
-      scale: currentTransform.scale,
-      translateX: currentTransform.translateX - deltaX,
-      translateY: currentTransform.translateY - deltaY,
-    };
-
-    // Disable smooth transitions for real-time panning
-    disableSmoothTransitions(canvas.transformLayer);
-
-    // Apply the new transform
-    return canvas.updateTransform(newTransform);
-  } catch (error) {
-    console.error("Error handling trackpad pan:", error);
-    return false;
-  }
+function handleTrackpadPan(
+  event: WheelEvent,
+  canvas: Canvas,
+  panHandler: ReturnType<typeof createTrackpadPanHandler>,
+): boolean {
+  return panHandler(event);
 }
 
 // Handles wheel events for zooming
@@ -55,10 +72,17 @@ function handleWheel(event: WheelEvent, canvas: Canvas, config: Required<WheelZo
     // Prevent default scrolling behavior
     event.preventDefault();
 
-    // Get mouse position relative to canvas
+    // Get mouse position relative to canvas content area (accounting for rulers)
     const rect = canvas.container.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
+    let mouseX = event.clientX - rect.left;
+    let mouseY = event.clientY - rect.top;
+
+    // Account for ruler offset if rulers are present
+    const hasRulers = canvas.container.querySelector(".canvas-ruler") !== null;
+    if (hasRulers) {
+      mouseX -= RULER_SIZE;
+      mouseY -= RULER_SIZE;
+    }
 
     // Determine base zoom speed based on modifier keys
     const isCtrlPressed = event.ctrlKey || event.metaKey;
@@ -76,10 +100,7 @@ function handleWheel(event: WheelEvent, canvas: Canvas, config: Required<WheelZo
     const gestureInfo = detectTrackpadGesture(event);
 
     // Handle different gesture types
-    if (gestureInfo.isTrackpadScroll) {
-      // Handle trackpad scroll as pan
-      return handleTrackpadPan(event, canvas);
-    }
+    // Note: trackpad pan is now handled in setupWheelZoom
 
     if (!gestureInfo.isZoomGesture) {
       // Not a zoom gesture, ignore
@@ -106,12 +127,21 @@ function handleWheel(event: WheelEvent, canvas: Canvas, config: Required<WheelZo
       deviceZoomSpeed *= TRACKPAD_THRESHOLDS.LOW_CONFIDENCE_MULTIPLIER;
     }
 
-    // Use exponential zoom for more natural feel
-    const zoomMultiplier = zoomDirection > 0 ? 1 + deviceZoomSpeed : 1 / (1 + deviceZoomSpeed);
-    const zoomFactor = zoomMultiplier;
-
     // Get current transform state
     const currentTransform = canvas.transform;
+
+    // Use exponential zoom for more natural feel
+    const rawZoomMultiplier = zoomDirection > 0 ? 1 + deviceZoomSpeed : 1 / (1 + deviceZoomSpeed);
+
+    // Apply zoom factor limiting to prevent too rapid zoom changes
+    const limitedZoomFactor = limitZoomFactor(rawZoomMultiplier);
+
+    // Skip this zoom event if change is too small
+    if (limitedZoomFactor === null) {
+      return false;
+    }
+
+    const zoomFactor = limitedZoomFactor;
 
     // Calculate new transform using zoom-to-mouse algorithm
     const newTransform = getZoomToMouseTransform(mouseX, mouseY, currentTransform, zoomFactor);
@@ -128,12 +158,8 @@ function handleWheel(event: WheelEvent, canvas: Canvas, config: Required<WheelZo
     // Apply the new transform with smooth transition
     const result = canvas.updateTransform(newTransform);
 
-    // Disable transitions after a short delay to avoid interfering with subsequent operations
-    setTimeout(() => {
-      if (canvas.transformLayer) {
-        disableSmoothTransitions(canvas.transformLayer);
-      }
-    }, 200);
+    // Schedule RAF-based transition cleanup
+    scheduleTransitionCleanup(canvas.transformLayer, 200);
 
     return result;
   } catch (error) {
@@ -149,7 +175,18 @@ export function setupWheelZoom(canvas: Canvas, options: WheelZoomOptions = {}): 
     ...options,
   };
 
-  const wheelHandler = (event: WheelEvent) => handleWheel(event, canvas, config);
+  // Create RAF-throttled pan handler for this canvas instance
+  const trackpadPanHandler = createTrackpadPanHandler(canvas);
+
+  const wheelHandler = (event: WheelEvent) => {
+    // Check if this is a trackpad pan gesture
+    const gestureInfo = detectTrackpadGesture(event);
+    if (gestureInfo.isTrackpadScroll) {
+      return handleTrackpadPan(event, canvas, trackpadPanHandler);
+    }
+
+    return handleWheel(event, canvas, config);
+  };
 
   canvas.container.addEventListener("wheel", wheelHandler, { passive: false });
 

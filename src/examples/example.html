@@ -30,7 +30,10 @@
         </div>
         <div class="feature green">
           <h2>60+ Frames per second </h2>
-          <p>Optimized for a super-smooth performance using RAF and GPU-accelerated CSS Matrix Transforms.</p>
+          <p>
+            Optimized for super-smooth 60fps performance using requestAnimationFrame throttling, batched DOM
+            updates, and GPU-accelerated CSS Matrix Transforms.
+          </p>
           <p>No worries about performance.</p>
         </div>
       </div>
@@ -124,8 +127,6 @@
           requireSpaceForMouseDrag: false,
           requireOptionForClickZoom: false,
           enableClickToZoom: true,
-          zoomSpeed: 0.4,
-          fineZoomSpeed: 0.2,
           showRulers: true, // Enable rulers and grid
           showGrid: true, // Show grid by default
           gridColor: "rgba(0, 0, 0, 0.08)", // Grid color

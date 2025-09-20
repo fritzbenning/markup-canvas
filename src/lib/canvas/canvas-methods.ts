@@ -9,7 +9,12 @@ import { canvasToContent } from "../matrix/coordinate-conversion.js";
 import { calculateMatrix } from "../matrix/matrix-calculation.js";
 import { clampZoom } from "../matrix/zoom-clamping.js";
 import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
-import { applyTransform, disableSmoothTransitions, enableSmoothTransitions } from "../transform/index.js";
+import {
+  applyTransform,
+  applyTransformRAF,
+  enableSmoothTransitions,
+  scheduleTransitionCleanup,
+} from "../transform/index.js";
 import { getCanvasBounds } from "./bounds.js";
 import { addContentToCanvas } from "./content.js";
 
@@ -34,6 +39,24 @@ export function createCanvasMethods() {
         this.transform.translateY,
       );
       const result = applyTransform(this.transformLayer, matrix);
+
+      // Call update callback if provided
+      if (this.config.onTransformUpdate) {
+        this.config.onTransformUpdate(this.transform);
+      }
+
+      return result;
+    },
+
+    // RAF-optimized transform updates for high-frequency operations
+    updateTransformRAF: function (this: BaseCanvas, newTransform: Partial<Transform>) {
+      this.transform = { ...this.transform, ...newTransform };
+      const matrix = calculateMatrix(
+        this.transform.scale,
+        this.transform.translateX,
+        this.transform.translateY,
+      );
+      const result = applyTransformRAF(this.transformLayer, matrix);
 
       // Call update callback if provided
       if (this.config.onTransformUpdate) {
@@ -103,12 +126,8 @@ export function createCanvasMethods() {
 
       const result = this.updateTransform(newTransform);
 
-      // Disable transitions after animation completes
-      setTimeout(() => {
-        if (this.transformLayer) {
-          disableSmoothTransitions(this.transformLayer);
-        }
-      }, duration + TRANSITION_CLEANUP_DELAY);
+      // Schedule RAF-based transition cleanup
+      scheduleTransitionCleanup(this.transformLayer, duration + TRANSITION_CLEANUP_DELAY);
 
       return result;
     },
@@ -125,12 +144,8 @@ export function createCanvasMethods() {
       };
       const result = this.updateTransform(resetTransform);
 
-      // Disable transitions after animation completes
-      setTimeout(() => {
-        if (this.transformLayer) {
-          disableSmoothTransitions(this.transformLayer);
-        }
-      }, duration + TRANSITION_CLEANUP_DELAY);
+      // Schedule RAF-based transition cleanup
+      scheduleTransitionCleanup(this.transformLayer, duration + TRANSITION_CLEANUP_DELAY);
 
       return result;
     },
@@ -157,12 +172,8 @@ export function createCanvasMethods() {
         translateY: centerY,
       });
 
-      // Disable transitions after animation completes
-      setTimeout(() => {
-        if (this.transformLayer) {
-          disableSmoothTransitions(this.transformLayer);
-        }
-      }, duration + TRANSITION_CLEANUP_DELAY);
+      // Schedule RAF-based transition cleanup
+      scheduleTransitionCleanup(this.transformLayer, duration + TRANSITION_CLEANUP_DELAY);
 
       return result;
     },

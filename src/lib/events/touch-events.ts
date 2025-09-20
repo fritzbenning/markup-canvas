@@ -1,7 +1,10 @@
 import type { EventCanvas as Canvas, TouchEventsOptions, TouchState, Transform } from "../../types/index.js";
+import { RULER_SIZE } from "../constants.js";
 import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
 import { disableSmoothTransitions } from "../transform/index.js";
+import { rafThrottle } from "../utils/raf-scheduler.js";
 import { DEFAULT_TOUCH_CONFIG } from "./constants.js";
+import { limitZoomFactor } from "./zoom-factor-limiter.js";
 
 // Calculates distance between two touch points
 function getTouchDistance(touch1: Touch, touch2: Touch): number {
@@ -44,11 +47,8 @@ export function setupTouchEvents(canvas: Canvas, options: TouchEventsOptions = {
     disableSmoothTransitions(canvas.transformLayer);
   }
 
-  function handleTouchMove(event: TouchEvent): void {
-    event.preventDefault();
-
-    const currentTouches = Array.from(event.touches);
-
+  // RAF-throttled touch move handler for smooth performance
+  const handleTouchMoveThrottled = rafThrottle((currentTouches: Touch[]) => {
     if (currentTouches.length === 1 && config.enableSingleTouchPan) {
       // Single touch pan
       if (touchState.touches.length === 1) {
@@ -68,16 +68,28 @@ export function setupTouchEvents(canvas: Canvas, options: TouchEventsOptions = {
       const currentCenter = getTouchCenter(currentTouches[0], currentTouches[1]);
 
       if (touchState.lastDistance > 0) {
-        const zoomFactor = currentDistance / touchState.lastDistance;
+        const rawZoomFactor = currentDistance / touchState.lastDistance;
 
-        // Get center relative to canvas
-        const rect = canvas.container.getBoundingClientRect();
-        const centerX = currentCenter.x - rect.left;
-        const centerY = currentCenter.y - rect.top;
+        // Apply zoom factor limiting for touch pinch gestures
+        const limitedZoomFactor = limitZoomFactor(rawZoomFactor);
 
-        const newTransform = getZoomToMouseTransform(centerX, centerY, canvas.transform, zoomFactor);
+        if (limitedZoomFactor !== null) {
+          // Get center relative to canvas content area (accounting for rulers)
+          const rect = canvas.container.getBoundingClientRect();
+          let centerX = currentCenter.x - rect.left;
+          let centerY = currentCenter.y - rect.top;
 
-        canvas.updateTransform(newTransform);
+          // Account for ruler offset if rulers are present
+          const hasRulers = canvas.container.querySelector(".canvas-ruler") !== null;
+          if (hasRulers) {
+            centerX -= RULER_SIZE;
+            centerY -= RULER_SIZE;
+          }
+
+          const newTransform = getZoomToMouseTransform(centerX, centerY, canvas.transform, limitedZoomFactor);
+
+          canvas.updateTransform(newTransform);
+        }
       }
 
       touchState.lastDistance = currentDistance;
@@ -85,6 +97,13 @@ export function setupTouchEvents(canvas: Canvas, options: TouchEventsOptions = {
     }
 
     touchState.touches = currentTouches;
+  });
+
+  function handleTouchMove(event: TouchEvent): void {
+    event.preventDefault();
+
+    const currentTouches = Array.from(event.touches);
+    handleTouchMoveThrottled(currentTouches);
   }
 
   function handleTouchEnd(event: TouchEvent): void {

@@ -13,11 +13,13 @@ export function calculateMatrix(scale: number, translateX: number, translateY: n
     translateY = DEFAULT_TRANSLATE_Y;
   }
 
-  // Create matrix directly for better performance
-  return new DOMMatrix([scale, 0, 0, 0, 0, scale, 0, 0, 0, 0, 1, 0, translateX, translateY, 0, 1]);
+  // Create matrix using proper 2D transformation format
+  // DOMMatrix constructor expects [a, b, c, d, e, f] for 2D transforms
+  // where: a=scaleX, b=skewY, c=skewX, d=scaleY, e=translateX, f=translateY
+  return new DOMMatrix([scale, 0, 0, scale, translateX, translateY]);
 }
 
 // Creates a fallback identity matrix for error recovery
 export function createIdentityMatrix(): DOMMatrix {
-  return new DOMMatrix([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+  return new DOMMatrix([1, 0, 0, 1, 0, 0]);
 }

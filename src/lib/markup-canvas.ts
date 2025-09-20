@@ -1,5 +1,6 @@
 import type { BaseCanvas, CanvasBounds, MarkupCanvasOptions, Transform } from "../types/index.js";
 import { createCanvas } from "./canvas/index.js";
+import { FINE_ZOOM_SPEED, ZOOM_SPEED } from "./constants.js";
 import {
   setupKeyboardNavigation,
   setupMouseDragWithControls,
@@ -8,7 +9,7 @@ import {
 } from "./events/index.js";
 import { clampZoom } from "./matrix/zoom-clamping.js";
 import { createRulers } from "./rulers/index.js";
-import { disableSmoothTransitions, enableSmoothTransitions } from "./transform/index.js";
+import { enableSmoothTransitions, scheduleTransitionCleanup } from "./transform/index.js";
 
 export class MarkupCanvas {
   private baseCanvas: BaseCanvas;
@@ -37,8 +38,8 @@ export class MarkupCanvas {
       // Wheel zoom
       const wheelCleanup = setupWheelZoom(this.baseCanvas, {
         smoothTransition: options.smoothTransition !== undefined ? options.smoothTransition : true,
-        zoomSpeed: options.zoomSpeed !== undefined ? options.zoomSpeed : 0.4,
-        fineZoomSpeed: options.fineZoomSpeed !== undefined ? options.fineZoomSpeed : 0.2,
+        zoomSpeed: options.zoomSpeed !== undefined ? options.zoomSpeed : ZOOM_SPEED,
+        fineZoomSpeed: options.fineZoomSpeed !== undefined ? options.fineZoomSpeed : FINE_ZOOM_SPEED,
       });
       this.cleanupFunctions.push(wheelCleanup);
 
@@ -299,11 +300,7 @@ export class MarkupCanvas {
     });
 
     if (duration > 0) {
-      setTimeout(() => {
-        if (this.baseCanvas.transformLayer) {
-          disableSmoothTransitions(this.baseCanvas.transformLayer);
-        }
-      }, duration + 50);
+      scheduleTransitionCleanup(this.baseCanvas.transformLayer, duration + 50);
     }
 
     return result;
@@ -347,11 +344,7 @@ export class MarkupCanvas {
     });
 
     if (duration > 0) {
-      setTimeout(() => {
-        if (this.baseCanvas.transformLayer) {
-          disableSmoothTransitions(this.baseCanvas.transformLayer);
-        }
-      }, duration + 50);
+      scheduleTransitionCleanup(this.baseCanvas.transformLayer, duration + 50);
     }
 
     return result;

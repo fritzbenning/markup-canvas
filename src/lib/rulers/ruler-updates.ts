@@ -1,5 +1,6 @@
 import type { RulerCanvas as Canvas, RulerOptions } from "../../types/index.js";
 import { RULER_SIZE } from "../constants.js";
+import { rafScheduler } from "../utils/raf-scheduler.js";
 import { updateGrid } from "./grid-overlay.js";
 import { calculateTickSpacing, createHorizontalTick, createVerticalTick } from "./tick-creation.js";
 
@@ -38,6 +39,19 @@ export function updateRulers(
   }
 }
 
+// RAF-optimized ruler updates for high-frequency updates
+export function updateRulersRAF(
+  canvas: Canvas,
+  horizontalRuler: HTMLElement,
+  verticalRuler: HTMLElement,
+  gridOverlay: HTMLElement | undefined,
+  config: Required<RulerOptions>,
+): void {
+  rafScheduler.schedule(() => {
+    updateRulers(canvas, horizontalRuler, verticalRuler, gridOverlay, config);
+  });
+}
+
 // Update horizontal ruler markings
 function updateHorizontalRuler(
   ruler: HTMLElement,
@@ -53,8 +67,8 @@ function updateHorizontalRuler(
   // Calculate appropriate tick spacing
   const tickSpacing = calculateTickSpacing(contentWidth, rulerWidth);
 
-  // Clear existing content
-  ruler.innerHTML = "";
+  // Create document fragment for batched DOM updates
+  const fragment = document.createDocumentFragment();
 
   // Create tick marks and labels
   const startTick = Math.floor(contentLeft / tickSpacing) * tickSpacing;
@@ -64,9 +78,13 @@ function updateHorizontalRuler(
     const pixelPos = (pos - contentLeft) * scale;
 
     if (pixelPos >= -50 && pixelPos <= rulerWidth + 50) {
-      createHorizontalTick(ruler, pos, pixelPos, tickSpacing, config);
+      createHorizontalTick(fragment, pos, pixelPos, tickSpacing, config);
     }
   }
+
+  // Batch DOM update: clear and append all at once
+  ruler.innerHTML = "";
+  ruler.appendChild(fragment);
 }
 
 // Update vertical ruler markings
@@ -84,8 +102,8 @@ function updateVerticalRuler(
   // Calculate appropriate tick spacing
   const tickSpacing = calculateTickSpacing(contentHeight, rulerHeight);
 
-  // Clear existing content
-  ruler.innerHTML = "";
+  // Create document fragment for batched DOM updates
+  const fragment = document.createDocumentFragment();
 
   // Create tick marks and labels
   const startTick = Math.floor(contentTop / tickSpacing) * tickSpacing;
@@ -95,7 +113,11 @@ function updateVerticalRuler(
     const pixelPos = (pos - contentTop) * scale;
 
     if (pixelPos >= -50 && pixelPos <= rulerHeight + 50) {
-      createVerticalTick(ruler, pos, pixelPos, tickSpacing, config);
+      createVerticalTick(fragment, pos, pixelPos, tickSpacing, config);
     }
   }
+
+  // Batch DOM update: clear and append all at once
+  ruler.innerHTML = "";
+  ruler.appendChild(fragment);
 }

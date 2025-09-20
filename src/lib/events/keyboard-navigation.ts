@@ -1,4 +1,5 @@
 import type { EventCanvas as Canvas, KeyboardNavigationOptions, Transform } from "../../types/index.js";
+import { RULER_SIZE } from "../constants.js";
 import { clampZoom } from "../matrix/zoom-clamping.js";
 import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
 import { getAdaptiveZoomSpeed } from "./adaptive-speed.js";
@@ -19,6 +20,13 @@ export function setupKeyboardNavigation(canvas: Canvas, options: KeyboardNavigat
     const rect = canvas.container.getBoundingClientRect();
     lastMouseX = event.clientX - rect.left;
     lastMouseY = event.clientY - rect.top;
+
+    // Account for ruler offset if rulers are present
+    const hasRulers = canvas.container.querySelector(".canvas-ruler") !== null;
+    if (hasRulers) {
+      lastMouseX -= RULER_SIZE;
+      lastMouseY -= RULER_SIZE;
+    }
   }
 
   function handleKeyDown(event: KeyboardEvent): void {

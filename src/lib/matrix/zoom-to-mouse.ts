@@ -5,8 +5,6 @@ import {
   DEFAULT_ZOOM,
   ZOOM_CHANGE_THRESHOLD,
 } from "../constants.js";
-import { canvasToContent } from "./coordinate-conversion.js";
-import { calculateMatrix } from "./matrix-calculation.js";
 import { clampZoom } from "./zoom-clamping.js";
 
 // Calculates zoom-to-mouse transformation
@@ -43,15 +41,15 @@ export function getZoomToMouseTransform(
     };
   }
 
-  // Get current matrix
-  const currentMatrix = calculateMatrix(currentScale, currentTx, currentTy);
-
-  // Convert mouse position to content coordinates
-  const contentPoint = canvasToContent(mouseX, mouseY, currentMatrix);
+  // Calculate the point in content space that should remain under the mouse
+  // Use direct calculation instead of matrix inversion for better precision
+  const contentX = (mouseX - currentTx) / currentScale;
+  const contentY = (mouseY - currentTy) / currentScale;
 
   // Calculate new translation to keep the content point under the mouse
-  const newTx = mouseX - contentPoint.x * newScale;
-  const newTy = mouseY - contentPoint.y * newScale;
+  // Formula: newTranslate = mouse - (content * newScale)
+  const newTx = mouseX - contentX * newScale;
+  const newTy = mouseY - contentY * newScale;
 
   return {
     scale: newScale,

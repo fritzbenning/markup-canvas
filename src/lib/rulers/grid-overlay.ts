@@ -1,4 +1,5 @@
 import { GRID_SETTINGS } from "../constants";
+import { rafScheduler } from "../utils/raf-scheduler.js";
 
 // Update grid overlay based on current transform
 export function updateGrid(
@@ -16,4 +17,16 @@ export function updateGrid(
 
   gridOverlay.style.backgroundSize = `${gridSize}px ${gridSize}px`;
   gridOverlay.style.backgroundPosition = `${translateX % gridSize}px ${translateY % gridSize}px`;
+}
+
+// RAF-optimized grid updates
+export function updateGridRAF(
+  gridOverlay: HTMLElement,
+  scale: number,
+  translateX: number,
+  translateY: number,
+): void {
+  rafScheduler.schedule(() => {
+    updateGrid(gridOverlay, scale, translateX, translateY);
+  });
 }
