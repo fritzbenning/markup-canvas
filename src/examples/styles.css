@@ -261,3 +261,38 @@ body {
 .zoom-indicator:hover {
   background: rgba(0, 0, 0, 0.9);
 }
+/* Gesture Debug Panel Styles */
+.gesture-debug {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  font-size: 0.7rem;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-width: 180px;
+}
+
+.gesture-debug h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.75rem;
+  color: #00ff88;
+  font-weight: 600;
+}
+
+.gesture-debug div {
+  margin: 4px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.gesture-debug span {
+  color: #88ff88;
+  font-weight: 500;
+}

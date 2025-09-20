@@ -145,6 +145,9 @@
         // Set up zoom level indicator
         setupZoomIndicator();
 
+        // Set up gesture debugging
+        setupGestureDebug();
+
         console.log("Simple demo initialized successfully!");
       }
 
@@ -164,6 +167,37 @@
         // Update zoom display on transform changes
         // We'll poll for changes since we don't have a direct event
         setInterval(updateZoomDisplay, 100);
+      }
+
+      function setupGestureDebug() {
+        const momentumElement = document.getElementById('momentum-value');
+        const directionElement = document.getElementById('direction-value');
+        const velocityElement = document.getElementById('velocity-value');
+        const touchActiveElement = document.getElementById('touch-active');
+        
+        let isTouchActive = false;
+
+        // Track touch events
+        canvas.container.addEventListener('touchstart', () => {
+          isTouchActive = true;
+        });
+
+        canvas.container.addEventListener('touchend', () => {
+          isTouchActive = false;
+        });
+
+        function updateGestureDebug() {
+          if (canvas && canvas._gestureSmoother) {
+            const smoother = canvas._gestureSmoother;
+            momentumElement.textContent = smoother.getMomentum().toFixed(4);
+            directionElement.textContent = smoother.getDirection().toString();
+            velocityElement.textContent = smoother.getVelocity().toFixed(4);
+            touchActiveElement.textContent = isTouchActive ? 'Yes' : 'No';
+          }
+        }
+
+        // Update debug info frequently during gestures
+        setInterval(updateGestureDebug, 50);
       }
 
       // Initialize when DOM is ready

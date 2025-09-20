@@ -4,20 +4,28 @@ export const DEFAULT_CANVAS_HEIGHT = 8000;
 
 // Zoom constraints
 export const MIN_ZOOM = 0.05;
-export const MAX_ZOOM = 10;
+export const MAX_ZOOM = 6;
 
 export const DEFAULT_ZOOM = 1.0;
 export const DEFAULT_TRANSLATE_X = -24;
 export const DEFAULT_TRANSLATE_Y = -24;
 
-export const ZOOM_SPEED = 0.4;
-export const FINE_ZOOM_SPEED = 0.3;
+export const ZOOM_SPEED = 0.55;
+export const FINE_ZOOM_SPEED = 0.35;
 
 // Zoom factor limiting (per-frame control)
 export const ZOOM_FACTOR_LIMIT = {
-  MAX_ZOOM_FACTOR_PER_FRAME: 1.2, // Maximum zoom factor per frame (1.02 = 2% increase max)
-  MIN_ZOOM_FACTOR_PER_FRAME: 0.8, // Minimum zoom factor per frame (0.98 = 2% decrease max)
+  MAX_ZOOM_FACTOR_PER_FRAME: 1.5, // Increased for smoother rapid gestures
+  MIN_ZOOM_FACTOR_PER_FRAME: 0.5, // Increased range for smoother rapid gestures
   MIN_ZOOM_FACTOR_CHANGE: 0.0001, // Minimum zoom factor change to process
+} as const;
+
+// Gesture smoothing constants
+export const GESTURE_SMOOTHING = {
+  MOMENTUM_DECAY: 0.8, // How quickly gesture momentum decays
+  SMOOTHING_FACTOR: 0.1, // Reduced for more responsive gestures
+  MAX_VELOCITY_SAMPLES: 8, // Increased for better velocity tracking
+  VELOCITY_THRESHOLD: 0.005, // Reduced threshold for more sensitive momentum
 } as const;
 
 // Validation thresholds

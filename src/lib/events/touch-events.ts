@@ -1,9 +1,10 @@
 import type { EventCanvas as Canvas, TouchEventsOptions, TouchState, Transform } from "../../types/index.js";
 import { RULER_SIZE } from "../constants.js";
-import { getZoomToMouseTransform } from "../matrix/zoom-to-mouse.js";
 import { disableSmoothTransitions } from "../transform/index.js";
 import { rafThrottle } from "../utils/raf-scheduler.js";
 import { DEFAULT_TOUCH_CONFIG } from "./constants.js";
+import { ContinuousZoomUpdater } from "./continuous-zoom-updater.js";
+import { GestureSmoother } from "./gesture-smoothing.js";
 import { limitZoomFactor } from "./zoom-factor-limiter.js";
 
 // Calculates distance between two touch points
@@ -34,6 +35,12 @@ export function setupTouchEvents(canvas: Canvas, options: TouchEventsOptions = {
     lastCenter: { x: 0, y: 0 },
   };
 
+  // Create gesture smoother for better pinch-to-zoom experience
+  const gestureSmoother = new GestureSmoother();
+
+  // Create continuous zoom updater for smooth long gestures
+  const continuousZoomUpdater = new ContinuousZoomUpdater(canvas);
+
   function handleTouchStart(event: TouchEvent): void {
     event.preventDefault();
 
@@ -42,12 +49,15 @@ export function setupTouchEvents(canvas: Canvas, options: TouchEventsOptions = {
     if (touchState.touches.length === 2 && config.enableMultiTouch) {
       touchState.lastDistance = getTouchDistance(touchState.touches[0], touchState.touches[1]);
       touchState.lastCenter = getTouchCenter(touchState.touches[0], touchState.touches[1]);
+
+      // Reset gesture smoother on new pinch gesture
+      gestureSmoother.reset(canvas.transform.scale);
     }
 
     disableSmoothTransitions(canvas.transformLayer);
   }
 
-  // RAF-throttled touch move handler for smooth performance
+  // Enhanced RAF-throttled touch move handler for smooth gesture performance
   const handleTouchMoveThrottled = rafThrottle((currentTouches: Touch[]) => {
     if (currentTouches.length === 1 && config.enableSingleTouchPan) {
       // Single touch pan
@@ -70,25 +80,30 @@ export function setupTouchEvents(canvas: Canvas, options: TouchEventsOptions = {
       if (touchState.lastDistance > 0) {
         const rawZoomFactor = currentDistance / touchState.lastDistance;
 
-        // Apply zoom factor limiting for touch pinch gestures
-        const limitedZoomFactor = limitZoomFactor(rawZoomFactor);
+        // Get center relative to canvas content area (accounting for rulers)
+        const rect = canvas.container.getBoundingClientRect();
+        let centerX = currentCenter.x - rect.left;
+        let centerY = currentCenter.y - rect.top;
+
+        // Account for ruler offset if rulers are present
+        const hasRulers = canvas.container.querySelector(".canvas-ruler") !== null;
+        if (hasRulers) {
+          centerX -= RULER_SIZE;
+          centerY -= RULER_SIZE;
+        }
+
+        // Apply gesture smoothing for better experience
+        const smoothedZoomFactor = gestureSmoother.smoothZoomFactor(rawZoomFactor, canvas.transform.scale);
+
+        // Apply zoom factor limiting for touch pinch gestures (with touch flag)
+        const limitedZoomFactor = limitZoomFactor(smoothedZoomFactor, true);
 
         if (limitedZoomFactor !== null) {
-          // Get center relative to canvas content area (accounting for rulers)
-          const rect = canvas.container.getBoundingClientRect();
-          let centerX = currentCenter.x - rect.left;
-          let centerY = currentCenter.y - rect.top;
+          // Calculate target zoom level
+          const targetZoom = canvas.transform.scale * limitedZoomFactor;
 
-          // Account for ruler offset if rulers are present
-          const hasRulers = canvas.container.querySelector(".canvas-ruler") !== null;
-          if (hasRulers) {
-            centerX -= RULER_SIZE;
-            centerY -= RULER_SIZE;
-          }
-
-          const newTransform = getZoomToMouseTransform(centerX, centerY, canvas.transform, limitedZoomFactor);
-
-          canvas.updateTransform(newTransform);
+          // Use continuous zoom updater for smooth transitions
+          continuousZoomUpdater.updateTargetZoom(targetZoom, centerX, centerY);
         }
       }
 
@@ -111,6 +126,8 @@ export function setupTouchEvents(canvas: Canvas, options: TouchEventsOptions = {
 
     if (touchState.touches.length < 2) {
       touchState.lastDistance = 0;
+      // Stop continuous zoom updates when gesture ends
+      continuousZoomUpdater.stopContinuousZoom();
     }
   }
 
@@ -123,6 +140,10 @@ export function setupTouchEvents(canvas: Canvas, options: TouchEventsOptions = {
   canvas.container.addEventListener("touchend", handleTouchEnd, {
     passive: false,
   });
+
+  // Expose gesture smoother and continuous zoom updater for debugging
+  (canvas as any)._gestureSmoother = gestureSmoother;
+  (canvas as any)._continuousZoomUpdater = continuousZoomUpdater;
 
   return () => {
     canvas.container.removeEventListener("touchstart", handleTouchStart);
