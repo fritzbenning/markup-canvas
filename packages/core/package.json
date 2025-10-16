@@ -30,7 +30,7 @@
     "dom"
   ],
   "author": "",
-  "license": "MIT",
+  "license": "CC-BY-NC-4.0",
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
     "@rollup/plugin-alias": "^5.1.1",
