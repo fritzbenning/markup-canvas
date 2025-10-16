@@ -40,14 +40,8 @@ export function getCanvasMethods() {
 
     // Handle canvas resize
     handleResize: function (this: BaseCanvas) {
-      // Update canvas bounds and ensure proper dimensions
       const newRect = this.container.getBoundingClientRect();
-      console.log("Canvas resized:", {
-        width: newRect.width,
-        height: newRect.height,
-      });
 
-      // Trigger any necessary updates for the new dimensions
       return true;
     },
 

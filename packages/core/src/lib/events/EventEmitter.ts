@@ -5,7 +5,6 @@ export class EventEmitter<Events extends Record<string, unknown>> {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set());
     }
-    console.log(`[EventEmitter] Registered handler for "${String(event)}", total handlers: ${this.listeners.get(event)!.size}`);
     this.listeners.get(event)!.add(handler as (data: unknown) => void);
   }
 
@@ -22,7 +21,6 @@ export class EventEmitter<Events extends Record<string, unknown>> {
       handlers.forEach((handler) => {
         try {
           handler(data);
-          console.log(`[EventEmitter] Emitted "${String(event)}", handlers: ${handlers.size}`, data);
         } catch (error) {
           console.error(`Error in event handler for "${String(event)}":`, error);
         }

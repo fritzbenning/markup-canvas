@@ -390,8 +390,6 @@ export class MarkupCanvas implements Canvas {
 
   updateConfig(newConfig: Partial<MarkupCanvasConfig>): void {
     this.config = createMarkupCanvasConfig({ ...this.config, ...newConfig });
-    // Note: This doesn't re-initialize event handlers - that would require a full rebuild
-    console.log("Configuration updated. Some changes may require recreating the canvas.");
   }
 
   // Cleanup method

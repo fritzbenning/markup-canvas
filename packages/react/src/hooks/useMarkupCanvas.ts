@@ -24,7 +24,6 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
   }, []);
 
   const handleZoom = useCallback((newZoom: number) => {
-    console.log("[useMarkupCanvas] handleZoom called", newZoom);
     setZoom(newZoom);
     optionsRef.current.onZoomChange?.(newZoom);
   }, []);
@@ -40,13 +39,9 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
   }, []);
 
   useEffect(() => {
-    console.log("[useMarkupCanvas] Event listener effect running, canvasInstance:", canvasInstance);
     if (!canvasInstance) {
-      console.log("[useMarkupCanvas] No canvas instance, skipping");
       return;
     }
-
-    console.log("[useMarkupCanvas] Registering event listeners");
 
     canvasInstance.on("transform", handleTransform);
     canvasInstance.on("zoom", handleZoom);
@@ -65,7 +60,6 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
     }
 
     return () => {
-      console.log("[useMarkupCanvas] Cleanup: removing event listeners");
       canvasInstance.off("transform", handleTransform);
       canvasInstance.off("zoom", handleZoom);
       canvasInstance.off("pan", handlePan);
