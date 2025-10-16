@@ -12,6 +12,6 @@
     "@markup-canvas/core": "workspace:*"
   },
   "devDependencies": {
-    "vite": "^5.0.0"
+    "vite": "^7.1.10"
   }
 }

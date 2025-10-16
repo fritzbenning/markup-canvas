@@ -3,20 +3,19 @@ import { type RefObject, useCallback, useEffect, useRef, useState } from "react"
 import type { MarkupCanvasRef, UseMarkupCanvasOptions } from "../types/index.js";
 
 export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, options: UseMarkupCanvasOptions = {}) {
+  const [canvasInstance, setCanvasInstance] = useState<MarkupCanvas | null>(null);
   const [transform, setTransform] = useState<Transform>({ scale: 1, translateX: 0, translateY: 0 });
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isReady, setIsReady] = useState(false);
-  const [canvasInstance, setCanvasInstance] = useState<MarkupCanvas | null>(null);
 
   const optionsRef = useRef(options);
   optionsRef.current = options;
 
-  const canvas = canvasRef.current?.canvas ?? null;
-
-  useEffect(() => {
+  const handleCanvasInstance = useCallback((canvas: MarkupCanvas) => {
     setCanvasInstance(canvas);
-  }, [canvas]);
+    optionsRef.current.onReady?.(canvas);
+  }, []);
 
   const handleTransform = useCallback((newTransform: Transform) => {
     setTransform(newTransform);
@@ -39,6 +38,8 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
   }, []);
 
   useEffect(() => {
+    console.log("useEffect", canvasInstance);
+
     if (!canvasInstance) {
       return;
     }
@@ -121,6 +122,7 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
 
   return {
     canvas: canvasRef.current?.canvas || null,
+    initCanvasUtils: handleCanvasInstance,
     transform,
     zoom,
     pan,

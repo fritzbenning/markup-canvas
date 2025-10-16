@@ -10,7 +10,8 @@ import { ZoomDisplay } from "./components/ZoomDisplay";
 function App() {
   const canvasRef = useRef<MarkupCanvasRef>(null);
 
-  const { zoom, zoomIn, zoomOut, fitToContent, resetZoom, centerContent, toggleTransitionMode } = useMarkupCanvas(canvasRef);
+  const { initCanvasUtils, zoom, zoomIn, zoomOut, fitToContent, resetZoom, centerContent, toggleTransitionMode } =
+    useMarkupCanvas(canvasRef);
 
   return (
     <div className="app">
@@ -40,6 +41,7 @@ function App() {
         enableTransition={false}
         enableRulers={true}
         enableGrid={true}
+        onReady={initCanvasUtils}
       >
         <Content />
       </MarkupCanvas>
