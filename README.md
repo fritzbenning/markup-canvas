@@ -2,6 +2,10 @@
 
 High-performance canvas-like container with pan and zoom capabilities for HTML content.
 
+## ✨ Live Demo
+
+Check out the live demo: [https://markup-canvas.vercel.app/](https://markup-canvas.vercel.app/)
+
 ## 📦 Packages
 
 This is a monorepo containing the following packages:
@@ -172,6 +176,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 🔗 Links
 
-- [GitHub Repository](https://github.com/your-repo/markup-canvas)
+- [GitHub Repository](https://github.com/fritzbenning/markup-canvas)
 - [NPM - Core](https://www.npmjs.com/package/@markup-canvas/core)
 - [NPM - React](https://www.npmjs.com/package/@markup-canvas/react)

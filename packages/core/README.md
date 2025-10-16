@@ -2,6 +2,10 @@
 
 High-performance canvas-like container with pan and zoom capabilities.
 
+## ✨ Live Demo
+
+Check out the live demo: [https://markup-canvas.vercel.app/](https://markup-canvas.vercel.app/)
+
 ## Installation
 
 ```bash

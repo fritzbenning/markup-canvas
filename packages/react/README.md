@@ -2,6 +2,10 @@
 
 React component and hook for `@markup-canvas/core`.
 
+## ✨ Live Demo
+
+Check out the live demo: [https://markup-canvas.vercel.app/](https://markup-canvas.vercel.app/)
+
 ## Installation
 
 ```bash
