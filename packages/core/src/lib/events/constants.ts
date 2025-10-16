@@ -1,0 +1,9 @@
+export const REFERENCE_DISPLAY_AREA = 1920 * 1080;
+
+export const TRACKPAD_PINCH_SPEED_FACTOR = 0.05;
+export const ADAPTIVE_ZOOM_FACTOR = 1;
+
+export const CLICK_THRESHOLDS = {
+  MAX_DURATION: 300,
+  MAX_MOVEMENT: 5,
+} as const;

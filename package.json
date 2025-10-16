@@ -1,0 +1,23 @@
+{
+  "name": "markup-canvas-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "High-performance canvas-like container with pan and zoom capabilities - Monorepo",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean",
+    "format": "biome format --write .",
+    "check": "biome check ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.4",
+    "turbo": "^2.0.0"
+  },
+  "packageManager": "pnpm@8.15.0",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

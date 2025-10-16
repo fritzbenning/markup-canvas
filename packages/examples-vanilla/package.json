@@ -1,0 +1,17 @@
+{
+  "name": "@markup-canvas/examples-vanilla",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Vanilla JavaScript examples for markup-canvas",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@markup-canvas/core": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

@@ -1,0 +1,431 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f5f5f5;
+  overflow: hidden;
+  color: black;
+}
+
+.headline-font {
+  font-family: "Anek Tamil", sans-serif;
+}
+
+.decorative-font {
+  font-family: "Herr Von Muellerhoff", cursive;
+}
+
+/* Container Styles */
+.app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f6f6f6;
+  overflow: hidden;
+}
+
+.canvas-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f6f6f6;
+  overflow: hidden;
+}
+
+.transform-layer {
+  background-color: #fff;
+}
+
+.content-item {
+  position: absolute;
+  background: white;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.intro {
+  position: absolute;
+  top: 200px;
+  left: 200px;
+}
+
+.intro h1 {
+  font-size: 150px;
+  font-family: "Anek Tamil", sans-serif;
+}
+
+.intro .beta {
+  font-size: 200px;
+  position: absolute;
+  top: 50px;
+  right: -50px;
+  transform: rotate(-16deg);
+  color: #808dfd;
+  font-family: "Herr Von Muellerhoff", cursive;
+}
+
+.canvas-container {
+  position: absolute;
+  display: flex;
+  gap: 100px;
+}
+
+.canvas-container[tabindex]:focus {
+  outline: none;
+}
+
+.feature {
+  padding: 40px;
+  border-radius: 32px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feature h2 {
+  font-size: 28px;
+  font-weight: 600;
+  font-family: "Anek Tamil", sans-serif;
+}
+
+.feature p {
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 140%;
+}
+
+.feature.lilac {
+  background-color: #bac1ff;
+}
+
+.feature.yellow {
+  background-color: #ffea93;
+}
+
+.feature.green {
+  background-color: #baffde;
+}
+
+.gradient {
+  position: absolute;
+  width: 4000px;
+  height: 4000px;
+}
+
+.gradient.lilac {
+  background: radial-gradient(circle, rgba(186, 193, 255, 0.2) 0%, rgba(186, 193, 255, 0) 80%);
+}
+
+.gradient.yellow {
+  background: radial-gradient(circle, rgba(255, 234, 147, 0.2) 0%, rgba(255, 234, 147, 0) 80%);
+}
+
+.blockquote {
+  font-size: 300px;
+  font-family: "Herr Von Muellerhoff", cursive;
+  text-align: center;
+  max-width: 1500px;
+  line-height: 0.9;
+}
+
+.blockquote cite {
+  display: block;
+  font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 32px;
+  margin-top: 24px;
+  color: #808dfd;
+  font-style: normal;
+}
+
+.emoji-sticker {
+  font-size: 100px;
+  position: absolute;
+}
+
+.hero-headline {
+  font-size: 200px;
+  color: #808dfd;
+  font-family: "Anek Tamil", sans-serif;
+}
+
+.content-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-item h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.content-item p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.content-item.large {
+  width: 300px;
+  height: 200px;
+}
+
+.content-item.medium {
+  width: 200px;
+  height: 150px;
+}
+
+.content-item.small {
+  width: 150px;
+  height: 100px;
+}
+
+.content-item.interactive {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}
+
+.content-item.interactive h3 {
+  color: white;
+}
+
+.content-item.interactive p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Image Content Styles */
+.image-item {
+  position: absolute;
+  overflow: hidden;
+}
+
+.image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-item .image-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  color: white;
+  padding: 20px 15px 15px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.image-item.large {
+  width: 1000px;
+  height: 700px;
+}
+
+.image-item.medium {
+  width: 800px;
+  height: 500px;
+}
+
+.image-item.small {
+  width: 600px;
+  height: 400px;
+}
+
+.image-item.portrait {
+  width: 700px;
+  height: 1000px;
+}
+
+/* Controls */
+.controls {
+  position: fixed;
+  bottom: 20px;
+  left: 48px;
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+}
+
+.button {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #eee;
+  border-radius: 12px;
+  color: black;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.button:hover {
+  background: #f5f5f5;
+}
+
+/* Zoom Indicator Styles */
+.zoom-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.05rem;
+  font-weight: 500;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: opacity 0.2s ease;
+}
+
+.zoom-indicator:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+/* PostIt Styles */
+.postit {
+  position: relative;
+  transform-origin: center center;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.postit:hover {
+  transform: rotate(-1deg) scale(1.02);
+}
+
+.postit.dragging {
+  transform: rotate(-2deg) scale(1.05);
+  z-index: 1000;
+}
+
+.postit-shadow {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 12px;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.postit-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.postit-text {
+  width: 100%;
+  height: 100%;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  cursor: text;
+}
+
+.postit-textarea {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  font-family: inherit;
+  color: inherit;
+  resize: none;
+  cursor: text;
+}
+
+.postit-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-top: 20px solid rgba(0, 0, 0, 0.1);
+  border-top-right-radius: 12px;
+}
+
+/* PostIt Color Variants */
+.postit-yellow .postit-content {
+  background: #fef08a;
+  color: #713f12;
+}
+
+.postit-yellow .postit-shadow {
+  background: rgba(251, 191, 36, 0.3);
+}
+
+.postit-pink .postit-content {
+  background: #fce7f3;
+  color: #831843;
+}
+
+.postit-pink .postit-shadow {
+  background: rgba(236, 72, 153, 0.3);
+}
+
+.postit-blue .postit-content {
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+.postit-blue .postit-shadow {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.postit-green .postit-content {
+  background: #dcfce7;
+  color: #14532d;
+}
+
+.postit-green .postit-shadow {
+  background: rgba(34, 197, 94, 0.3);
+}

@@ -1,0 +1,56 @@
+{
+  "name": "@markup-canvas/core",
+  "version": "0.1.0",
+  "description": "High-performance canvas-like container with pan and zoom capabilities",
+  "type": "module",
+  "main": "dist/markup-canvas.cjs.js",
+  "module": "dist/markup-canvas.esm.js",
+  "browser": "dist/markup-canvas.umd.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "src/",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "clean": "rm -rf dist",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "zoom",
+    "pan",
+    "canvas",
+    "transform",
+    "interactive",
+    "html",
+    "dom"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "2.2.4",
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-commonjs": "^28.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "glob": "^11.0.3",
+    "rollup": "^4.9.6",
+    "tslib": "^2.6.2",
+    "ttypescript": "^1.5.15",
+    "typescript": "^5.3.3",
+    "typescript-transform-paths": "^3.5.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}

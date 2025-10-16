@@ -1,0 +1,19 @@
+export { MarkupCanvas, MarkupCanvas as default } from "./lib/MarkupCanvas.js";
+export type {
+  BaseCanvas,
+  Canvas,
+  CanvasBounds,
+  CanvasOptions,
+  GestureInfo,
+  MarkupCanvasConfig,
+  MarkupCanvasEvents,
+  MouseDragControls,
+  Point,
+  RulerCanvas,
+  RulerOptions,
+  RulerSystem,
+  TouchState,
+  Transform,
+  ZoomBoundaryOptions,
+  ZoomBoundaryResult,
+} from "./types/index.js";
