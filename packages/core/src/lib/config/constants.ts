@@ -47,10 +47,10 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   rulerTextColor: "#666",
   rulerMajorTickColor: "#999",
   rulerMinorTickColor: "#ccc",
-  rulerFontSize: 10,
+  rulerFontSize: 9,
   rulerFontFamily: "Monaco, Menlo, monospace",
   rulerUnits: "px",
-  rulerSize: 24,
+  rulerSize: 20,
 
   // Callbacks
   onTransformUpdate: () => {},

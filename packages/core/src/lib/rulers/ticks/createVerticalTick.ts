@@ -31,6 +31,7 @@ export function createVerticalTick(
 			top: ${pixelPos - 6}px;
 			right: ${tickWidth + 6}px;
 			font-size: ${config.rulerFontSize}px;
+			line-height: 1;
 			color: ${config.rulerTextColor};
 			white-space: nowrap;
 			pointer-events: none;

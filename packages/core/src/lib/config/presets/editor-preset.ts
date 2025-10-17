@@ -50,7 +50,7 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   rulerFontSize: 9,
   rulerFontFamily: "Monaco, Menlo, monospace",
   rulerUnits: "px",
-  rulerSize: 24,
+  rulerSize: 20,
 
   // Callbacks
   onTransformUpdate: () => {},

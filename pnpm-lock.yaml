@@ -105,14 +105,13 @@ importers:
         version: 7.1.10(@types/node@24.8.0)(terser@5.44.0)
 
   packages/react:
-    dependencies:
-      '@markup-canvas/core':
-        specifier: ^1.0.0
-        version: 1.0.1
     devDependencies:
       '@biomejs/biome':
         specifier: 2.2.6
         version: 2.2.6
+      '@markup-canvas/core':
+        specifier: workspace:*
+        version: link:../core
       '@rollup/plugin-node-resolve':
         specifier: ^16.0.3
         version: 16.0.3(rollup@4.52.4)
@@ -475,9 +474,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
-
-  '@markup-canvas/core@1.0.1':
-    resolution: {integrity: sha512-urM6F1tn/MGVcKrzpPFZJ1Ll93oYf28HWQZ7wh8WbgVLTQ0JvFp97WOFJH4mng6D77NUijG2auiIT3BCQqaypw==}
 
   '@rolldown/pluginutils@1.0.0-beta.38':
     resolution: {integrity: sha512-N/ICGKleNhA5nc9XXQG/kkKHJ7S55u0x0XUJbbkmdCnFuoRkM1Il12q9q0eX19+M7KKUEPw/daUPIRnxhcxAIw==}
@@ -1482,8 +1478,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
-
-  '@markup-canvas/core@1.0.1': {}
 
   '@rolldown/pluginutils@1.0.0-beta.38': {}
 

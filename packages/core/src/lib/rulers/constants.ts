@@ -1,6 +1,4 @@
 // Rulers
-export const RULER_SIZE = 24;
-
 export const RULER_Z_INDEX = {
   GRID: 100,
   RULERS: 1000,

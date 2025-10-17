@@ -31,6 +31,7 @@ export function createHorizontalTick(
 			left: ${pixelPos}px;
 			bottom: ${tickHeight}px;
 			font-size: ${config.rulerFontSize}px;
+			line-height: 1;
 			color: ${config.rulerTextColor};
 			white-space: nowrap;
 			pointer-events: none;
