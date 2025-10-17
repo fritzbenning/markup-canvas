@@ -1,6 +1,6 @@
 {
   "name": "markup-canvas",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "private": true,
   "description": "High-performance canvas-like container with pan and zoom capabilities",
   "scripts": {
@@ -29,5 +29,5 @@
   "bugs": {
     "url": "https://github.com/fritzbenning/markup-canvas/issues"
   },
-  "homepage": "https://markup-canvas.vercel.app/"
+  "homepage": "https://markup-canvas.vercel.app"
 }
