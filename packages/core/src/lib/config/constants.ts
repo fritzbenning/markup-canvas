@@ -39,7 +39,7 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   // Visual elements
   enableRulers: true,
   enableGrid: true,
-  gridColor: "rgba(0, 123, 255, 0.1)",
+  gridColor: "rgba(0, 0, 0, 0.1)",
 
   // Ruler styling
   rulerBackgroundColor: "rgba(255, 255, 255, 0.95)",
