@@ -29,7 +29,7 @@
     "html",
     "dom"
   ],
-  "author": "",
+  "author": "Fritz Benning <mail@fritzbenning.de>",
   "license": "CC-BY-NC-4.0",
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
@@ -47,10 +47,10 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/fritzbenning/markup-canvas"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/fritzbenning/markup-canvas/issues"
   },
-  "homepage": ""
+  "homepage": "https://github.com/fritzbenning/markup-canvas#readme"
 }

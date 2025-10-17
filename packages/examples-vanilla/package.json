@@ -13,5 +13,15 @@
   },
   "devDependencies": {
     "vite": "^7.1.10"
-  }
+  },
+  "author": "Fritz Benning <mail@fritzbenning.de>",
+  "license": "CC-BY-NC-4.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fritzbenning/markup-canvas"
+  },
+  "bugs": {
+    "url": "https://github.com/fritzbenning/markup-canvas/issues"
+  },
+  "homepage": "https://github.com/fritzbenning/markup-canvas#readme"
 }
