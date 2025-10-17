@@ -1,6 +1,6 @@
 # 🤿 Markup Canvas
 
-High-performance canvas-like container with pan and zoom capabilities for HTML content.
+Lightweight, canvas-like container with smooth pan and zoom capabilities. Simply add your HTML or React content inside.
 
 ## ✨ Live Demo
 

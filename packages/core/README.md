@@ -1,6 +1,14 @@
 # @markup-canvas/core
 
-High-performance canvas-like container with pan and zoom capabilities.
+Lightweight, canvas-like container with smooth pan and zoom capabilities. Simply add your HTML or React content inside.
+
+## Features
+
+- 🚀 **High Performance**: 60fps smooth animations with GPU acceleration
+- 🎯 **Precise Control**: Zoom, pan, and navigate with mouse, keyboard, or touch
+- 📏 **Rulers & Grid**: Optional rulers and grid overlay
+- 🔧 **Event System**: Built-in EventEmitter for reactive updates
+- 📦 **TypeScript**: Full TypeScript support with comprehensive types
 
 ## ✨ Live Demo
 
@@ -37,6 +45,83 @@ const canvas = new MarkupCanvas(container, {
   enableGrid: true,
 });
 ```
+
+### Config Options
+
+#### Canvas Dimensions
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `width` | `number` | - | Canvas width in pixels |
+| `height` | `number` | - | Canvas height in pixels |
+| `enableAcceleration` | `boolean` | `true` | Enable hardware acceleration |
+
+#### Interaction Controls
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `enableZoom` | `boolean` | `true` | Enable zoom functionality |
+| `enablePan` | `boolean` | `true` | Enable pan functionality |
+| `enableTouch` | `boolean` | `true` | Enable touch gestures |
+| `enableKeyboard` | `boolean` | `true` | Enable keyboard controls |
+| `limitKeyboardEventsToCanvas` | `boolean` | `true` | Limit keyboard events to when canvas is focused |
+
+#### Zoom Behavior
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `zoomSpeed` | `number` | `1.2` | Zoom speed factor |
+| `minZoom` | `number` | `0.1` | Minimum zoom level |
+| `maxZoom` | `number` | `10` | Maximum zoom level |
+| `enableTransition` | `boolean` | `false` | Enable smooth transitions |
+| `transitionDuration` | `number` | `300` | Transition duration in ms |
+| `enableAdaptiveSpeed` | `boolean` | `true` | Enable adaptive zoom speed |
+
+#### Pan Behavior
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `enableLeftDrag` | `boolean` | `true` | Enable left mouse button drag |
+| `enableMiddleDrag` | `boolean` | `true` | Enable middle mouse button drag |
+| `requireSpaceForMouseDrag` | `boolean` | `false` | Require space key for mouse drag |
+| `keyboardPanStep` | `number` | `50` | Keyboard pan step size in pixels |
+| `keyboardFastMultiplier` | `number` | `3` | Fast pan multiplier (with shift key) |
+| `keyboardZoomStep` | `number` | `0.2` | Keyboard zoom step size |
+
+#### Click-to-Zoom
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `enableClickToZoom` | `boolean` | `false` | Enable click to zoom |
+| `clickZoomLevel` | `number` | `2` | Target zoom level for click-to-zoom |
+| `requireOptionForClickZoom` | `boolean` | `false` | Require Option/Alt key for click-to-zoom |
+
+#### Visual Elements
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `enableRulers` | `boolean` | `true` | Show rulers on top and left |
+| `enableGrid` | `boolean` | `false` | Show background grid |
+| `gridColor` | `string` | `"#e0e0e0"` | Grid line color |
+
+#### Ruler Styling
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `rulerBackgroundColor` | `string` | `"#f5f5f5"` | Ruler background color |
+| `rulerBorderColor` | `string` | `"#d0d0d0"` | Ruler border color |
+| `rulerTextColor` | `string` | `"#666666"` | Ruler text color |
+| `rulerMajorTickColor` | `string` | `"#666666"` | Major tick mark color |
+| `rulerMinorTickColor` | `string` | `"#999999"` | Minor tick mark color |
+| `rulerFontSize` | `number` | `12` | Ruler font size in pixels |
+| `rulerFontFamily` | `string` | `"monospace"` | Ruler font family |
+| `rulerUnits` | `string` | `"px"` | Ruler units label |
+
+#### Callbacks
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `onTransformUpdate` | `(transform: Transform) => void` | Called continuously during transform updates |
 
 ### Event Handling
 
@@ -170,68 +255,6 @@ Here's a complete example with HTML:
 </body>
 </html>
 ```
-
-## Features
-
-- 🚀 **High Performance**: 60fps smooth animations with GPU acceleration
-- 🎯 **Precise Control**: Zoom, pan, and navigate with mouse, keyboard, or touch
-- 📏 **Rulers & Grid**: Optional rulers and grid overlay
-- 🎨 **Pure HTML**: Use any HTML content or framework components
-- 🔧 **Event System**: Built-in EventEmitter for reactive updates
-- 📦 **TypeScript**: Full TypeScript support with comprehensive types
-
-## Configuration Options
-
-### Canvas Dimensions
-- `width?: number` - Canvas width in pixels
-- `height?: number` - Canvas height in pixels
-- `enableAcceleration?: boolean` - Enable hardware acceleration
-
-### Interaction Controls
-- `enableZoom?: boolean` - Enable zoom functionality
-- `enablePan?: boolean` - Enable pan functionality
-- `enableTouch?: boolean` - Enable touch gestures
-- `enableKeyboard?: boolean` - Enable keyboard controls
-- `limitKeyboardEventsToCanvas?: boolean` - Limit keyboard events to when canvas is focused
-
-### Zoom Behavior
-- `zoomSpeed?: number` - Zoom speed factor
-- `minZoom?: number` - Minimum zoom level
-- `maxZoom?: number` - Maximum zoom level
-- `enableTransition?: boolean` - Enable smooth transitions
-- `transitionDuration?: number` - Transition duration in ms
-- `enableAdaptiveSpeed?: boolean` - Enable adaptive zoom speed
-
-### Pan Behavior
-- `enableLeftDrag?: boolean` - Enable left mouse button drag
-- `enableMiddleDrag?: boolean` - Enable middle mouse button drag
-- `requireSpaceForMouseDrag?: boolean` - Require space key for mouse drag
-- `keyboardPanStep?: number` - Keyboard pan step size
-- `keyboardFastMultiplier?: number` - Fast pan multiplier (with shift)
-- `keyboardZoomStep?: number` - Keyboard zoom step size
-
-### Click-to-Zoom
-- `enableClickToZoom?: boolean` - Enable click to zoom
-- `clickZoomLevel?: number` - Target zoom level for click-to-zoom
-- `requireOptionForClickZoom?: boolean` - Require Option/Alt key for click-to-zoom
-
-### Visual Elements
-- `enableRulers?: boolean` - Show rulers
-- `enableGrid?: boolean` - Show background grid
-- `gridColor?: string` - Grid line color
-
-### Ruler Styling
-- `rulerBackgroundColor?: string` - Ruler background color
-- `rulerBorderColor?: string` - Ruler border color
-- `rulerTextColor?: string` - Ruler text color
-- `rulerMajorTickColor?: string` - Major tick mark color
-- `rulerMinorTickColor?: string` - Minor tick mark color
-- `rulerFontSize?: number` - Ruler font size
-- `rulerFontFamily?: string` - Ruler font family
-- `rulerUnits?: string` - Ruler units label
-
-### Callbacks
-- `onTransformUpdate?: (transform: Transform) => void` - Called on transform update
 
 ## API
 
