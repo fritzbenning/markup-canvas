@@ -29,7 +29,7 @@ export function createHorizontalTick(
     label.style.cssText = `
 			position: absolute;
 			left: ${pixelPos}px;
-			bottom: ${tickHeight}px;
+			bottom: ${tickHeight + 1}px;
 			font-size: ${config.rulerFontSize}px;
 			line-height: 1;
 			color: ${config.rulerTextColor};
