@@ -24,7 +24,7 @@ export function handleClickToZoom(
     const rawClickX = event.clientX - rect.left;
     const rawClickY = event.clientY - rect.top;
 
-    const { clickX, clickY } = withRulerOffset(canvas, rawClickX, rawClickY, (adjustedX, adjustedY) => ({
+    const { clickX, clickY } = withRulerOffset(canvas, rawClickX, rawClickY, config.rulerSize, (adjustedX, adjustedY) => ({
       clickX: adjustedX,
       clickY: adjustedY,
     }));

@@ -47,9 +47,10 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   rulerTextColor: "oklch(70.5% 0.015 286.067)",
   rulerMajorTickColor: "oklch(87.1% 0.006 286.286)",
   rulerMinorTickColor: "oklch(92% 0.004 286.32)",
-  rulerFontSize: 8,
+  rulerFontSize: 9,
   rulerFontFamily: "Monaco, Menlo, monospace",
   rulerUnits: "px",
+  rulerSize: 24,
 
   // Callbacks
   onTransformUpdate: () => {},

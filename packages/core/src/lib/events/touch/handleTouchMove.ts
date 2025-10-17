@@ -39,7 +39,7 @@ export function handleTouchMove(event: TouchEvent, canvas: Canvas, touchState: T
         let centerY = currentCenter.y - rect.top;
 
         // Account for ruler offset if rulers are present
-        const adjustedCenter = withRulerOffsetObject(canvas, { x: centerX, y: centerY }, (adjusted) => adjusted);
+        const adjustedCenter = withRulerOffsetObject(canvas, canvas.config.rulerSize, { x: centerX, y: centerY }, (adjusted) => adjusted);
         centerX = adjustedCenter.x;
         centerY = adjustedCenter.y;
 

@@ -25,6 +25,7 @@ export function createRulers(canvas: Canvas, config: Required<MarkupCanvasConfig
     showGrid: config.enableGrid,
     gridColor: config.gridColor,
     units: config.rulerUnits,
+    rulerSize: config.rulerSize,
   };
 
   const safeUpdate = (): void => {

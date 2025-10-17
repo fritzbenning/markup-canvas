@@ -52,5 +52,10 @@ export function createMarkupCanvasConfig(options: MarkupCanvasConfig = {}): Requ
     config.rulerFontSize = DEFAULT_CONFIG.rulerFontSize;
   }
 
+  if (typeof config.rulerSize !== "number" || config.rulerSize <= 0) {
+    console.warn("Invalid rulerSize, using default");
+    config.rulerSize = DEFAULT_CONFIG.rulerSize;
+  }
+
   return config;
 }

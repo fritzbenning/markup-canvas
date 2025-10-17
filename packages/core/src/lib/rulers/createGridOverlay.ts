@@ -1,13 +1,13 @@
 import type { RulerOptions } from "@/types/index.js";
-import { RULER_SIZE, RULER_Z_INDEX } from "./constants";
+import { RULER_Z_INDEX } from "./constants";
 
 export function createGridOverlay(config: Required<RulerOptions>): HTMLElement {
   const grid = document.createElement("div");
   grid.className = "canvas-ruler grid-overlay";
   grid.style.cssText = `
 		position: absolute;
-		top: ${RULER_SIZE}px;
-		left: ${RULER_SIZE}px;
+		top: ${config.rulerSize}px;
+		left: ${config.rulerSize}px;
 		right: 0;
 		bottom: 0;
 		pointer-events: none;

@@ -48,6 +48,7 @@ export interface MarkupCanvasConfig {
   rulerFontSize?: number;
   rulerFontFamily?: string;
   rulerUnits?: string;
+  rulerSize?: number;
 
   // Callbacks
   onTransformUpdate?: (transform: Transform) => void;

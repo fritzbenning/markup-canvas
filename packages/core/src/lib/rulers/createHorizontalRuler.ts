@@ -1,5 +1,5 @@
 import type { RulerOptions } from "@/types/index.js";
-import { RULER_SIZE, RULER_Z_INDEX } from "./constants";
+import { RULER_Z_INDEX } from "./constants";
 
 export function createHorizontalRuler(config: Required<RulerOptions>): HTMLElement {
   const ruler = document.createElement("div");
@@ -7,9 +7,9 @@ export function createHorizontalRuler(config: Required<RulerOptions>): HTMLEleme
   ruler.style.cssText = `
 	position: absolute;
 	top: 0;
-	left: ${RULER_SIZE}px;
+	left: ${config.rulerSize}px;
 	right: 0;
-	height: ${RULER_SIZE}px;
+	height: ${config.rulerSize}px;
 	background: ${config.backgroundColor};
 	border-bottom: 1px solid ${config.borderColor};
 	border-right: 1px solid ${config.borderColor};

@@ -14,7 +14,7 @@ export function setupKeyboardEvents(canvas: Canvas, config: Required<MarkupCanva
     const rawMouseX = event.clientX - rect.left;
     const rawMouseY = event.clientY - rect.top;
 
-    withRulerOffsets(canvas, rawMouseX, rawMouseY, (adjustedX, adjustedY) => {
+    withRulerOffsets(canvas, config.rulerSize, rawMouseX, rawMouseY, (adjustedX, adjustedY) => {
       lastMouseX = adjustedX;
       lastMouseY = adjustedY;
     });

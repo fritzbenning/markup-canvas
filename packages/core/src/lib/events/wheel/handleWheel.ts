@@ -25,7 +25,7 @@ export function handleWheel(event: WheelEvent, canvas: Canvas, config: Required<
     const rawMouseY = event.clientY - rect.top;
 
     // Account for ruler offset
-    const { mouseX, mouseY } = withRulerOffset(canvas, rawMouseX, rawMouseY, (adjustedX, adjustedY) => ({
+    const { mouseX, mouseY } = withRulerOffset(canvas, rawMouseX, rawMouseY, config.rulerSize, (adjustedX, adjustedY) => ({
       mouseX: adjustedX,
       mouseY: adjustedY,
     }));

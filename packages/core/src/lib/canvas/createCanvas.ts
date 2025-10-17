@@ -5,7 +5,6 @@ import { DEFAULT_ZOOM } from "@/lib/constants.js";
 import { createMatrix } from "@/lib/matrix/createMatrix.js";
 import { applyTransform, enableHardwareAcceleration } from "@/lib/transform/index.js";
 import type { BaseCanvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
-import { RULER_SIZE } from "../rulers/constants";
 
 // Creates and initializes a canvas with the required DOM structure
 export function createCanvas(container: HTMLElement, config: Required<MarkupCanvasConfig>): BaseCanvas | null {
@@ -24,7 +23,7 @@ export function createCanvas(container: HTMLElement, config: Required<MarkupCanv
       enableHardwareAcceleration(transformLayer);
     }
 
-    const rulerOffset = config.enableRulers ? -RULER_SIZE : 0;
+    const rulerOffset = config.enableRulers ? -config.rulerSize : 0;
 
     const initialTransform: Transform = {
       scale: DEFAULT_ZOOM,

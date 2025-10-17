@@ -1,7 +1,6 @@
 import { DEFAULT_ZOOM, ZOOM_CHANGE_THRESHOLD } from "@/lib/constants.js";
 import { clampZoom } from "@/lib/matrix/clampZoom.js";
 import type { MarkupCanvasConfig, Transform } from "@/types/index.js";
-import { RULER_SIZE } from "../rulers/constants";
 
 export function getZoomToMouseTransform(
   mouseX: number,
@@ -10,7 +9,7 @@ export function getZoomToMouseTransform(
   zoomFactor: number,
   config: Required<MarkupCanvasConfig>
 ): Transform {
-  const rulerOffset = config.enableRulers ? -RULER_SIZE : 0;
+  const rulerOffset = config.enableRulers ? -config.rulerSize : 0;
 
   const transform = currentTransform || {
     scale: DEFAULT_ZOOM,

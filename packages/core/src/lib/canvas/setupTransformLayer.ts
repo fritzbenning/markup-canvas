@@ -1,11 +1,10 @@
-import { RULER_SIZE } from "@/lib/rulers/constants";
 import type { MarkupCanvasConfig } from "@/types";
 
 // Sets up the transform layer with proper styles and dimensions
 export function setupTransformLayer(transformLayer: HTMLElement, config: Required<MarkupCanvasConfig>): void {
   transformLayer.style.position = "absolute";
 
-  const rulerOffset = RULER_SIZE;
+  const rulerOffset = config.rulerSize;
 
   transformLayer.style.top = `${rulerOffset}px`;
   transformLayer.style.left = `${rulerOffset}px`;

@@ -1,6 +1,5 @@
 import { updateGrid } from "@/lib/rulers/updateGrid.js";
 import type { RulerCanvas as Canvas, RulerOptions } from "@/types/index.js";
-import { RULER_SIZE } from "./constants";
 import { updateHorizontalRuler } from "./updateHorizontalRuler.js";
 import { updateVerticalRuler } from "./updateVerticalRuler.js";
 
@@ -16,8 +15,8 @@ export function updateRulers(
   const translateX = bounds.translateX || 0;
   const translateY = bounds.translateY || 0;
 
-  const canvasWidth = bounds.width - RULER_SIZE;
-  const canvasHeight = bounds.height - RULER_SIZE;
+  const canvasWidth = bounds.width - config.rulerSize;
+  const canvasHeight = bounds.height - config.rulerSize;
 
   const contentLeft = -translateX / scale;
   const contentTop = -translateY / scale;

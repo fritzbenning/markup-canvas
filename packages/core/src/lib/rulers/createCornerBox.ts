@@ -1,5 +1,5 @@
 import type { RulerOptions } from "@/types/index.js";
-import { RULER_SIZE, RULER_Z_INDEX } from "./constants";
+import { RULER_Z_INDEX } from "./constants";
 
 export function createCornerBox(config: Required<RulerOptions>): HTMLElement {
   const corner = document.createElement("div");
@@ -8,8 +8,8 @@ export function createCornerBox(config: Required<RulerOptions>): HTMLElement {
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: ${RULER_SIZE}px;
-		height: ${RULER_SIZE}px;
+		width: ${config.rulerSize}px;
+		height: ${config.rulerSize}px;
 		background: ${config.backgroundColor};
 		border-right: 1px solid ${config.borderColor};
 		border-bottom: 1px solid ${config.borderColor};

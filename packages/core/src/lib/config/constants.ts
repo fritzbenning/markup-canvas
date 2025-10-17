@@ -50,6 +50,7 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   rulerFontSize: 10,
   rulerFontFamily: "Monaco, Menlo, monospace",
   rulerUnits: "px",
+  rulerSize: 24,
 
   // Callbacks
   onTransformUpdate: () => {},

@@ -11,6 +11,7 @@ export interface RulerOptions {
   showGrid?: boolean;
   gridColor?: string;
   units?: string;
+  rulerSize?: number;
 }
 
 export interface RulerSystem {

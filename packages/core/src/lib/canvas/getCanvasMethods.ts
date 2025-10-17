@@ -40,8 +40,6 @@ export function getCanvasMethods() {
 
     // Handle canvas resize
     handleResize: function (this: BaseCanvas) {
-      const newRect = this.container.getBoundingClientRect();
-
       return true;
     },
 
@@ -68,7 +66,7 @@ export function getCanvasMethods() {
     // Reset view with animation
     resetView: function (this: BaseCanvas) {
       return withTransition(this.transformLayer, this.config, () => {
-        return withRulerSize(this, (rulerSize) => {
+        return withRulerSize(this, this.config.rulerSize, (rulerSize) => {
           const resetTransform: Transform = {
             scale: 1.0,
             translateX: rulerSize * -1,

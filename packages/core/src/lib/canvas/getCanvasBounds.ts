@@ -20,8 +20,8 @@ export function getCanvasBounds(canvas: BaseCanvas): CanvasBounds {
     const totalHeight = containerRect.height || container.clientHeight || 0;
 
     // Calculate canvas dimensions accounting for rulers
-    const canvasWidth = withRulerSize({ container }, (rulerSize) => Math.max(0, totalWidth - rulerSize));
-    const canvasHeight = withRulerSize({ container }, (rulerSize) => Math.max(0, totalHeight - rulerSize));
+    const canvasWidth = withRulerSize({ container }, config.rulerSize, (rulerSize) => Math.max(0, totalWidth - rulerSize));
+    const canvasHeight = withRulerSize({ container }, config.rulerSize, (rulerSize) => Math.max(0, totalHeight - rulerSize));
 
     // Get content dimensions
     const contentWidth = config.width || DEFAULT_CONFIG.width;
