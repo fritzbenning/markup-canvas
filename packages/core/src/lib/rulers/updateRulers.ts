@@ -1,5 +1,5 @@
 import { updateGrid } from "@/lib/rulers/updateGrid.js";
-import type { RulerCanvas as Canvas, RulerOptions } from "@/types/index.js";
+import type { RulerCanvas as Canvas, MarkupCanvasConfig } from "@/types/index.js";
 import { updateHorizontalRuler } from "./updateHorizontalRuler.js";
 import { updateVerticalRuler } from "./updateVerticalRuler.js";
 
@@ -8,7 +8,7 @@ export function updateRulers(
   horizontalRuler: HTMLElement,
   verticalRuler: HTMLElement,
   gridOverlay: HTMLElement | undefined,
-  config: Required<RulerOptions>
+  config: Required<MarkupCanvasConfig>
 ): void {
   const bounds = canvas.getBounds();
   const scale = bounds.scale || 1;

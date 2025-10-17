@@ -1,7 +1,7 @@
-import type { RulerOptions } from "@/types/index.js";
+import type { MarkupCanvasConfig } from "@/types/index.js";
 import { RULER_Z_INDEX } from "./constants";
 
-export function createGridOverlay(config: Required<RulerOptions>): HTMLElement {
+export function createGridOverlay(config: Required<MarkupCanvasConfig>): HTMLElement {
   const grid = document.createElement("div");
   grid.className = "canvas-ruler grid-overlay";
   grid.style.cssText = `

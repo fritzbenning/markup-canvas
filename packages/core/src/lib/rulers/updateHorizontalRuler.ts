@@ -1,4 +1,4 @@
-import type { RulerOptions } from "@/types/index.js";
+import type { MarkupCanvasConfig } from "@/types/index.js";
 import { calculateTickSpacing } from "./ticks/calculateTickSpacing.js";
 import { createHorizontalTick } from "./ticks/createHorizontalTick.js";
 
@@ -8,7 +8,7 @@ export function updateHorizontalRuler(
   contentRight: number,
   canvasWidth: number,
   scale: number,
-  config: Required<RulerOptions>
+  config: Required<MarkupCanvasConfig>
 ): void {
   const rulerWidth = canvasWidth;
   const contentWidth = contentRight - contentLeft;

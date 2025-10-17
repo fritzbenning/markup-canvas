@@ -23,6 +23,6 @@ export type {
 // Ruler types
 export type {
   RulerCanvas,
-  RulerOptions,
+  RulerElements,
   RulerSystem,
 } from "./rulers.js";

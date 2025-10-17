@@ -11,7 +11,6 @@ export type {
   MouseDragControls,
   Point,
   RulerCanvas,
-  RulerOptions,
   RulerSystem,
   TouchState,
   Transform,

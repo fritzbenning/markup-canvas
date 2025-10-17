@@ -1,6 +1,6 @@
 import type { RulerCanvas as Canvas, MarkupCanvasConfig, RulerSystem } from "@/types/index.js";
+import type { RulerElements } from "@/types/rulers.js";
 import { createRulerElements } from "./createRulerElements.js";
-import type { RulerElements } from "./RulerElements.js";
 import { setupRulerEvents } from "./setupRulerEvents.js";
 import { updateRulers } from "./updateRulers.js";
 
@@ -14,27 +14,13 @@ export function createRulers(canvas: Canvas, config: Required<MarkupCanvasConfig
   let cleanupEvents: (() => void) | null = null;
   let isDestroyed = false;
 
-  const rulerOptions = {
-    backgroundColor: config.rulerBackgroundColor,
-    borderColor: config.rulerBorderColor,
-    textColor: config.rulerTextColor,
-    majorTickColor: config.rulerMajorTickColor,
-    minorTickColor: config.rulerMinorTickColor,
-    fontSize: config.rulerFontSize,
-    fontFamily: config.rulerFontFamily,
-    showGrid: config.enableGrid,
-    gridColor: config.gridColor,
-    units: config.rulerUnits,
-    rulerSize: config.rulerSize,
-  };
-
   const safeUpdate = (): void => {
     if (isDestroyed || !elements.horizontalRuler || !elements.verticalRuler) return;
-    updateRulers(canvas, elements.horizontalRuler, elements.verticalRuler, elements.gridOverlay, rulerOptions);
+    updateRulers(canvas, elements.horizontalRuler, elements.verticalRuler, elements.gridOverlay, config);
   };
 
   try {
-    elements = createRulerElements(canvas.container, rulerOptions);
+    elements = createRulerElements(canvas.container, config);
     cleanupEvents = setupRulerEvents(canvas, safeUpdate);
 
     safeUpdate();

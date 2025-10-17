@@ -1,5 +1,5 @@
 import { calculateTickSpacing, createVerticalTick } from "@/lib/rulers/ticks";
-import type { RulerOptions } from "@/types/index.js";
+import type { MarkupCanvasConfig } from "@/types/index.js";
 
 export function updateVerticalRuler(
   ruler: HTMLElement,
@@ -7,7 +7,7 @@ export function updateVerticalRuler(
   contentBottom: number,
   canvasHeight: number,
   scale: number,
-  config: Required<RulerOptions>
+  config: Required<MarkupCanvasConfig>
 ): void {
   const rulerHeight = canvasHeight;
   const contentHeight = contentBottom - contentTop;

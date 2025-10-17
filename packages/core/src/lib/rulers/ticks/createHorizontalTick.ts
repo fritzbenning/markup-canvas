@@ -1,12 +1,12 @@
 import { TICK_SETTINGS } from "@/lib/rulers/constants.js";
-import type { RulerOptions } from "@/types/index.js";
+import type { MarkupCanvasConfig } from "@/types/index.js";
 
 export function createHorizontalTick(
   container: HTMLElement | DocumentFragment,
   position: number,
   pixelPos: number,
   tickSpacing: number,
-  config: Required<RulerOptions>
+  config: Required<MarkupCanvasConfig>
 ): void {
   const tick = document.createElement("div");
   const isMajor = position % (tickSpacing * TICK_SETTINGS.MAJOR_MULTIPLIER) === 0;
@@ -18,7 +18,7 @@ export function createHorizontalTick(
 		bottom: 0;
 		width: 1px;
 		height: ${tickHeight}px;
-		background: ${isMajor ? config.majorTickColor : config.minorTickColor};
+		background: ${isMajor ? config.rulerMajorTickColor : config.rulerMinorTickColor};
 	`;
 
   container.appendChild(tick);
@@ -30,8 +30,8 @@ export function createHorizontalTick(
 			position: absolute;
 			left: ${pixelPos}px;
 			bottom: ${tickHeight}px;
-			font-size: ${config.fontSize}px;
-			color: ${config.textColor};
+			font-size: ${config.rulerFontSize}px;
+			color: ${config.rulerTextColor};
 			white-space: nowrap;
 			pointer-events: none;
 		`;

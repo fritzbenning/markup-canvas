@@ -1,19 +1,5 @@
 import type { CanvasBounds, Transform } from "./canvas.js";
 
-export interface RulerOptions {
-  backgroundColor?: string;
-  borderColor?: string;
-  textColor?: string;
-  majorTickColor?: string;
-  minorTickColor?: string;
-  fontSize?: number;
-  fontFamily?: string;
-  showGrid?: boolean;
-  gridColor?: string;
-  units?: string;
-  rulerSize?: number;
-}
-
 export interface RulerSystem {
   horizontalRuler: HTMLElement;
   verticalRuler: HTMLElement;
@@ -33,4 +19,10 @@ export interface RulerCanvas {
   transform: Transform;
   updateTransform: (newTransform: Partial<Transform>) => boolean;
   getBounds: () => CanvasBounds;
+}
+export interface RulerElements {
+  horizontalRuler: HTMLElement;
+  verticalRuler: HTMLElement;
+  cornerBox: HTMLElement;
+  gridOverlay?: HTMLElement;
 }
