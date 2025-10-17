@@ -1,6 +1,6 @@
 {
   "name": "@markup-canvas/react",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "React components and hooks for markup-canvas",
   "type": "module",
   "main": "dist/index.cjs.js",
@@ -8,7 +8,8 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist/",
-    "src/"
+    "src/",
+    "README.md"
   ],
   "scripts": {
     "build": "rollup -c",
