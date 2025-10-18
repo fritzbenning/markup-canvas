@@ -10,6 +10,7 @@ export interface MarkupCanvasRef {
   centerContent: () => void;
   getTransform: () => Transform;
   getZoom: () => number;
+  updateThemeMode: (mode: "light" | "dark") => void;
 }
 
 export interface UseMarkupCanvasOptions {

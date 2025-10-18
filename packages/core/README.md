@@ -117,6 +117,18 @@ const canvas = new MarkupCanvas(container, {
 | `rulerFontFamily` | `string` | `"monospace"` | Ruler font family |
 | `rulerUnits` | `string` | `"px"` | Ruler units label |
 
+#### Dark Theme Support
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `themeMode` | `"light" \| "dark"` | `"light"` | Current theme mode |
+| `rulerBackgroundColorDark` | `string` | `"rgba(30, 30, 30, 0.95)"` | Dark mode ruler background color |
+| `rulerBorderColorDark` | `string` | `"#444"` | Dark mode ruler border color |
+| `rulerTextColorDark` | `string` | `"#aaa"` | Dark mode ruler text color |
+| `rulerMajorTickColorDark` | `string` | `"#666"` | Dark mode major tick mark color |
+| `rulerMinorTickColorDark` | `string` | `"#444"` | Dark mode minor tick mark color |
+| `gridColorDark` | `string` | `"rgba(255, 255, 255, 0.1)"` | Dark mode grid line color |
+
 #### Callbacks
 
 | Option | Type | Description |
@@ -183,6 +195,33 @@ Always cleanup when you're done:
 
 ```javascript
 canvas.cleanup();
+```
+
+### Theme Management
+
+Switch between light and dark themes dynamically:
+
+```javascript
+// Change theme mode
+canvas.updateThemeMode('dark');
+canvas.updateThemeMode('light');
+```
+
+You can also customize dark theme colors:
+
+```javascript
+const canvas = new MarkupCanvas(container, {
+  width: 20000,
+  height: 15000,
+  themeMode: 'light',
+  // Light theme colors (default)
+  rulerBackgroundColor: 'rgba(255, 255, 255, 0.95)',
+  rulerTextColor: '#666',
+  // Dark theme colors
+  rulerBackgroundColorDark: 'rgba(30, 30, 30, 0.95)',
+  rulerTextColorDark: '#aaa',
+  gridColorDark: 'rgba(255, 255, 255, 0.1)',
+});
 ```
 
 ### Complete Example

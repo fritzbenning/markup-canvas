@@ -39,7 +39,7 @@ export interface MarkupCanvasConfig {
   enableGrid?: boolean;
   gridColor?: string;
 
-  // Ruler styling
+  // Ruler styling (light theme)
   rulerBackgroundColor?: string;
   rulerBorderColor?: string;
   rulerTextColor?: string;
@@ -49,6 +49,17 @@ export interface MarkupCanvasConfig {
   rulerFontFamily?: string;
   rulerUnits?: string;
   rulerSize?: number;
+
+  // Ruler styling (dark theme)
+  rulerBackgroundColorDark?: string;
+  rulerBorderColorDark?: string;
+  rulerTextColorDark?: string;
+  rulerMajorTickColorDark?: string;
+  rulerMinorTickColorDark?: string;
+  gridColorDark?: string;
+
+  // Theme
+  themeMode?: "light" | "dark";
 
   // Callbacks
   onTransformUpdate?: (transform: Transform) => void;

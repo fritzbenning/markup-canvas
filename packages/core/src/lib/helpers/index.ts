@@ -10,3 +10,4 @@ export {
   withRulerSize,
 } from "./withRulerCheck.js";
 export { withRulerOffset } from "./withRulerOffset.js";
+export { withTheme } from "./withTheme.js";

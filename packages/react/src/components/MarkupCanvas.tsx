@@ -26,6 +26,7 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
   ({ children, className, style, onTransformChange, onZoomChange, onPanChange, onReady, ...options }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [canvasInstance, setCanvasInstance] = useState<CoreMarkupCanvas | null>(null);
+    const prevThemeModeRef = useRef<"light" | "dark" | undefined>(options.themeMode);
 
     useImperativeHandle(
       ref,
@@ -39,6 +40,7 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
         centerContent: () => canvasInstance?.centerContent(),
         getTransform: () => canvasInstance?.transform || { scale: 1, translateX: 0, translateY: 0 },
         getZoom: () => canvasInstance?.transform?.scale || 1,
+        updateThemeMode: (mode: "light" | "dark") => canvasInstance?.updateThemeMode(mode),
       }),
       [canvasInstance]
     );
@@ -69,12 +71,17 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
       onReadyRef.current?.(canvas);
     }, []);
 
-    const stableOptions = useMemo(() => options, Object.values(options));
+    // Separate theme mode from other options
+    const { themeMode, ...configOptions } = options;
 
+    // Create stable reference for non-theme options using JSON serialization
+    const stableConfigJson = useMemo(() => JSON.stringify(configOptions), [configOptions]);
+
+    // Handle canvas creation with non-theme options
     useEffect(() => {
       if (!containerRef.current) return;
 
-      const canvas = new CoreMarkupCanvas(containerRef.current, stableOptions);
+      const canvas = new CoreMarkupCanvas(containerRef.current, configOptions as MarkupCanvasConfig);
       setCanvasInstance(canvas);
 
       canvas.on("transform", handleTransformChange);
@@ -98,7 +105,15 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
         canvas.cleanup();
         setCanvasInstance(null);
       };
-    }, [stableOptions, handleTransformChange, handleZoomChange, handlePanChange, handleReady]);
+    }, [stableConfigJson, handleTransformChange, handleZoomChange, handlePanChange, handleReady]);
+
+    // Handle theme changes separately without recreating the canvas
+    useEffect(() => {
+      if (!canvasInstance || themeMode === prevThemeModeRef.current) return;
+
+      canvasInstance.updateThemeMode(themeMode || "light");
+      prevThemeModeRef.current = themeMode;
+    }, [canvasInstance, themeMode]);
 
     return (
       <div ref={containerRef} className={className} style={{ width: "100%", height: "100%", ...style }}>

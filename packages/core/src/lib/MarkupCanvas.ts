@@ -392,6 +392,27 @@ export class MarkupCanvas implements Canvas {
     this.config = createMarkupCanvasConfig({ ...this.config, ...newConfig });
   }
 
+  // Theme management
+  updateThemeMode(mode: "light" | "dark"): void {
+    const newConfig = {
+      ...this.config,
+      themeMode: mode,
+    };
+    this.config = createMarkupCanvasConfig(newConfig);
+
+    // Update rulers if they exist
+    if (this.rulers) {
+      this.rulers.updateTheme(this.config);
+    }
+
+    // Update grid if it exists
+    if (this.rulers?.gridOverlay) {
+      this.rulers.gridOverlay.style.backgroundColor = mode === "dark" 
+        ? this.config.gridColorDark 
+        : this.config.gridColor;
+    }
+  }
+
   // Cleanup method
   cleanup(): void {
     this.cleanupFunctions.forEach((cleanup) => {

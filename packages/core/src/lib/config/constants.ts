@@ -41,7 +41,7 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   enableGrid: true,
   gridColor: "rgba(0, 0, 0, 0.1)",
 
-  // Ruler styling
+  // Ruler styling (light theme)
   rulerBackgroundColor: "rgba(255, 255, 255, 0.95)",
   rulerBorderColor: "#ddd",
   rulerTextColor: "#666",
@@ -51,6 +51,17 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   rulerFontFamily: "Monaco, Menlo, monospace",
   rulerUnits: "px",
   rulerSize: 20,
+
+  // Ruler styling (dark theme)
+  rulerBackgroundColorDark: "rgba(30, 30, 30, 0.95)",
+  rulerBorderColorDark: "#444",
+  rulerTextColorDark: "#aaa",
+  rulerMajorTickColorDark: "#666",
+  rulerMinorTickColorDark: "#444",
+  gridColorDark: "rgba(255, 255, 255, 0.1)",
+
+  // Theme
+  themeMode: "light",
 
   // Callbacks
   onTransformUpdate: () => {},

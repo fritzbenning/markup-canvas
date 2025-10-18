@@ -52,6 +52,17 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   rulerUnits: "px",
   rulerSize: 20,
 
+  // Ruler styling (dark theme)
+  rulerBackgroundColorDark: "rgba(30, 30, 30, 0.95)",
+  rulerBorderColorDark: "#444",
+  rulerTextColorDark: "#aaa",
+  rulerMajorTickColorDark: "#666",
+  rulerMinorTickColorDark: "#444",
+  gridColorDark: "rgba(255, 255, 255, 0.1)",
+
+  // Theme
+  themeMode: "light",
+
   // Callbacks
   onTransformUpdate: () => {},
 };

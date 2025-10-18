@@ -127,6 +127,18 @@ The `MarkupCanvas` component accepts the following props:
 | `rulerFontFamily` | `string` | `"monospace"` | Ruler font family |
 | `rulerUnits` | `string` | `"px"` | Ruler units label |
 
+**Dark Theme Support**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `themeMode` | `"light" \| "dark"` | `"light"` | Current theme mode |
+| `rulerBackgroundColorDark` | `string` | `"rgba(30, 30, 30, 0.95)"` | Dark mode ruler background color |
+| `rulerBorderColorDark` | `string` | `"#444"` | Dark mode ruler border color |
+| `rulerTextColorDark` | `string` | `"#aaa"` | Dark mode ruler text color |
+| `rulerMajorTickColorDark` | `string` | `"#666"` | Dark mode major tick mark color |
+| `rulerMinorTickColorDark` | `string` | `"#444"` | Dark mode minor tick mark color |
+| `gridColorDark` | `string` | `"rgba(255, 255, 255, 0.1)"` | Dark mode grid line color |
+
 **React-Specific Props**
 
 | Prop | Type | Default | Description |
@@ -162,6 +174,7 @@ The `MarkupCanvas` component accepts the following props:
   maxZoom={10}
   gridColor="#e8e8e8"
   rulerBackgroundColor="#fafafa"
+  themeMode="light"
   enableClickToZoom={true}
   clickZoomLevel={2}
   onZoomChange={(zoom) => console.log('Zoom:', zoom)}
@@ -171,6 +184,41 @@ The `MarkupCanvas` component accepts the following props:
 >
   {/* Canvas content */}
 </MarkupCanvas>
+```
+
+**Theme Switching Example**
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkupCanvas, type MarkupCanvasRef } from '@markup-canvas/react';
+
+function App() {
+  const canvasRef = useRef<MarkupCanvasRef>(null);
+  const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
+
+  const handleThemeToggle = () => {
+    const newMode = themeMode === 'light' ? 'dark' : 'light';
+    setThemeMode(newMode);
+    canvasRef.current?.updateThemeMode(newMode);
+  };
+
+  return (
+    <div>
+      <button onClick={handleThemeToggle}>Toggle Theme</button>
+      
+      <MarkupCanvas
+        ref={canvasRef}
+        width={20000}
+        height={15000}
+        themeMode={themeMode}
+        enableRulers={true}
+        enableGrid={true}
+      >
+        <div>Your content here</div>
+      </MarkupCanvas>
+    </div>
+  );
+}
 ```
 
 ### useMarkupCanvas Hook
@@ -185,13 +233,26 @@ import { MarkupCanvas, type MarkupCanvasRef, useMarkupCanvas } from '@markup-can
 function App() {
   const canvasRef = useRef<MarkupCanvasRef>(null);
 
-  const { initCanvasUtils, zoom, zoomIn, zoomOut, fitToContent, resetZoom } = useMarkupCanvas(canvasRef);
+  const { 
+    initCanvasUtils, 
+    zoom, 
+    zoomIn, 
+    zoomOut, 
+    fitToContent, 
+    resetZoom,
+    themeMode,
+    toggleThemeMode,
+    updateThemeMode,
+  } = useMarkupCanvas(canvasRef);
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
       <button onClick={() => zoomIn()}>Zoom In</button>
       <button onClick={() => zoomOut()}>Zoom Out</button>
       <button onClick={() => fitToContent()}>Fit to Content</button>
+      <button onClick={toggleThemeMode}>
+        Toggle Theme (Current: {themeMode})
+      </button>
       <span>Current zoom: {zoom.toFixed(2)}</span>
       
       <MarkupCanvas
@@ -200,6 +261,7 @@ function App() {
         height={15000}
         enableZoom={true}
         enablePan={true}
+        themeMode={themeMode}
         onReady={initCanvasUtils} // Required for hook to work
       >
         <div style={{ position: 'absolute', top: 100, left: 100 }}>
@@ -211,9 +273,32 @@ function App() {
 }
 ```
 
+**Hook Return Values**
+
+The `useMarkupCanvas` hook returns an object with the following properties and methods:
+
+| Property/Method | Type | Description |
+|-----------------|------|-------------|
+| `canvas` | `MarkupCanvas \| null` | The canvas instance |
+| `initCanvasUtils` | `(canvas: MarkupCanvas) => void` | Initialize function to pass to `onReady` |
+| `transform` | `Transform` | Current canvas transform |
+| `zoom` | `number` | Current zoom level |
+| `pan` | `{ x: number; y: number }` | Current pan position |
+| `isReady` | `boolean` | Whether canvas is ready |
+| `zoomIn` | `(factor?: number) => void` | Zoom in by factor |
+| `zoomOut` | `(factor?: number) => void` | Zoom out by factor |
+| `resetZoom` | `() => void` | Reset zoom to 100% |
+| `panTo` | `(x: number, y: number) => void` | Pan to specific coordinates |
+| `fitToContent` | `() => void` | Fit content to viewport |
+| `centerContent` | `() => void` | Center content on canvas |
+| `setTransitionMode` | `(enabled: boolean) => void` | Enable/disable transitions |
+| `toggleTransitionMode` | `() => boolean` | Toggle transition mode |
+| `themeMode` | `"light" \| "dark"` | Current theme mode |
+| `updateThemeMode` | `(mode: "light" \| "dark") => void` | Update theme mode |
+| `toggleThemeMode` | `() => "light" \| "dark"` | Toggle between themes |
+
 ## License
 
 **CC BY-NC 4.0** - Creative Commons Attribution-NonCommercial 4.0 International
 
 This project is licensed for non-commercial use only. See the [LICENSE](../../LICENSE) file for details.
-

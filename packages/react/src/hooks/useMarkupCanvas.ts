@@ -8,6 +8,7 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isReady, setIsReady] = useState(false);
+  const [themeMode, setThemeModeState] = useState<"light" | "dark">("light");
 
   const optionsRef = useRef(options);
   optionsRef.current = options;
@@ -120,6 +121,20 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
     return false;
   }, [canvasRef]);
 
+  const updateThemeMode = useCallback(
+    (mode: "light" | "dark") => {
+      setThemeModeState(mode);
+      canvasRef.current?.updateThemeMode(mode);
+    },
+    [canvasRef]
+  );
+
+  const toggleThemeMode = useCallback(() => {
+    const newMode = themeMode === "light" ? "dark" : "light";
+    updateThemeMode(newMode);
+    return newMode;
+  }, [themeMode, updateThemeMode]);
+
   return {
     canvas: canvasRef.current?.canvas || null,
     initCanvasUtils: handleCanvasInstance,
@@ -135,5 +150,8 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
     centerContent,
     setTransitionMode,
     toggleTransitionMode,
+    themeMode,
+    updateThemeMode,
+    toggleThemeMode,
   };
 }

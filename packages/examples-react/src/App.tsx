@@ -1,5 +1,5 @@
 import { MarkupCanvas, type MarkupCanvasRef, useMarkupCanvas } from "@markup-canvas/react";
-import { ZoomIn, ZoomOut } from "lucide-react";
+import { Moon, Sun, ZoomIn, ZoomOut } from "lucide-react";
 import { useRef } from "react";
 import "./App.css";
 import { Button } from "./components/Button";
@@ -10,8 +10,18 @@ import { ZoomDisplay } from "./components/ZoomDisplay";
 function App() {
   const canvasRef = useRef<MarkupCanvasRef>(null);
 
-  const { initCanvasUtils, zoom, zoomIn, zoomOut, fitToContent, resetZoom, centerContent, toggleTransitionMode } =
-    useMarkupCanvas(canvasRef);
+  const {
+    initCanvasUtils,
+    zoom,
+    zoomIn,
+    zoomOut,
+    fitToContent,
+    resetZoom,
+    centerContent,
+    toggleTransitionMode,
+    themeMode,
+    toggleThemeMode,
+  } = useMarkupCanvas(canvasRef);
 
   return (
     <div className="app">
@@ -28,6 +38,10 @@ function App() {
         <Button onClick={resetZoom}>Reset Zoom</Button>
         <Button onClick={centerContent}>Center Content</Button>
         <Button onClick={toggleTransitionMode}> Toggle Transition Mode</Button>
+        <Button onClick={toggleThemeMode}>
+          {themeMode === "light" ? <Sun size={16} /> : <Moon size={16} />}
+          {themeMode === "light" ? "Light" : "Dark"}
+        </Button>
       </Controls>
       <ZoomDisplay zoom={zoom} />
       <MarkupCanvas
@@ -41,6 +55,7 @@ function App() {
         enableTransition={false}
         enableRulers={true}
         enableGrid={true}
+        themeMode={themeMode}
         onReady={initCanvasUtils}
       >
         <Content />

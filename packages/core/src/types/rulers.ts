@@ -1,4 +1,5 @@
 import type { CanvasBounds, Transform } from "./canvas.js";
+import type { MarkupCanvasConfig } from "./config.js";
 
 export interface RulerSystem {
   horizontalRuler: HTMLElement;
@@ -6,6 +7,7 @@ export interface RulerSystem {
   cornerBox: HTMLElement;
   gridOverlay?: HTMLElement;
   update: () => void;
+  updateTheme: (config: Required<MarkupCanvasConfig>) => void;
   show: () => void;
   hide: () => void;
   toggleGrid: () => void;
