@@ -6,32 +6,24 @@ export function createHorizontalTick(
   container: HTMLElement | DocumentFragment,
   position: number,
   pixelPos: number,
-  tickSpacing: number,
+  _tickSpacing: number,
   config: Required<MarkupCanvasConfig>
 ): void {
   const tick = document.createElement("div");
-  const isMajor = position % (tickSpacing * TICK_SETTINGS.MAJOR_MULTIPLIER) === 0;
-  const tickHeight = isMajor ? TICK_SETTINGS.MAJOR_HEIGHT : TICK_SETTINGS.MINOR_HEIGHT;
-
-  let tickColor: string;
-  if (config.themeMode === "dark") {
-    tickColor = isMajor ? config.rulerMajorTickColorDark : config.rulerMinorTickColorDark;
-  } else {
-    tickColor = isMajor ? config.rulerMajorTickColor : config.rulerMinorTickColor;
-  }
+  const tickColor = getThemeValue(config, "rulerTickColor");
 
   tick.style.cssText = `
 		position: absolute;
 		left: ${pixelPos}px;
 		bottom: 0;
 		width: 1px;
-		height: ${tickHeight}px;
+		height: ${TICK_SETTINGS.TICK_HEIGHT}px;
 		background: ${tickColor};
 	`;
 
   container.appendChild(tick);
 
-  const shouldShowLabel = isMajor || position % TICK_SETTINGS.LABEL_INTERVAL === 0;
+  const shouldShowLabel = position % TICK_SETTINGS.TICK_LABEL_INTERVAL === 0;
   if (shouldShowLabel) {
     const label = document.createElement("div");
     const textColor = getThemeValue(config, "rulerTextColor");
@@ -39,7 +31,7 @@ export function createHorizontalTick(
     label.style.cssText = `
 			position: absolute;
 			left: ${pixelPos}px;
-			bottom: ${tickHeight + 1}px;
+			bottom: ${TICK_SETTINGS.TICK_HEIGHT + 2}px;
 			font-size: ${config.rulerFontSize}px;
 			line-height: 1;
 			color: ${textColor};

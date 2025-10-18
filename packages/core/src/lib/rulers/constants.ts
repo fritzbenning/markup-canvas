@@ -6,12 +6,9 @@ export const RULER_Z_INDEX = {
 } as const;
 
 export const TICK_SETTINGS = {
-  MAJOR_HEIGHT: 6,
-  MINOR_HEIGHT: 4,
-  MAJOR_WIDTH: 8,
-  MINOR_WIDTH: 4,
-  MAJOR_MULTIPLIER: 5,
-  LABEL_INTERVAL: 100,
+  TICK_HEIGHT: 4,
+  TICK_WIDTH: 4,
+  TICK_LABEL_INTERVAL: 100,
 } as const;
 
 export const GRID_SETTINGS = {

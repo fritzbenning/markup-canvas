@@ -6,32 +6,24 @@ export function createVerticalTick(
   container: HTMLElement | DocumentFragment,
   position: number,
   pixelPos: number,
-  tickSpacing: number,
+  _tickSpacing: number,
   config: Required<MarkupCanvasConfig>
 ): void {
   const tick = document.createElement("div");
-  const isMajor = position % (tickSpacing * TICK_SETTINGS.MAJOR_MULTIPLIER) === 0;
-  const tickWidth = isMajor ? TICK_SETTINGS.MAJOR_WIDTH : TICK_SETTINGS.MINOR_WIDTH;
-
-  let tickColor: string;
-  if (config.themeMode === "dark") {
-    tickColor = isMajor ? config.rulerMajorTickColorDark : config.rulerMinorTickColorDark;
-  } else {
-    tickColor = isMajor ? config.rulerMajorTickColor : config.rulerMinorTickColor;
-  }
+  const tickColor = getThemeValue(config, "rulerTickColor");
 
   tick.style.cssText = `
 		position: absolute;
 		top: ${pixelPos}px;
 		right: 0;
-		width: ${tickWidth}px;
+		width: ${TICK_SETTINGS.TICK_WIDTH}px;
 		height: 1px;
 		background: ${tickColor};
 	`;
 
   container.appendChild(tick);
 
-  const shouldShowLabel = isMajor || position % TICK_SETTINGS.LABEL_INTERVAL === 0;
+  const shouldShowLabel = position % TICK_SETTINGS.TICK_LABEL_INTERVAL === 0;
   if (shouldShowLabel) {
     const label = document.createElement("div");
     const textColor = getThemeValue(config, "rulerTextColor");
@@ -39,7 +31,7 @@ export function createVerticalTick(
     label.style.cssText = `
 			position: absolute;
 			top: ${pixelPos - 6}px;
-			right: ${tickWidth + 6}px;
+			right: ${TICK_SETTINGS.TICK_WIDTH + 6}px;
 			font-size: ${config.rulerFontSize}px;
 			line-height: 1;
 			color: ${textColor};

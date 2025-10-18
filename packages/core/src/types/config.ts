@@ -47,8 +47,7 @@ export interface MarkupCanvasConfig {
   rulerBackgroundColor?: string;
   rulerBorderColor?: string;
   rulerTextColor?: string;
-  rulerMajorTickColor?: string;
-  rulerMinorTickColor?: string;
+  rulerTickColor?: string;
   rulerFontSize?: number;
   rulerFontFamily?: string;
   rulerUnits?: string;
@@ -58,8 +57,7 @@ export interface MarkupCanvasConfig {
   rulerBackgroundColorDark?: string;
   rulerBorderColorDark?: string;
   rulerTextColorDark?: string;
-  rulerMajorTickColorDark?: string;
-  rulerMinorTickColorDark?: string;
+  rulerTickColorDark?: string;
   gridColorDark?: string;
 
   // Theme
