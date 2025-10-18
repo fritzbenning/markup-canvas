@@ -121,8 +121,7 @@ The `MarkupCanvas` component accepts the following props:
 | `rulerBackgroundColor` | `string` | `"#f5f5f5"` | Ruler background color |
 | `rulerBorderColor` | `string` | `"#d0d0d0"` | Ruler border color |
 | `rulerTextColor` | `string` | `"#666666"` | Ruler text color |
-| `rulerMajorTickColor` | `string` | `"#666666"` | Major tick mark color |
-| `rulerMinorTickColor` | `string` | `"#999999"` | Minor tick mark color |
+| `rulerTickColor` | `string` | `"#cccccc"` | Tick mark color |
 | `rulerFontSize` | `number` | `12` | Ruler font size in pixels |
 | `rulerFontFamily` | `string` | `"monospace"` | Ruler font family |
 | `rulerUnits` | `string` | `"px"` | Ruler units label |
@@ -135,8 +134,7 @@ The `MarkupCanvas` component accepts the following props:
 | `rulerBackgroundColorDark` | `string` | `"rgba(30, 30, 30, 0.95)"` | Dark mode ruler background color |
 | `rulerBorderColorDark` | `string` | `"#444"` | Dark mode ruler border color |
 | `rulerTextColorDark` | `string` | `"#aaa"` | Dark mode ruler text color |
-| `rulerMajorTickColorDark` | `string` | `"#666"` | Dark mode major tick mark color |
-| `rulerMinorTickColorDark` | `string` | `"#444"` | Dark mode minor tick mark color |
+| `rulerTickColorDark` | `string` | `"#383838"` | Dark mode tick mark color |
 | `gridColorDark` | `string` | `"rgba(255, 255, 255, 0.1)"` | Dark mode grid line color |
 
 **React-Specific Props**

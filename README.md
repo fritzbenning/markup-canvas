@@ -76,6 +76,7 @@ function App() {
 - 🎯 **Precise Control**: Zoom, pan, and navigate with mouse, keyboard, or touch
 - 📏 **Rulers & Grid**: Optional rulers and grid overlay
 - 🎨 **Pure HTML**: Use any HTML content or framework components
+- 🌓 **Dark Mode**: Built-in dark theme support
 - 🔧 **Event System**: Built-in EventEmitter for reactive updates
 - ⚛️ **React Support**: First-class React components and hooks
 - 📦 **TypeScript**: Full TypeScript support with comprehensive types
