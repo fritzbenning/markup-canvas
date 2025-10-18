@@ -1,5 +1,10 @@
 export class EventEmitter<Events extends Record<string, unknown>> {
   private listeners: Map<keyof Events, Set<(data: unknown) => void>> = new Map();
+  private emitInterceptor?: (event: keyof Events, data: unknown) => void;
+
+  setEmitInterceptor(interceptor: (event: keyof Events, data: unknown) => void): void {
+    this.emitInterceptor = interceptor;
+  }
 
   on<K extends keyof Events>(event: K, handler: (data: Events[K]) => void): void {
     if (!this.listeners.has(event)) {
@@ -16,6 +21,8 @@ export class EventEmitter<Events extends Record<string, unknown>> {
   }
 
   emit<K extends keyof Events>(event: K, data: Events[K]): void {
+    this.emitInterceptor?.(event, data);
+
     const handlers = this.listeners.get(event);
     if (handlers) {
       handlers.forEach((handler) => {

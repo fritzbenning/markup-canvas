@@ -11,7 +11,7 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   enablePan: true,
   enableTouch: true,
   enableKeyboard: true,
-  limitKeyboardEventsToCanvas: false,
+  bindKeyboardEventsTo: "canvas",
 
   // Zoom behavior
   zoomSpeed: 1.5,
@@ -66,6 +66,10 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
 
   // Theme
   themeMode: "light",
+
+  // Global Binding & Instance Access
+  bindToWindow: false,
+  name: "markupCanvas",
 
   // Callbacks
   onTransformUpdate: () => {},

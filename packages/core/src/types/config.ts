@@ -6,12 +6,16 @@ export interface MarkupCanvasConfig {
   height?: number;
   enableAcceleration?: boolean;
 
+  // Global Binding & Instance Access
+  bindToWindow?: boolean;
+  name?: string;
+
   // Interaction controls
   enableZoom?: boolean;
   enablePan?: boolean;
   enableTouch?: boolean;
   enableKeyboard?: boolean;
-  limitKeyboardEventsToCanvas?: boolean;
+  bindKeyboardEventsTo?: "canvas" | "document";
 
   // Zoom behavior
   zoomSpeed?: number;

@@ -23,7 +23,7 @@ export function setupKeyboardEvents(canvas: Canvas, config: Required<MarkupCanva
   function handleKeyDown(event: Event): void {
     if (!(event instanceof KeyboardEvent)) return;
 
-    if (config.limitKeyboardEventsToCanvas && document.activeElement !== canvas.container) return;
+    if (config.bindKeyboardEventsTo === "canvas" && document.activeElement !== canvas.container) return;
 
     const isFastPan = event.shiftKey;
     const panDistance = config.keyboardPanStep * (isFastPan ? config.keyboardFastMultiplier : 1);
@@ -102,7 +102,7 @@ export function setupKeyboardEvents(canvas: Canvas, config: Required<MarkupCanva
     }
   }
 
-  const keyboardTarget = config.limitKeyboardEventsToCanvas ? canvas.container : document;
+  const keyboardTarget = config.bindKeyboardEventsTo === "canvas" ? canvas.container : document;
 
   keyboardTarget.addEventListener("keydown", handleKeyDown);
   canvas.container.addEventListener("mousemove", handleMouseMove);

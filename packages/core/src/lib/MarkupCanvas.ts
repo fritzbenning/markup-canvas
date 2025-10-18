@@ -43,11 +43,68 @@ export class MarkupCanvas implements Canvas {
     }
 
     this.baseCanvas = canvas;
+
+    if (this.config.bindToWindow) {
+      this.listen.setEmitInterceptor((event, data) => {
+        this.broadcastEvent(event as string, data);
+      });
+      this.setupGlobalBinding();
+    }
+
     this.setupEventHandlers();
     this._isReady = true;
 
     // Emit ready event
     this.listen.emit("ready", this);
+  }
+
+  private setupGlobalBinding(): void {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const canvasName = this.config.name || "markupCanvas";
+    const windowObj = window as unknown as Record<string, unknown>;
+
+    // Bind instance to window
+    windowObj[canvasName] = this;
+
+    // Track all instances
+    if (!windowObj.__markupCanvasInstances) {
+      windowObj.__markupCanvasInstances = new Map();
+    }
+    (windowObj.__markupCanvasInstances as unknown as Map<string, MarkupCanvas>).set(canvasName, this);
+  }
+
+  private cleanupGlobalBinding(): void {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const canvasName = this.config.name || "markupCanvas";
+    const windowObj = window as unknown as Record<string, unknown>;
+
+    delete windowObj[canvasName];
+    if (windowObj.__markupCanvasInstances) {
+      (windowObj.__markupCanvasInstances as unknown as Map<string, MarkupCanvas>).delete(canvasName);
+    }
+  }
+
+  private broadcastEvent(event: string, data: unknown): void {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    window.postMessage(
+      {
+        source: "markup-canvas",
+        event,
+        data,
+        timestamp: Date.now(),
+        canvasName: this.config.name,
+      },
+      "*"
+    );
   }
 
   private setupEventHandlers(): void {
@@ -412,6 +469,7 @@ export class MarkupCanvas implements Canvas {
 
   // Cleanup method
   cleanup(): void {
+    this.cleanupGlobalBinding();
     this.cleanupFunctions.forEach((cleanup) => {
       try {
         cleanup();

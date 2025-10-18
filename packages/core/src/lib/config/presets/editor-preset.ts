@@ -11,7 +11,7 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   enablePan: true,
   enableTouch: true,
   enableKeyboard: false,
-  limitKeyboardEventsToCanvas: false,
+  bindKeyboardEventsTo: "canvas",
 
   // Zoom behavior
   zoomSpeed: 1.5,
@@ -67,6 +67,10 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
 
   // Theme
   themeMode: "light",
+
+  // Global Binding & Instance Access
+  bindToWindow: false,
+  name: "markupCanvas",
 
   // Callbacks
   onTransformUpdate: () => {},
