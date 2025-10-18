@@ -48,22 +48,22 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   rulerSize: 20,
 
   // Canvas styling
-  canvasBackgroundColor: "rgba(255, 255, 255, 1)",
-  canvasBackgroundColorDark: "rgba(40, 40, 40, 1)",
+  canvasBackgroundColor: "oklch(98.5% 0 0)",
+  canvasBackgroundColorDark: "oklch(21% 0.006 285.885)",
 
   // Ruler styling
-  rulerBackgroundColor: "rgba(255, 255, 255, 0.4)",
-  rulerBorderColor: "#ddd",
+  rulerBackgroundColor: "oklch(100% 0 0 / 0.4)",
+  rulerBorderColor: "oklch(98.5% 0 0)",
   rulerTextColor: "oklch(70.5% 0.015 286.067)",
-  rulerTickColor: "oklch(92% 0.004 286.32)",
-  gridColor: "rgba(0, 123, 255, 0.1)",
+  rulerTickColor: "oklch(70.5% 0.015 286.067)",
+  gridColor: "rgba(232, 86, 193, 0.5)",
 
   // Ruler styling (dark theme)
-  rulerBackgroundColorDark: "rgba(30, 30, 30, 0.95)",
-  rulerBorderColorDark: "#444",
-  rulerTextColorDark: "#aaa",
-  rulerTickColorDark: "#444",
-  gridColorDark: "rgba(255, 255, 255, 0.1)",
+  rulerBackgroundColorDark: "oklch(27.4% 0.006 286.033)",
+  rulerBorderColorDark: "oklch(37% 0.013 285.805)",
+  rulerTextColorDark: "oklch(55.2% 0.016 285.938)",
+  rulerTickColorDark: "oklch(55.2% 0.016 285.938)",
+  gridColorDark: "rgba(232, 86, 193, 0.5)",
 
   // Theme
   themeMode: "light",

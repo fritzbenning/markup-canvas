@@ -9,8 +9,6 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isReady, setIsReady] = useState(false);
   const [themeMode, setThemeModeState] = useState<"light" | "dark">("light");
-  const [showRulers, setShowRulers] = useState(true);
-  const [showGrid, setShowGrid] = useState(false);
 
   const optionsRef = useRef(options);
   optionsRef.current = options;
@@ -139,7 +137,6 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
 
   const toggleRulers = useCallback(() => {
     canvasRef.current?.toggleRulers();
-    setShowRulers((prev) => !prev);
   }, [canvasRef]);
 
   const areRulersVisible = useCallback(() => {
@@ -148,7 +145,6 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
 
   const toggleGrid = useCallback(() => {
     canvasRef.current?.toggleGrid();
-    setShowGrid((prev) => !prev);
   }, [canvasRef]);
 
   const isGridVisible = useCallback(() => {
