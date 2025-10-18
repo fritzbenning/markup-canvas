@@ -48,19 +48,19 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   rulerSize: 20,
 
   // Canvas styling
-  canvasBackgroundColor: "oklch(98.5% 0 0)",
-  canvasBackgroundColorDark: "oklch(21% 0.006 285.885)",
+  canvasBackgroundColor: "transparent",
+  canvasBackgroundColorDark: "transparent",
 
   // Ruler styling
   rulerBackgroundColor: "oklch(100% 0 0 / 0.4)",
-  rulerBorderColor: "oklch(98.5% 0 0)",
+  rulerBorderColor: "oklch(96.7% 0.001 286.375)",
   rulerTextColor: "oklch(70.5% 0.015 286.067)",
-  rulerTickColor: "oklch(70.5% 0.015 286.067)",
+  rulerTickColor: "oklch(92% 0.004 286.32)",
   gridColor: "rgba(232, 86, 193, 0.5)",
 
   // Ruler styling (dark theme)
   rulerBackgroundColorDark: "oklch(27.4% 0.006 286.033)",
-  rulerBorderColorDark: "oklch(37% 0.013 285.805)",
+  rulerBorderColorDark: "oklch(44.2% 0.017 285.786)",
   rulerTextColorDark: "oklch(55.2% 0.016 285.938)",
   rulerTickColorDark: "oklch(55.2% 0.016 285.938)",
   gridColorDark: "rgba(232, 86, 193, 0.5)",

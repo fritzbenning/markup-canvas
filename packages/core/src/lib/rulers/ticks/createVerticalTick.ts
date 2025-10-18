@@ -12,6 +12,7 @@ export function createVerticalTick(
   const tick = document.createElement("div");
   const tickColor = getThemeValue(config, "rulerTickColor");
 
+  tick.className = "tick";
   tick.style.cssText = `
 		position: absolute;
 		top: ${pixelPos}px;

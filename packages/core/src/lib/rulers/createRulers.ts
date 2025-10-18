@@ -48,9 +48,6 @@ export function createRulers(canvas: Canvas, config: Required<MarkupCanvasConfig
 
         // Update all ruler theme colors
         updateRulerTheme(elements, newConfig);
-
-        // Re-render rulers to update tick colors
-        safeUpdate();
       },
 
       show: () => {

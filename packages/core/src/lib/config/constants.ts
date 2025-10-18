@@ -52,7 +52,7 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
 
   // Ruler styling (light theme)
   rulerBackgroundColor: "rgba(255, 255, 255, 0.95)",
-  rulerBorderColor: "rgba(221, 221, 221, 1)",
+  rulerBorderColor: "rgba(223, 223, 223, 1)",
   rulerTextColor: "rgba(102, 102, 102, 1)",
   rulerTickColor: "rgba(204, 204, 204, 1)",
   gridColor: "rgba(232, 86, 193, 0.5)",

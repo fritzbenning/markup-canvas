@@ -8,16 +8,12 @@ export interface RulerThemeUpdater {
   gridOverlay?: HTMLElement;
 }
 
-/**
- * Updates all ruler elements with new theme colors
- * @param elements - The ruler elements to update
- * @param config - The canvas config containing theme and color settings
- */
 export function updateRulerTheme(elements: RulerThemeUpdater, config: Required<MarkupCanvasConfig>): void {
   // Get theme-aware colors
   const backgroundColor = getThemeValue(config, "rulerBackgroundColor");
   const borderColor = getThemeValue(config, "rulerBorderColor");
   const textColor = getThemeValue(config, "rulerTextColor");
+  const tickColor = getThemeValue(config, "rulerTickColor");
   const gridColor = getThemeValue(config, "gridColor");
 
   // Update horizontal ruler
@@ -26,6 +22,10 @@ export function updateRulerTheme(elements: RulerThemeUpdater, config: Required<M
     elements.horizontalRuler.style.borderBottomColor = borderColor;
     elements.horizontalRuler.style.borderRightColor = borderColor;
     elements.horizontalRuler.style.color = textColor;
+    // Update all tick elements
+    elements.horizontalRuler.querySelectorAll(".tick").forEach((tick) => {
+      (tick as HTMLElement).style.background = tickColor;
+    });
   }
 
   // Update vertical ruler
@@ -34,6 +34,10 @@ export function updateRulerTheme(elements: RulerThemeUpdater, config: Required<M
     elements.verticalRuler.style.borderRightColor = borderColor;
     elements.verticalRuler.style.borderBottomColor = borderColor;
     elements.verticalRuler.style.color = textColor;
+    // Update all tick elements
+    elements.verticalRuler.querySelectorAll(".tick").forEach((tick) => {
+      (tick as HTMLElement).style.background = tickColor;
+    });
   }
 
   // Update corner box

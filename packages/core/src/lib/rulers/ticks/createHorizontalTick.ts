@@ -12,6 +12,7 @@ export function createHorizontalTick(
   const tick = document.createElement("div");
   const tickColor = getThemeValue(config, "rulerTickColor");
 
+  tick.className = "tick";
   tick.style.cssText = `
 		position: absolute;
 		left: ${pixelPos}px;
