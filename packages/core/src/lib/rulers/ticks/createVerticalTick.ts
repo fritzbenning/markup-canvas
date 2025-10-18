@@ -1,4 +1,3 @@
-import { getThemeValue } from "@/lib/helpers/index.js";
 import { TICK_SETTINGS } from "@/lib/rulers/constants.js";
 import type { MarkupCanvasConfig } from "@/types/index.js";
 
@@ -10,7 +9,6 @@ export function createVerticalTick(
   config: Required<MarkupCanvasConfig>
 ): void {
   const tick = document.createElement("div");
-  const tickColor = getThemeValue(config, "rulerTickColor");
 
   tick.className = "tick";
   tick.style.cssText = `
@@ -19,7 +17,7 @@ export function createVerticalTick(
 		right: 0;
 		width: ${TICK_SETTINGS.TICK_WIDTH}px;
 		height: 1px;
-		background: ${tickColor};
+		background: var(--ruler-tick-color);
 	`;
 
   container.appendChild(tick);
@@ -27,7 +25,6 @@ export function createVerticalTick(
   const shouldShowLabel = position % TICK_SETTINGS.TICK_LABEL_INTERVAL === 0;
   if (shouldShowLabel) {
     const label = document.createElement("div");
-    const textColor = getThemeValue(config, "rulerTextColor");
 
     label.style.cssText = `
 			position: absolute;
@@ -35,7 +32,7 @@ export function createVerticalTick(
 			right: ${TICK_SETTINGS.TICK_WIDTH + 6}px;
 			font-size: ${config.rulerFontSize}px;
 			line-height: 1;
-			color: ${textColor};
+			color: var(--ruler-text-color);
 			white-space: nowrap;
 			pointer-events: none;
 			transform: rotate(-90deg);

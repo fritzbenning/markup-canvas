@@ -2,7 +2,6 @@ import { MarkupCanvas, type MarkupCanvasRef, useMarkupCanvas } from "@markup-can
 import { Moon, Sun, ZoomIn, ZoomOut } from "lucide-react";
 import { useRef } from "react";
 import "./App.css";
-import { EDITOR_PRESET } from "@markup-canvas/core";
 import { Button } from "./components/Button";
 import { Content } from "./components/Content";
 import { Controls } from "./components/Controls";
@@ -58,7 +57,6 @@ function App() {
         enableGrid={true}
         themeMode={themeMode}
         onReady={initCanvasUtils}
-        {...EDITOR_PRESET}
       >
         <Content />
       </MarkupCanvas>

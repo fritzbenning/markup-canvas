@@ -24,6 +24,8 @@ export function createRulers(canvas: Canvas, config: Required<MarkupCanvasConfig
     elements = createRulerElements(canvas.container, config);
     cleanupEvents = setupRulerEvents(canvas, safeUpdate);
 
+    updateRulerTheme(elements, config);
+
     safeUpdate();
 
     if (!config.showRulers) {

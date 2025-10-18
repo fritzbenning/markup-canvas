@@ -1,4 +1,3 @@
-import { getThemeValue } from "@/lib/helpers/index.js";
 import { TICK_SETTINGS } from "@/lib/rulers/constants.js";
 import type { MarkupCanvasConfig } from "@/types/index.js";
 
@@ -10,7 +9,6 @@ export function createHorizontalTick(
   config: Required<MarkupCanvasConfig>
 ): void {
   const tick = document.createElement("div");
-  const tickColor = getThemeValue(config, "rulerTickColor");
 
   tick.className = "tick";
   tick.style.cssText = `
@@ -19,7 +17,7 @@ export function createHorizontalTick(
 		bottom: 0;
 		width: 1px;
 		height: ${TICK_SETTINGS.TICK_HEIGHT}px;
-		background: ${tickColor};
+		background: var(--ruler-tick-color);
 	`;
 
   container.appendChild(tick);
@@ -27,7 +25,6 @@ export function createHorizontalTick(
   const shouldShowLabel = position % TICK_SETTINGS.TICK_LABEL_INTERVAL === 0;
   if (shouldShowLabel) {
     const label = document.createElement("div");
-    const textColor = getThemeValue(config, "rulerTextColor");
 
     label.style.cssText = `
 			position: absolute;
@@ -35,7 +32,7 @@ export function createHorizontalTick(
 			bottom: ${TICK_SETTINGS.TICK_HEIGHT + 2}px;
 			font-size: ${config.rulerFontSize}px;
 			line-height: 1;
-			color: ${textColor};
+			color: var(--ruler-text-color);
 			white-space: nowrap;
 			pointer-events: none;
 		`;

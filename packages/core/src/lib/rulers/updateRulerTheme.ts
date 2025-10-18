@@ -16,43 +16,31 @@ export function updateRulerTheme(elements: RulerThemeUpdater, config: Required<M
   const tickColor = getThemeValue(config, "rulerTickColor");
   const gridColor = getThemeValue(config, "gridColor");
 
-  // Update horizontal ruler
+  // Update horizontal ruler with CSS variables
   if (elements.horizontalRuler) {
-    elements.horizontalRuler.style.background = backgroundColor;
-    elements.horizontalRuler.style.borderBottomColor = borderColor;
-    elements.horizontalRuler.style.borderRightColor = borderColor;
-    elements.horizontalRuler.style.color = textColor;
-    // Update all tick elements
-    elements.horizontalRuler.querySelectorAll(".tick").forEach((tick) => {
-      (tick as HTMLElement).style.background = tickColor;
-    });
+    elements.horizontalRuler.style.setProperty("--ruler-background-color", backgroundColor);
+    elements.horizontalRuler.style.setProperty("--ruler-border-color", borderColor);
+    elements.horizontalRuler.style.setProperty("--ruler-text-color", textColor);
+    elements.horizontalRuler.style.setProperty("--ruler-tick-color", tickColor);
   }
 
-  // Update vertical ruler
+  // Update vertical ruler with CSS variables
   if (elements.verticalRuler) {
-    elements.verticalRuler.style.background = backgroundColor;
-    elements.verticalRuler.style.borderRightColor = borderColor;
-    elements.verticalRuler.style.borderBottomColor = borderColor;
-    elements.verticalRuler.style.color = textColor;
-    // Update all tick elements
-    elements.verticalRuler.querySelectorAll(".tick").forEach((tick) => {
-      (tick as HTMLElement).style.background = tickColor;
-    });
+    elements.verticalRuler.style.setProperty("--ruler-background-color", backgroundColor);
+    elements.verticalRuler.style.setProperty("--ruler-border-color", borderColor);
+    elements.verticalRuler.style.setProperty("--ruler-text-color", textColor);
+    elements.verticalRuler.style.setProperty("--ruler-tick-color", tickColor);
   }
 
-  // Update corner box
+  // Update corner box with CSS variables
   if (elements.cornerBox) {
-    elements.cornerBox.style.background = backgroundColor;
-    elements.cornerBox.style.borderRightColor = borderColor;
-    elements.cornerBox.style.borderBottomColor = borderColor;
-    elements.cornerBox.style.color = textColor;
+    elements.cornerBox.style.setProperty("--ruler-background-color", backgroundColor);
+    elements.cornerBox.style.setProperty("--ruler-border-color", borderColor);
+    elements.cornerBox.style.setProperty("--ruler-text-color", textColor);
   }
 
-  // Update grid overlay
+  // Update grid overlay with CSS variables
   if (elements.gridOverlay) {
-    elements.gridOverlay.style.backgroundImage = `
-      linear-gradient(${gridColor} 1px, transparent 1px),
-      linear-gradient(90deg, ${gridColor} 1px, transparent 1px)
-    `;
+    elements.gridOverlay.style.setProperty("--grid-color", gridColor);
   }
 }
