@@ -1,13 +1,13 @@
-import { withTheme } from "@/lib/helpers/index.js";
+import { getThemeValue } from "@/lib/helpers/index.js";
 import type { MarkupCanvasConfig } from "@/types/index.js";
 import { RULER_Z_INDEX } from "./constants";
 
 export function createHorizontalRuler(config: Required<MarkupCanvasConfig>): HTMLElement {
   const ruler = document.createElement("div");
   ruler.className = "canvas-ruler horizontal-ruler";
-  const backgroundColor = withTheme(config, config.rulerBackgroundColor, config.rulerBackgroundColorDark);
-  const borderColor = withTheme(config, config.rulerBorderColor, config.rulerBorderColorDark);
-  const textColor = withTheme(config, config.rulerTextColor, config.rulerTextColorDark);
+  const backgroundColor = getThemeValue(config, "rulerBackgroundColor");
+  const borderColor = getThemeValue(config, "rulerBorderColor");
+  const textColor = getThemeValue(config, "rulerTextColor");
 
   ruler.style.cssText = `
 	position: absolute;

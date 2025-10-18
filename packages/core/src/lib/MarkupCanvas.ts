@@ -2,7 +2,7 @@ import { createCanvas } from "@/lib/canvas/index.js";
 import { createMarkupCanvasConfig } from "@/lib/config/createMarkupCanvasConfig.js";
 import { EventEmitter } from "@/lib/events/EventEmitter.js";
 import { setupKeyboardEvents, setupMouseEvents, setupTouchEvents, setupWheelEvents } from "@/lib/events/index.js";
-import { withClampedZoom, withFeatureEnabled, withTheme } from "@/lib/helpers/index.js";
+import { getThemeValue, withClampedZoom, withFeatureEnabled } from "@/lib/helpers/index.js";
 import { createRulers } from "@/lib/rulers/index.js";
 import { withTransition } from "@/lib/transition/withTransition.js";
 import type {
@@ -401,7 +401,7 @@ export class MarkupCanvas implements Canvas {
     this.config = createMarkupCanvasConfig(newConfig);
 
     // Update canvas background color
-    const backgroundColor = withTheme(this.config, this.config.canvasBackgroundColor, this.config.canvasBackgroundColorDark);
+    const backgroundColor = getThemeValue(this.config, "canvasBackgroundColor");
     this.baseCanvas.container.style.backgroundColor = backgroundColor;
 
     // Update rulers if they exist

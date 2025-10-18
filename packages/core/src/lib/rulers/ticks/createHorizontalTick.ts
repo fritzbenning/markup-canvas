@@ -1,4 +1,4 @@
-import { withTheme } from "@/lib/helpers/index.js";
+import { getThemeValue } from "@/lib/helpers/index.js";
 import { TICK_SETTINGS } from "@/lib/rulers/constants.js";
 import type { MarkupCanvasConfig } from "@/types/index.js";
 
@@ -12,11 +12,13 @@ export function createHorizontalTick(
   const tick = document.createElement("div");
   const isMajor = position % (tickSpacing * TICK_SETTINGS.MAJOR_MULTIPLIER) === 0;
   const tickHeight = isMajor ? TICK_SETTINGS.MAJOR_HEIGHT : TICK_SETTINGS.MINOR_HEIGHT;
-  const tickColor = withTheme(
-    config,
-    isMajor ? config.rulerMajorTickColor : config.rulerMinorTickColor,
-    isMajor ? config.rulerMajorTickColorDark : config.rulerMinorTickColorDark
-  );
+
+  let tickColor: string;
+  if (config.themeMode === "dark") {
+    tickColor = isMajor ? config.rulerMajorTickColorDark : config.rulerMinorTickColorDark;
+  } else {
+    tickColor = isMajor ? config.rulerMajorTickColor : config.rulerMinorTickColor;
+  }
 
   tick.style.cssText = `
 		position: absolute;
@@ -32,7 +34,7 @@ export function createHorizontalTick(
   const shouldShowLabel = isMajor || position % TICK_SETTINGS.LABEL_INTERVAL === 0;
   if (shouldShowLabel) {
     const label = document.createElement("div");
-    const textColor = withTheme(config, config.rulerTextColor, config.rulerTextColorDark);
+    const textColor = getThemeValue(config, "rulerTextColor");
 
     label.style.cssText = `
 			position: absolute;

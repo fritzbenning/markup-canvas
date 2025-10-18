@@ -54,14 +54,14 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   rulerTextColor: "rgba(102, 102, 102, 1)",
   rulerMajorTickColor: "rgba(153, 153, 153, 1)",
   rulerMinorTickColor: "rgba(204, 204, 204, 1)",
-  gridColor: "rgba(0, 0, 0, 0.1)",
+  gridColor: "rgba(232, 86, 193, 0.5)",
 
   // Ruler styling (dark theme)
   rulerBackgroundColorDark: "rgba(30, 30, 30, 0.95)",
   rulerBorderColorDark: "rgba(68, 68, 68, 1)",
   rulerTextColorDark: "rgba(170, 170, 170, 1)",
-  rulerMajorTickColorDark: "rgba(102, 102, 102, 1)",
-  rulerMinorTickColorDark: "rgba(68, 68, 68, 1)",
+  rulerMajorTickColorDark: "rgba(72, 72, 72, 1)",
+  rulerMinorTickColorDark: "rgba(56, 56, 56, 1)",
   gridColorDark: "rgba(232, 86, 193, 0.5)",
 
   // Theme

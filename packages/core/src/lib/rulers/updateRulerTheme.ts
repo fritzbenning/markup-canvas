@@ -1,4 +1,4 @@
-import { withTheme } from "@/lib/helpers/index.js";
+import { getThemeValue } from "@/lib/helpers/index.js";
 import type { MarkupCanvasConfig } from "@/types/index.js";
 
 export interface RulerThemeUpdater {
@@ -8,12 +8,17 @@ export interface RulerThemeUpdater {
   gridOverlay?: HTMLElement;
 }
 
+/**
+ * Updates all ruler elements with new theme colors
+ * @param elements - The ruler elements to update
+ * @param config - The canvas config containing theme and color settings
+ */
 export function updateRulerTheme(elements: RulerThemeUpdater, config: Required<MarkupCanvasConfig>): void {
   // Get theme-aware colors
-  const backgroundColor = withTheme(config, config.rulerBackgroundColor, config.rulerBackgroundColorDark);
-  const borderColor = withTheme(config, config.rulerBorderColor, config.rulerBorderColorDark);
-  const textColor = withTheme(config, config.rulerTextColor, config.rulerTextColorDark);
-  const gridColor = withTheme(config, config.gridColor, config.gridColorDark);
+  const backgroundColor = getThemeValue(config, "rulerBackgroundColor");
+  const borderColor = getThemeValue(config, "rulerBorderColor");
+  const textColor = getThemeValue(config, "rulerTextColor");
+  const gridColor = getThemeValue(config, "gridColor");
 
   // Update horizontal ruler
   if (elements.horizontalRuler) {

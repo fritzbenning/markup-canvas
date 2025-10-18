@@ -1,14 +1,14 @@
+import { getThemeValue } from "@/lib/helpers/index.js";
 import type { MarkupCanvasConfig } from "@/types/index.js";
-import { withTheme } from "@/lib/helpers/index.js";
 import { RULER_Z_INDEX } from "./constants";
 
 export function createCornerBox(config: Required<MarkupCanvasConfig>): HTMLElement {
   const corner = document.createElement("div");
   corner.className = "canvas-ruler corner-box";
-  const backgroundColor = withTheme(config, config.rulerBackgroundColor, config.rulerBackgroundColorDark);
-  const borderColor = withTheme(config, config.rulerBorderColor, config.rulerBorderColorDark);
-  const textColor = withTheme(config, config.rulerTextColor, config.rulerTextColorDark);
-  
+  const backgroundColor = getThemeValue(config, "rulerBackgroundColor");
+  const borderColor = getThemeValue(config, "rulerBorderColor");
+  const textColor = getThemeValue(config, "rulerTextColor");
+
   corner.style.cssText = `
 		position: absolute;
 		top: 0;

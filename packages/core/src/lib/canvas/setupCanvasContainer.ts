@@ -1,6 +1,6 @@
 import { checkContainerDimensions } from "@/lib/canvas/checkContainerDimensions";
 import { CANVAS_CONTAINER_CLASS } from "@/lib/constants";
-import { withTheme } from "@/lib/helpers/index.js";
+import { getThemeValue } from "@/lib/helpers/index.js";
 import type { MarkupCanvasConfig } from "@/types/index.js";
 
 export function setupCanvasContainer(container: HTMLElement, config?: Required<MarkupCanvasConfig>): void {
@@ -14,7 +14,7 @@ export function setupCanvasContainer(container: HTMLElement, config?: Required<M
 
   // Apply canvas background color
   if (config) {
-    const backgroundColor = withTheme(config, config.canvasBackgroundColor, config.canvasBackgroundColorDark);
+    const backgroundColor = getThemeValue(config, "canvasBackgroundColor");
     container.style.backgroundColor = backgroundColor;
   }
 

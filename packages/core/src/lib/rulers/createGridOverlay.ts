@@ -1,12 +1,12 @@
+import { getThemeValue } from "@/lib/helpers/index.js";
 import type { MarkupCanvasConfig } from "@/types/index.js";
-import { withTheme } from "@/lib/helpers/index.js";
 import { RULER_Z_INDEX } from "./constants";
 
 export function createGridOverlay(config: Required<MarkupCanvasConfig>): HTMLElement {
   const grid = document.createElement("div");
   grid.className = "canvas-ruler grid-overlay";
-  const gridColor = withTheme(config, config.gridColor, config.gridColorDark);
-  
+  const gridColor = getThemeValue(config, "gridColor");
+
   grid.style.cssText = `
 		position: absolute;
 		top: ${config.rulerSize}px;
