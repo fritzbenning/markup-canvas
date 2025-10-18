@@ -1,5 +1,5 @@
-import { TICK_SETTINGS } from "@/lib/rulers/constants.js";
 import { withTheme } from "@/lib/helpers/index.js";
+import { TICK_SETTINGS } from "@/lib/rulers/constants.js";
 import type { MarkupCanvasConfig } from "@/types/index.js";
 
 export function createVerticalTick(
@@ -33,7 +33,7 @@ export function createVerticalTick(
   if (shouldShowLabel) {
     const label = document.createElement("div");
     const textColor = withTheme(config, config.rulerTextColor, config.rulerTextColorDark);
-    
+
     label.style.cssText = `
 			position: absolute;
 			top: ${pixelPos - 6}px;

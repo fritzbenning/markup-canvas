@@ -1,5 +1,5 @@
-import type { MarkupCanvasConfig } from "@/types/index.js";
 import { withTheme } from "@/lib/helpers/index.js";
+import type { MarkupCanvasConfig } from "@/types/index.js";
 import { RULER_Z_INDEX } from "./constants";
 
 export function createHorizontalRuler(config: Required<MarkupCanvasConfig>): HTMLElement {
@@ -8,7 +8,7 @@ export function createHorizontalRuler(config: Required<MarkupCanvasConfig>): HTM
   const backgroundColor = withTheme(config, config.rulerBackgroundColor, config.rulerBackgroundColorDark);
   const borderColor = withTheme(config, config.rulerBorderColor, config.rulerBorderColorDark);
   const textColor = withTheme(config, config.rulerTextColor, config.rulerTextColorDark);
-  
+
   ruler.style.cssText = `
 	position: absolute;
 	top: 0;

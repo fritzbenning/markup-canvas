@@ -407,9 +407,7 @@ export class MarkupCanvas implements Canvas {
 
     // Update grid if it exists
     if (this.rulers?.gridOverlay) {
-      this.rulers.gridOverlay.style.backgroundColor = mode === "dark" 
-        ? this.config.gridColorDark 
-        : this.config.gridColor;
+      this.rulers.gridOverlay.style.backgroundColor = mode === "dark" ? this.config.gridColorDark : this.config.gridColor;
     }
   }
 
