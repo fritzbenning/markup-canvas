@@ -26,7 +26,7 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
   ({ children, className, style, onTransformChange, onZoomChange, onPanChange, onReady, ...options }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [canvasInstance, setCanvasInstance] = useState<CoreMarkupCanvas | null>(null);
-    const prevThemeModeRef = useRef<"light" | "dark" | undefined>(options.themeMode);
+    const themeModeRef = useRef<"light" | "dark" | undefined>(options.themeMode);
 
     useImperativeHandle(
       ref,
@@ -109,10 +109,10 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
 
     // Handle theme changes separately without recreating the canvas
     useEffect(() => {
-      if (!canvasInstance || themeMode === prevThemeModeRef.current) return;
+      if (!canvasInstance || themeMode === themeModeRef.current) return;
 
       canvasInstance.updateThemeMode(themeMode || "light");
-      prevThemeModeRef.current = themeMode;
+      themeModeRef.current = themeMode;
     }, [canvasInstance, themeMode]);
 
     return (
