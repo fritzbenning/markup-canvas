@@ -4,8 +4,8 @@ import type { UseMarkupCanvasOptions } from "../types/index.js";
 
 interface UseMarkupCanvasWindowOptions extends UseMarkupCanvasOptions {
   canvasName?: string;
-  onCanvasFound?: (canvas: MarkupCanvas) => void;
-  onCanvasNotFound?: () => void;
+  onCanvasReady?: (canvas: MarkupCanvas) => void;
+  onCanvasUnavailable?: () => void;
 }
 
 export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}) {
@@ -51,7 +51,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   // Get instance from window binding
   useEffect(() => {
     if (typeof window === "undefined") {
-      optionsRef.current.onCanvasNotFound?.();
+      optionsRef.current.onCanvasUnavailable?.();
       return;
     }
 
@@ -59,7 +59,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
     const instance = (window as any)[canvasName] as MarkupCanvas | undefined;
     if (instance && typeof instance === "object") {
       handleCanvasInstance(instance);
-      optionsRef.current.onCanvasFound?.(instance);
+      optionsRef.current.onCanvasReady?.(instance);
 
       // Set initial state from instance
       if (instance.transform) {
@@ -83,7 +83,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
         setShowGridState(true);
       }
     } else {
-      optionsRef.current.onCanvasNotFound?.();
+      optionsRef.current.onCanvasUnavailable?.();
     }
   }, [canvasName, handleCanvasInstance]);
 

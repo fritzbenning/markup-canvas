@@ -3,5 +3,11 @@
   "installCommand": "pnpm install",
   "buildCommand": "pnpm run build --filter=@markup-canvas/examples-react",
   "outputDirectory": "packages/examples-react/dist",
-  "framework": "vite"
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
+    }
+  ]
 }

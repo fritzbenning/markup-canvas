@@ -95,11 +95,18 @@ export class MarkupCanvas implements Canvas {
       return;
     }
 
+    // Receivers can get the instance from the window binding
+    let broadcastData = data;
+
+    if (event === "ready") {
+      broadcastData = { ready: true };
+    }
+
     window.postMessage(
       {
         source: "markup-canvas",
         event,
-        data,
+        data: broadcastData,
         timestamp: Date.now(),
         canvasName: this.config.name,
       },
