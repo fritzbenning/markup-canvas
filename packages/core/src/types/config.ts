@@ -39,6 +39,10 @@ export interface MarkupCanvasConfig {
   enableGrid?: boolean;
   gridColor?: string;
 
+  // Canvas styling
+  canvasBackgroundColor?: string;
+  canvasBackgroundColorDark?: string;
+
   // Ruler styling (light theme)
   rulerBackgroundColor?: string;
   rulerBorderColor?: string;

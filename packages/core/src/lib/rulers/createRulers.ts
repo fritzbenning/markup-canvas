@@ -40,16 +40,8 @@ export function createRulers(canvas: Canvas, config: Required<MarkupCanvasConfig
         // Update all ruler theme colors
         updateRulerTheme(elements, newConfig);
 
-        // Save and restore grid display state around re-render
-        const gridDisplayState = elements.gridOverlay?.style.display;
-
         // Re-render rulers to update tick colors
         safeUpdate();
-
-        // Restore grid display state after re-render
-        if (elements.gridOverlay && gridDisplayState !== undefined) {
-          elements.gridOverlay.style.display = gridDisplayState;
-        }
       },
 
       show: () => {

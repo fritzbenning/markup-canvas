@@ -14,7 +14,7 @@ export function createCanvas(container: HTMLElement, config: Required<MarkupCanv
   }
 
   try {
-    setupCanvasContainer(container);
+    setupCanvasContainer(container, config);
 
     const { transformLayer, contentLayer } = createCanvasLayers(container, config);
 

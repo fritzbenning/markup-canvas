@@ -39,7 +39,15 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   // Visual elements
   enableRulers: true,
   enableGrid: false,
-  gridColor: "rgba(0, 123, 255, 0.1)",
+
+  rulerFontSize: 9,
+  rulerFontFamily: "Monaco, Menlo, monospace",
+  rulerUnits: "px",
+  rulerSize: 20,
+
+  // Canvas styling
+  canvasBackgroundColor: "rgba(255, 255, 255, 1)",
+  canvasBackgroundColorDark: "rgba(40, 40, 40, 1)",
 
   // Ruler styling
   rulerBackgroundColor: "rgba(255, 255, 255, 0.4)",
@@ -47,10 +55,7 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   rulerTextColor: "oklch(70.5% 0.015 286.067)",
   rulerMajorTickColor: "oklch(87.1% 0.006 286.286)",
   rulerMinorTickColor: "oklch(92% 0.004 286.32)",
-  rulerFontSize: 9,
-  rulerFontFamily: "Monaco, Menlo, monospace",
-  rulerUnits: "px",
-  rulerSize: 20,
+  gridColor: "rgba(0, 123, 255, 0.1)",
 
   // Ruler styling (dark theme)
   rulerBackgroundColorDark: "rgba(30, 30, 30, 0.95)",

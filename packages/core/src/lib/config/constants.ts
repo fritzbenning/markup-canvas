@@ -38,27 +38,31 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
 
   // Visual elements
   enableRulers: true,
-  enableGrid: true,
-  gridColor: "rgba(0, 0, 0, 0.1)",
-
-  // Ruler styling (light theme)
-  rulerBackgroundColor: "rgba(255, 255, 255, 0.95)",
-  rulerBorderColor: "#ddd",
-  rulerTextColor: "#666",
-  rulerMajorTickColor: "#999",
-  rulerMinorTickColor: "#ccc",
+  enableGrid: false,
   rulerFontSize: 9,
   rulerFontFamily: "Monaco, Menlo, monospace",
   rulerUnits: "px",
   rulerSize: 20,
 
+  // Canvas styling
+  canvasBackgroundColor: "rgba(250, 250, 250, 1)",
+  canvasBackgroundColorDark: "rgba(40, 40, 40, 1)",
+
+  // Ruler styling (light theme)
+  rulerBackgroundColor: "rgba(255, 255, 255, 0.95)",
+  rulerBorderColor: "rgba(221, 221, 221, 1)",
+  rulerTextColor: "rgba(102, 102, 102, 1)",
+  rulerMajorTickColor: "rgba(153, 153, 153, 1)",
+  rulerMinorTickColor: "rgba(204, 204, 204, 1)",
+  gridColor: "rgba(0, 0, 0, 0.1)",
+
   // Ruler styling (dark theme)
   rulerBackgroundColorDark: "rgba(30, 30, 30, 0.95)",
-  rulerBorderColorDark: "#444",
-  rulerTextColorDark: "#aaa",
-  rulerMajorTickColorDark: "#666",
-  rulerMinorTickColorDark: "#444",
-  gridColorDark: "rgba(255, 255, 255, 0.1)",
+  rulerBorderColorDark: "rgba(68, 68, 68, 1)",
+  rulerTextColorDark: "rgba(170, 170, 170, 1)",
+  rulerMajorTickColorDark: "rgba(102, 102, 102, 1)",
+  rulerMinorTickColorDark: "rgba(68, 68, 68, 1)",
+  gridColorDark: "rgba(232, 86, 193, 0.5)",
 
   // Theme
   themeMode: "light",
