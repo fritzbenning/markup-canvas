@@ -52,7 +52,7 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   canvasBackgroundColorDark: "transparent",
 
   // Ruler styling
-  rulerBackgroundColor: "oklch(100% 0 0 / 0.4)",
+  rulerBackgroundColor: "oklch(100% 0 0 / 0.96)",
   rulerBorderColor: "oklch(96.7% 0.001 286.375)",
   rulerTextColor: "oklch(70.5% 0.015 286.067)",
   rulerTickColor: "oklch(92% 0.004 286.32)",
