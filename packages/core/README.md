@@ -103,6 +103,8 @@ const canvas = new MarkupCanvas(container, {
 |--------|------|---------|-------------|
 | `enableRulers` | `boolean` | `true` | Show rulers on top and left |
 | `enableGrid` | `boolean` | `false` | Show background grid |
+| `showRulers` | `boolean` | `true` | Initially show rulers (only applies if `enableRulers` is true) |
+| `showGrid` | `boolean` | `false` | Initially show grid (only applies if `enableGrid` is true) |
 | `gridColor` | `string` | `"#e0e0e0"` | Grid line color |
 
 #### Ruler Styling

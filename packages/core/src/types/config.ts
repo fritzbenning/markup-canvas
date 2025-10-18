@@ -37,6 +37,8 @@ export interface MarkupCanvasConfig {
   // Visual elements
   enableRulers?: boolean;
   enableGrid?: boolean;
+  showRulers?: boolean;
+  showGrid?: boolean;
   gridColor?: string;
 
   // Canvas styling

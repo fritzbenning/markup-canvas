@@ -112,6 +112,8 @@ The `MarkupCanvas` component accepts the following props:
 |------|------|---------|-------------|
 | `enableRulers` | `boolean` | `true` | Show rulers on top and left |
 | `enableGrid` | `boolean` | `false` | Show background grid |
+| `showRulers` | `boolean` | `true` | Initially show rulers (only applies if `enableRulers` is true) |
+| `showGrid` | `boolean` | `false` | Initially show grid (only applies if `enableGrid` is true) |
 | `gridColor` | `string` | `"#e0e0e0"` | Grid line color |
 
 **Ruler Styling**
@@ -294,8 +296,18 @@ The `useMarkupCanvas` hook returns an object with the following properties and m
 | `themeMode` | `"light" \| "dark"` | Current theme mode |
 | `updateThemeMode` | `(mode: "light" \| "dark") => void` | Update theme mode |
 | `toggleThemeMode` | `() => "light" \| "dark"` | Toggle between themes |
-
-## License
+| `toggleRulers` | `() => void` | Toggle rulers visibility |
+| `showRulers` | `() => void` | Show rulers |
+| `hideRulers` | `() => void` | Hide rulers |
+| `areRulersVisible` | `() => boolean` | Check if rulers are visible |
+| `showRulersState` | `boolean` | Current rulers visibility state |
+| `toggleGrid` | `() => void` | Toggle grid visibility |
+| `showGrid` | `() => void` | Show grid |
+| `hideGrid` | `() => void` | Hide grid |
+| `isGridVisible` | `() => boolean` | Check if grid is visible |
+| `showGridState` | `boolean` | Current grid visibility state |
+  
+  ## License
 
 **CC BY-NC 4.0** - Creative Commons Attribution-NonCommercial 4.0 International
 

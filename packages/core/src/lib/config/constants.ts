@@ -39,6 +39,8 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   // Visual elements
   enableRulers: true,
   enableGrid: false,
+  showRulers: true,
+  showGrid: false,
   rulerFontSize: 9,
   rulerFontFamily: "Monaco, Menlo, monospace",
   rulerUnits: "px",

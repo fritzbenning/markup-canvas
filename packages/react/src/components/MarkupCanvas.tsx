@@ -41,6 +41,14 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
         getTransform: () => canvasInstance?.transform || { scale: 1, translateX: 0, translateY: 0 },
         getZoom: () => canvasInstance?.transform?.scale || 1,
         updateThemeMode: (mode: "light" | "dark") => canvasInstance?.updateThemeMode(mode),
+        toggleRulers: () => canvasInstance?.toggleRulers(),
+        showRulers: () => canvasInstance?.showRulers(),
+        hideRulers: () => canvasInstance?.hideRulers(),
+        areRulersVisible: () => canvasInstance?.areRulersVisible() ?? false,
+        toggleGrid: () => canvasInstance?.toggleGrid(),
+        showGrid: () => canvasInstance?.showGrid(),
+        hideGrid: () => canvasInstance?.hideGrid(),
+        isGridVisible: () => canvasInstance?.isGridVisible() ?? false,
       }),
       [canvasInstance]
     );

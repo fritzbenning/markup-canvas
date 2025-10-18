@@ -26,6 +26,15 @@ export function createRulers(canvas: Canvas, config: Required<MarkupCanvasConfig
 
     safeUpdate();
 
+    if (!config.showRulers) {
+      elements.horizontalRuler.style.display = "none";
+      elements.verticalRuler.style.display = "none";
+      elements.cornerBox.style.display = "none";
+    }
+    if (!config.showGrid && elements.gridOverlay) {
+      elements.gridOverlay.style.display = "none";
+    }
+
     return {
       horizontalRuler: elements.horizontalRuler,
       verticalRuler: elements.verticalRuler,
