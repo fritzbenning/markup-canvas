@@ -34,24 +34,20 @@ function WindowExample() {
 
   const handleMessage = useCallback((event: MessageEvent) => {
     if (event.data.source === "markup-canvas" && event.data.canvasName === "canvas") {
-      // Listen specifically for zoom events
       if (event.data.event === "zoom") {
         const zoomValue = event.data.data;
         console.log("Current zoom value:", zoomValue);
-        // Use the zoom value here
       }
     }
   }, []);
 
   useEffect(() => {
-    window.addEventListener("message", (event) => {
-      handleMessage(event);
-    });
+    window.addEventListener("message", handleMessage);
 
     return () => {
       window.removeEventListener("message", handleMessage);
     };
-  }, []);
+  }, [handleMessage]);
 
   return (
     <main className="app">
