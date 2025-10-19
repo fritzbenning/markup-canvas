@@ -15,7 +15,7 @@ Using the `useMarkupCanvas` hook with a direct ref to the canvas component.
 - Direct ref access patterns
 - Simpler component hierarchies
 
-**URL:** `http://localhost:5173/#/`
+**URL:** `http://localhost:3001/#/`
 
 ### 2. **Window Example** (`/window`)
 Using the `useMarkupCanvasWindow` hook to access a globally-bound canvas instance.
@@ -26,7 +26,7 @@ Using the `useMarkupCanvasWindow` hook to access a globally-bound canvas instanc
 - Cross-component communication patterns
 - Window-based event handling
 
-**URL:** `http://localhost:5173/#/window`
+**URL:** `http://localhost:3001/#/window`
 
 **How it works:**
 - Canvas is initialized with `bindToWindow={true}` and a specific `name` prop
@@ -61,7 +61,7 @@ cd packages/examples-react
 pnpm dev
 ```
 
-The app will open at `http://localhost:5173` with navigation between examples.
+The app will open at `http://localhost:3001` with navigation between examples.
 
 ## Features
 

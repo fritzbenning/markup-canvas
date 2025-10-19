@@ -234,7 +234,15 @@ export class MarkupCanvas implements Canvas {
   }
 
   setZoom(zoomLevel: number): boolean {
-    return this.baseCanvas.setZoom(zoomLevel);
+    return withTransition(this.transformLayer, this.config, () => {
+      return withClampedZoom(this.config, (clamp) => {
+        const newScale = clamp(zoomLevel);
+        const newTransform: Partial<Transform> = {
+          scale: newScale,
+        };
+        return this.updateTransform(newTransform);
+      });
+    });
   }
 
   canvasToContent(x: number, y: number): { x: number; y: number } {
