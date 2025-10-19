@@ -55,8 +55,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const instance = (window as any)[canvasName] as MarkupCanvas | undefined;
+    const instance = (window as unknown as Record<string, unknown>)[canvasName] as MarkupCanvas | undefined;
     if (instance && typeof instance === "object") {
       handleCanvasInstance(instance);
       optionsRef.current.onCanvasReady?.(instance);
@@ -85,7 +84,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
     } else {
       optionsRef.current.onCanvasUnavailable?.();
     }
-  }, [canvasName, handleCanvasInstance]);
+  }, [canvasName]);
 
   // Set up event listeners on canvas instance
   useEffect(() => {
