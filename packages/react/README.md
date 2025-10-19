@@ -75,6 +75,8 @@ The `MarkupCanvas` component accepts the following props:
 | `enableTouch` | `boolean` | `true` | Enable touch gestures |
 | `enableKeyboard` | `boolean` | `true` | Enable keyboard controls |
 | `limitKeyboardEventsToCanvas` | `boolean` | `true` | Limit keyboard events to when canvas is focused |
+| `bindToWindow` | `boolean` | `false` | Bind canvas instance to window for cross-iframe communication |
+| `enablePostMessageAPI` | `boolean` | `false` | Enable postMessage API for controlling canvas from outside iframe |
 
 **Zoom Behavior**
 

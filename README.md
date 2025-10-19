@@ -82,6 +82,90 @@ function App() {
 - 📦 **TypeScript**: Full TypeScript support with comprehensive types
 - 🎪 **Framework Agnostic**: Core library works with any framework
 
+## 🌐 PostMessage API - Control Canvas from Outside Iframe
+
+Control the MarkupCanvas from a parent window or external application using the PostMessage API. Perfect for Sandpack sandboxes, iframes, or any cross-origin communication.
+
+### Configuration
+
+```tsx
+<MarkupCanvas
+  bindToWindow={true}        // Required: binds canvas to window
+  enablePostMessageAPI={true} // Enable postMessage listeners
+  name="canvas"              // Canvas instance name
+/>
+```
+
+### Use Case: Sandpack Integration
+
+Control a MarkupCanvas inside a Sandpack iframe from your documentation or parent application:
+
+```javascript
+// From parent window/application
+const iframe = document.querySelector('iframe');
+
+// Send commands to the canvas inside the iframe
+iframe.contentWindow.postMessage({
+  source: "markup-canvas",
+  canvasName: "canvas",
+  action: "zoomIn",
+  args: [0.1]
+}, "*");
+```
+
+### Available Actions
+
+**View Methods:**
+- `zoomIn` - Relative zoom increase
+- `zoomOut` - Relative zoom decrease
+- `setZoom` - Set absolute zoom level
+- `resetZoom` - Reset to 100%
+- `panLeft`, `panRight`, `panUp`, `panDown` - Pan in directions
+- `fitToScreen` - Fit content to viewport
+- `centerContent` - Center content
+- `scrollToPoint` - Pan to specific coordinates
+
+**Ruler & Grid:**
+- `toggleRulers`, `showRulers`, `hideRulers`
+- `toggleGrid`, `showGrid`, `hideGrid`
+
+**Configuration:**
+- `updateThemeMode` - Change theme (light/dark)
+- `toggleThemeMode` - Toggle theme
+
+### Examples
+
+```javascript
+// Set zoom to 2x (200%)
+iframe.contentWindow.postMessage({
+  source: "markup-canvas",
+  canvasName: "canvas",
+  action: "setZoom",
+  args: [2.0]
+}, "*");
+
+// Toggle dark mode
+iframe.contentWindow.postMessage({
+  source: "markup-canvas",
+  canvasName: "canvas",
+  action: "toggleThemeMode"
+}, "*");
+
+// Show rulers
+iframe.contentWindow.postMessage({
+  source: "markup-canvas",
+  canvasName: "canvas",
+  action: "showRulers"
+}, "*");
+
+// Error handling
+window.addEventListener("message", (event) => {
+  if (event.data.source === "markup-canvas-error") {
+    console.error(`Action failed: ${event.data.action}`, event.data.error);
+  }
+});
+```
+
 ## 🛠️ Development
 
 This project uses [Turborepo](https://turbo.build/repo) for monorepo management and [pnpm](https://pnpm.io/) for package management.

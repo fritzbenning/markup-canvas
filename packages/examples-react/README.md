@@ -110,6 +110,83 @@ Both examples demonstrate:
 </Root>
 ```
 
+## PostMessage API - Control Canvas from Outside Iframe
+
+The PostMessage API allows you to control a MarkupCanvas inside an iframe from a parent window or external application.
+
+### Configuration
+
+Enable the PostMessage API in your MarkupCanvas:
+
+```tsx
+<MarkupCanvas
+  width={20000}
+  height={15000}
+  name="canvas"
+  bindToWindow={true}        // Required: binds canvas to window
+  enablePostMessageAPI={true} // Enable postMessage listeners
+>
+  <Content />
+</MarkupCanvas>
+```
+
+### Send Commands from Parent
+
+```javascript
+// Get reference to the iframe (e.g., in Sandpack or embedded app)
+const iframe = document.querySelector('iframe');
+
+// Zoom to 2x (200%)
+iframe.contentWindow.postMessage({
+  source: "markup-canvas",
+  canvasName: "canvas",
+  action: "setZoom",
+  args: [2.0]
+}, "*");
+
+// Toggle dark mode
+iframe.contentWindow.postMessage({
+  source: "markup-canvas",
+  canvasName: "canvas",
+  action: "toggleThemeMode"
+}, "*");
+```
+
+### Available Actions
+
+**View Control:**
+- `zoomIn(factor?)` - Zoom in by factor (default 0.1)
+- `zoomOut(factor?)` - Zoom out by factor (default 0.1)
+- `setZoom(level)` - Set zoom to specific level
+- `resetZoom()` - Reset to 100%
+- `panLeft(distance?)`, `panRight(distance?)`, `panUp(distance?)`, `panDown(distance?)` - Pan operations
+- `fitToScreen()` - Fit content to viewport
+- `centerContent()` - Center content
+- `scrollToPoint(x, y)` - Pan to specific coordinates
+
+**Rulers & Grid:**
+- `toggleRulers()`, `showRulers()`, `hideRulers()`
+- `toggleGrid()`, `showGrid()`, `hideGrid()`
+
+**Theme:**
+- `updateThemeMode(mode)` - Set theme ("light" or "dark")
+- `toggleThemeMode()` - Toggle between themes
+
+### Error Handling
+
+Listen for errors when PostMessage actions fail:
+
+```javascript
+window.addEventListener("message", (event) => {
+  if (event.data.source === "markup-canvas-error") {
+    console.error(
+      `Canvas action failed: ${event.data.action}`,
+      event.data.error
+    );
+  }
+});
+```
+
 ## Learn More
 
 Check out the [main documentation](../../README.md) for more details on using MarkupCanvas.
