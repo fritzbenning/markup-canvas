@@ -6,6 +6,10 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   height: 4000,
   enableAcceleration: true,
 
+  // Global Binding & Instance Access
+  bindToWindow: true,
+  name: "canvas",
+
   // Interaction controls
   enableZoom: true,
   enablePan: true,
@@ -67,10 +71,6 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
 
   // Theme
   themeMode: "light",
-
-  // Global Binding & Instance Access
-  bindToWindow: false,
-  name: "markupCanvas",
 
   // Callbacks
   onTransformUpdate: () => {},
