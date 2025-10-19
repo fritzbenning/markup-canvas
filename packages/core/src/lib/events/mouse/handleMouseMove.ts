@@ -1,12 +1,14 @@
 import { CLICK_THRESHOLDS } from "@/lib/events/constants.js";
 import { withRAFThrottle } from "@/lib/helpers/index.js";
-import type { Canvas, Transform } from "@/types/index.js";
+import type { Canvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
 
 export function handleMouseMove(
   event: MouseEvent,
   canvas: Canvas,
+  config: Required<MarkupCanvasConfig>,
   isDragEnabled: boolean,
   isDragging: boolean,
+  isSpacePressed: boolean,
   mouseDownTime: number,
   mouseDownX: number,
   mouseDownY: number,
@@ -25,7 +27,10 @@ export function handleMouseMove(
     if (deltaX > CLICK_THRESHOLDS.MAX_MOVEMENT || deltaY > CLICK_THRESHOLDS.MAX_MOVEMENT) {
       setters.setHasDragged(true);
 
-      if (!isDragging && isDragEnabled) {
+      // Check if drag is allowed based on configuration
+      const canDrag = config.requireSpaceForMouseDrag ? isSpacePressed : true;
+
+      if (!isDragging && isDragEnabled && canDrag) {
         setters.setIsDragging(true);
       }
     }

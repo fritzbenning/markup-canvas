@@ -81,12 +81,25 @@ export function setupMouseEvents(
   };
 
   const mouseMoveHandler = (event: MouseEvent) => {
-    handleMouseMove(event, canvas, isDragEnabled, isDragging, mouseDownTime, mouseDownX, mouseDownY, lastMouseX, lastMouseY, {
-      setHasDragged: setters.setHasDragged,
-      setIsDragging: setters.setIsDragging,
-      setLastMouseX: setters.setLastMouseX,
-      setLastMouseY: setters.setLastMouseY,
-    });
+    handleMouseMove(
+      event,
+      canvas,
+      config,
+      isDragEnabled,
+      isDragging,
+      isSpacePressed,
+      mouseDownTime,
+      mouseDownX,
+      mouseDownY,
+      lastMouseX,
+      lastMouseY,
+      {
+        setHasDragged: setters.setHasDragged,
+        setIsDragging: setters.setIsDragging,
+        setLastMouseX: setters.setLastMouseX,
+        setLastMouseY: setters.setLastMouseY,
+      }
+    );
   };
 
   const mouseUpHandler = (event: MouseEvent) => {
