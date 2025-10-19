@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 function incrementVersion(version, type) {
   const [major, minor, patch] = version.split(".").map(Number);
@@ -19,7 +19,7 @@ function incrementVersion(version, type) {
 function updatePackageJson(filePath, newVersion) {
   const content = JSON.parse(fs.readFileSync(filePath, "utf8"));
   content.version = newVersion;
-  fs.writeFileSync(filePath, JSON.stringify(content, null, 2) + "\n");
+  fs.writeFileSync(filePath, `${JSON.stringify(content, null, 2)}\n`);
 }
 
 const versionType = process.argv[2] || "patch";
