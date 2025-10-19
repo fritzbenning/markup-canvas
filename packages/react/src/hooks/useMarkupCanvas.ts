@@ -69,19 +69,13 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
     };
   }, [instance, handleTransform, handleZoom, handlePan, handleReady]);
 
-  const zoomIn = useCallback(
-    (factor = 0.5) => {
-      canvasRef.current?.zoomIn(factor);
-    },
-    [canvasRef]
-  );
+  const zoomIn = useCallback(() => {
+    canvasRef.current?.zoomIn();
+  }, [canvasRef]);
 
-  const zoomOut = useCallback(
-    (factor = 0.5) => {
-      canvasRef.current?.zoomOut(factor);
-    },
-    [canvasRef]
-  );
+  const zoomOut = useCallback(() => {
+    canvasRef.current?.zoomOut();
+  }, [canvasRef]);
 
   const resetZoom = useCallback(() => {
     canvasRef.current?.resetZoom();

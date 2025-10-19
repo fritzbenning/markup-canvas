@@ -1,51 +1,30 @@
 import { getAdaptiveZoomSpeed } from "@/lib/events/utils/getAdaptiveZoomSpeed.js";
-import { withRulerOffsets } from "@/lib/helpers/index.js";
-import { clampZoom } from "@/lib/matrix/clampZoom.js";
-import { getZoomToMouseTransform } from "@/lib/matrix/getZoomToMouseTransform.js";
 import type { Canvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
 
 export function setupKeyboardEvents(canvas: Canvas, config: Required<MarkupCanvasConfig>): () => void {
-  // Track mouse position
-  let lastMouseX = 0;
-  let lastMouseY = 0;
-
-  function handleMouseMove(event: MouseEvent): void {
-    const rect = canvas.container.getBoundingClientRect();
-    const rawMouseX = event.clientX - rect.left;
-    const rawMouseY = event.clientY - rect.top;
-
-    withRulerOffsets(canvas, config.rulerSize, rawMouseX, rawMouseY, (adjustedX, adjustedY) => {
-      lastMouseX = adjustedX;
-      lastMouseY = adjustedY;
-    });
-  }
-
   function handleKeyDown(event: Event): void {
     if (!(event instanceof KeyboardEvent)) return;
 
     if (config.bindKeyboardEventsTo === "canvas" && document.activeElement !== canvas.container) return;
-
-    const isFastPan = event.shiftKey;
-    const panDistance = config.keyboardPanStep * (isFastPan ? config.keyboardFastMultiplier : 1);
 
     let handled = false;
     const newTransform: Partial<Transform> = {};
 
     switch (event.key) {
       case "ArrowLeft":
-        newTransform.translateX = canvas.transform.translateX + panDistance;
+        newTransform.translateX = canvas.transform.translateX + config.keyboardPanStep;
         handled = true;
         break;
       case "ArrowRight":
-        newTransform.translateX = canvas.transform.translateX - panDistance;
+        newTransform.translateX = canvas.transform.translateX - config.keyboardPanStep;
         handled = true;
         break;
       case "ArrowUp":
-        newTransform.translateY = canvas.transform.translateY + panDistance;
+        newTransform.translateY = canvas.transform.translateY + config.keyboardPanStep;
         handled = true;
         break;
       case "ArrowDown":
-        newTransform.translateY = canvas.transform.translateY - panDistance;
+        newTransform.translateY = canvas.transform.translateY - config.keyboardPanStep;
         handled = true;
         break;
       case "=":
@@ -54,7 +33,7 @@ export function setupKeyboardEvents(canvas: Canvas, config: Required<MarkupCanva
           const adaptiveZoomStep = config.enableAdaptiveSpeed
             ? getAdaptiveZoomSpeed(canvas, config.keyboardZoomStep)
             : config.keyboardZoomStep;
-          newTransform.scale = clampZoom(canvas.transform.scale * (1 + adaptiveZoomStep), config);
+          canvas.zoomIn(adaptiveZoomStep);
           handled = true;
         }
         break;
@@ -63,18 +42,20 @@ export function setupKeyboardEvents(canvas: Canvas, config: Required<MarkupCanva
           const adaptiveZoomStep = config.enableAdaptiveSpeed
             ? getAdaptiveZoomSpeed(canvas, config.keyboardZoomStep)
             : config.keyboardZoomStep;
-          newTransform.scale = clampZoom(canvas.transform.scale * (1 - adaptiveZoomStep), config);
+          canvas.zoomOut(adaptiveZoomStep);
           handled = true;
         }
         break;
       case "0":
-        if (event.metaKey || event.ctrlKey) {
-          const targetScale = 1.0;
-          const zoomFactor = targetScale / canvas.transform.scale;
-
-          const zoomTransform = getZoomToMouseTransform(lastMouseX, lastMouseY, canvas.transform, zoomFactor, config);
-
-          Object.assign(newTransform, zoomTransform);
+        if (event.ctrlKey) {
+          if (canvas.resetView) {
+            canvas.resetView();
+          }
+          handled = true;
+        } else if (event.metaKey || event.ctrlKey) {
+          if (canvas.resetViewToCenter) {
+            canvas.resetViewToCenter();
+          }
           handled = true;
         }
         break;
@@ -105,10 +86,8 @@ export function setupKeyboardEvents(canvas: Canvas, config: Required<MarkupCanva
   const keyboardTarget = config.bindKeyboardEventsTo === "canvas" ? canvas.container : document;
 
   keyboardTarget.addEventListener("keydown", handleKeyDown);
-  canvas.container.addEventListener("mousemove", handleMouseMove);
 
   return () => {
     keyboardTarget.removeEventListener("keydown", handleKeyDown);
-    canvas.container.removeEventListener("mousemove", handleMouseMove);
   };
 }

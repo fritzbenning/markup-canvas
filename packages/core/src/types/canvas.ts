@@ -66,6 +66,7 @@ export interface Canvas extends BaseCanvas {
   zoomIn: (factor?: number) => boolean;
   zoomOut: (factor?: number) => boolean;
   resetZoom: (duration?: number) => boolean;
+  resetViewToCenter: () => boolean;
   // Mouse drag control functions
   enableMouseDrag: () => boolean;
   disableMouseDrag: () => boolean;

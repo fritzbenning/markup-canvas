@@ -32,8 +32,8 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
       ref,
       () => ({
         canvas: canvasInstance,
-        zoomIn: (factor = 0.1) => canvasInstance?.zoomIn(factor),
-        zoomOut: (factor = 0.1) => canvasInstance?.zoomOut(factor),
+        zoomIn: () => canvasInstance?.zoomIn(),
+        zoomOut: () => canvasInstance?.zoomOut(),
         resetZoom: () => canvasInstance?.resetZoom(),
         panTo: (x, y) => canvasInstance?.scrollToPoint(x, y),
         fitToContent: () => canvasInstance?.fitToScreen(),

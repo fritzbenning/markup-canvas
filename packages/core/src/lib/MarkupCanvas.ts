@@ -2,6 +2,7 @@ import { createCanvas } from "@/lib/canvas/index.js";
 import { createMarkupCanvasConfig } from "@/lib/config/createMarkupCanvasConfig.js";
 import { EventEmitter } from "@/lib/events/EventEmitter.js";
 import { setupKeyboardEvents, setupMouseEvents, setupPostMessageEvents, setupTouchEvents, setupWheelEvents } from "@/lib/events/index.js";
+import { getViewportCenter } from "@/lib/events/utils/getViewportCenter.js";
 import { getThemeValue, withClampedZoom, withFeatureEnabled } from "@/lib/helpers/index.js";
 import { createRulers } from "@/lib/rulers/index.js";
 import { withTransition } from "@/lib/transition/withTransition.js";
@@ -260,12 +261,25 @@ export class MarkupCanvas implements Canvas {
   }
 
   resetView(): boolean {
+    const result = this.baseCanvas.resetView ? this.baseCanvas.resetView() : false;
+    if (result) {
+      this.emitTransformEvents();
+    }
+    return result;
+  }
+
+  resetViewToCenter(): boolean {
     return withTransition(this.transformLayer, this.config, () => {
-      const result = this.baseCanvas.resetView ? this.baseCanvas.resetView() : false;
-      if (result) {
-        this.emitTransformEvents();
-      }
-      return result;
+      return withClampedZoom(this.config, (clamp) => {
+        const newScale = clamp(1.0);
+
+        const center = getViewportCenter(this);
+        const result = this.zoomToPoint(center.x, center.y, newScale);
+        if (result) {
+          this.emitTransformEvents();
+        }
+        return result;
+      });
     });
   }
 
@@ -313,32 +327,32 @@ export class MarkupCanvas implements Canvas {
   }
 
   // Zoom methods
-  zoomIn(factor: number = 0.1): boolean {
+  zoomIn(factor: number = 0.5): boolean {
     return withTransition(this.transformLayer, this.config, () => {
       return withClampedZoom(this.config, (clamp) => {
         const newScale = clamp(this.baseCanvas.transform.scale * (1 + factor));
-        const newTransform: Partial<Transform> = {
-          scale: newScale,
-        };
-        return this.updateTransform(newTransform);
+
+        // Get the center of the viewport
+        const center = getViewportCenter(this);
+        return this.zoomToPoint(center.x, center.y, newScale);
       });
     });
   }
 
-  zoomOut(factor: number = 0.1): boolean {
+  zoomOut(factor: number = 0.5): boolean {
     return withTransition(this.transformLayer, this.config, () => {
       return withClampedZoom(this.config, (clamp) => {
         const newScale = clamp(this.baseCanvas.transform.scale * (1 - factor));
-        const newTransform: Partial<Transform> = {
-          scale: newScale,
-        };
-        return this.updateTransform(newTransform);
+
+        // Get the center of the viewport
+        const center = getViewportCenter(this);
+        return this.zoomToPoint(center.x, center.y, newScale);
       });
     });
   }
 
   resetZoom(): boolean {
-    return this.resetView();
+    return this.resetViewToCenter();
   }
 
   // Mouse drag control methods
