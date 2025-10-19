@@ -9,6 +9,7 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   // Global Binding & Instance Access
   bindToWindow: true,
   name: "canvas",
+  enablePostMessageAPI: true,
 
   // Interaction controls
   enableZoom: true,

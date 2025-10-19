@@ -59,6 +59,7 @@ function WindowExample() {
         height={15000}
         name="canvas"
         bindToWindow={true}
+        enablePostMessageAPI={true}
         enableKeyboard={true}
         requireSpaceForMouseDrag={false}
         requireOptionForClickZoom={false}

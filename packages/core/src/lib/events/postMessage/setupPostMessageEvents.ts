@@ -1,0 +1,90 @@
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
+import type { PostMessageAction, PostMessageRequest } from "@/types/events";
+import { sendPostMessageError } from "./sendError";
+
+export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
+  const handleMessage = (event: MessageEvent): void => {
+    const data = event.data as PostMessageRequest;
+
+    // Validate message structure
+    if (data.source !== "markup-canvas") {
+      return;
+    }
+
+    const canvasName = canvas.config.name || "markupCanvas";
+    if (data.canvasName !== canvasName) {
+      return;
+    }
+
+    const action = data.action as PostMessageAction;
+    const args = data.args || [];
+
+    try {
+      // View methods
+      if (action === "zoomIn") {
+        canvas.zoomIn(args[0] as number | undefined);
+      } else if (action === "zoomOut") {
+        canvas.zoomOut(args[0] as number | undefined);
+      } else if (action === "resetZoom") {
+        canvas.resetZoom();
+      } else if (action === "panLeft") {
+        canvas.panLeft(args[0] as number | undefined);
+      } else if (action === "panRight") {
+        canvas.panRight(args[0] as number | undefined);
+      } else if (action === "panUp") {
+        canvas.panUp(args[0] as number | undefined);
+      } else if (action === "panDown") {
+        canvas.panDown(args[0] as number | undefined);
+      } else if (action === "fitToScreen") {
+        canvas.fitToScreen();
+      } else if (action === "centerContent") {
+        canvas.centerContent();
+      } else if (action === "scrollToPoint") {
+        canvas.scrollToPoint(args[0] as number, args[1] as number);
+      } else if (action === "resetView") {
+        canvas.resetView();
+      }
+      // Ruler/Grid methods
+      else if (action === "toggleRulers") {
+        canvas.toggleRulers();
+      } else if (action === "showRulers") {
+        canvas.showRulers();
+      } else if (action === "hideRulers") {
+        canvas.hideRulers();
+      } else if (action === "toggleGrid") {
+        canvas.toggleGrid();
+      } else if (action === "showGrid") {
+        canvas.showGrid();
+      } else if (action === "hideGrid") {
+        canvas.hideGrid();
+      }
+      // Config methods
+      else if (action === "updateThemeMode") {
+        const mode = args[0] as "light" | "dark";
+        if (mode !== "light" && mode !== "dark") {
+          throw new Error(`Invalid theme mode: ${mode}`);
+        }
+        canvas.updateThemeMode(mode);
+      } else if (action === "toggleThemeMode") {
+        const currentConfig = canvas.getConfig();
+        const newMode = currentConfig.themeMode === "light" ? "dark" : "light";
+        canvas.updateThemeMode(newMode);
+      } else {
+        throw new Error(`Unknown action: ${action}`);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      sendPostMessageError(canvasName, action, errorMessage);
+    }
+  };
+
+  if (typeof window !== "undefined") {
+    window.addEventListener("message", handleMessage);
+  }
+
+  return () => {
+    if (typeof window !== "undefined") {
+      window.removeEventListener("message", handleMessage);
+    }
+  };
+}

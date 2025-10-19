@@ -29,3 +29,31 @@ export interface MouseDragControls {
   disable: () => boolean;
   isEnabled: () => boolean;
 }
+
+export type PostMessageAction =
+  | "zoomIn"
+  | "zoomOut"
+  | "resetZoom"
+  | "panLeft"
+  | "panRight"
+  | "panUp"
+  | "panDown"
+  | "fitToScreen"
+  | "centerContent"
+  | "scrollToPoint"
+  | "resetView"
+  | "toggleRulers"
+  | "showRulers"
+  | "hideRulers"
+  | "toggleGrid"
+  | "showGrid"
+  | "hideGrid"
+  | "updateThemeMode"
+  | "toggleThemeMode";
+
+export interface PostMessageRequest {
+  source: "markup-canvas";
+  canvasName: string;
+  action: PostMessageAction;
+  args?: unknown[];
+}

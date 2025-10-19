@@ -10,6 +10,9 @@ export interface MarkupCanvasConfig {
   bindToWindow?: boolean;
   name?: string;
 
+  // Post Message API
+  enablePostMessageAPI?: boolean;
+
   // Interaction controls
   enableZoom?: boolean;
   enablePan?: boolean;

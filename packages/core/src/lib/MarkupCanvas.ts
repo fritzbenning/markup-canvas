@@ -1,7 +1,7 @@
 import { createCanvas } from "@/lib/canvas/index.js";
 import { createMarkupCanvasConfig } from "@/lib/config/createMarkupCanvasConfig.js";
 import { EventEmitter } from "@/lib/events/EventEmitter.js";
-import { setupKeyboardEvents, setupMouseEvents, setupTouchEvents, setupWheelEvents } from "@/lib/events/index.js";
+import { setupKeyboardEvents, setupMouseEvents, setupPostMessageEvents, setupTouchEvents, setupWheelEvents } from "@/lib/events/index.js";
 import { getThemeValue, withClampedZoom, withFeatureEnabled } from "@/lib/helpers/index.js";
 import { createRulers } from "@/lib/rulers/index.js";
 import { withTransition } from "@/lib/transition/withTransition.js";
@@ -29,6 +29,7 @@ export class MarkupCanvas implements Canvas {
   public config: Required<MarkupCanvasConfig>;
   private _isReady = false;
   private listen = new EventEmitter<MarkupCanvasEvents>();
+  private postMessageCleanup: (() => void) | null = null;
 
   constructor(container: HTMLElement, options: MarkupCanvasConfig = {}) {
     if (!container) {
@@ -50,6 +51,11 @@ export class MarkupCanvas implements Canvas {
         this.broadcastEvent(event as string, data);
       });
       this.setupGlobalBinding();
+
+      // Set up postMessage listener
+      if (this.config.enablePostMessageAPI) {
+        this.postMessageCleanup = setupPostMessageEvents(this);
+      }
     }
 
     this.setupEventHandlers();
@@ -482,6 +488,13 @@ export class MarkupCanvas implements Canvas {
   // Cleanup method
   cleanup(): void {
     this.cleanupGlobalBinding();
+
+    // Cleanup postMessage listener
+    if (this.postMessageCleanup) {
+      this.postMessageCleanup();
+      this.postMessageCleanup = null;
+    }
+
     this.cleanupFunctions.forEach((cleanup) => {
       try {
         cleanup();
