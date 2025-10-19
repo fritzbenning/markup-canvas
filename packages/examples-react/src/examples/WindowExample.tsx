@@ -1,6 +1,7 @@
 import { MarkupCanvas, useMarkupCanvasWindow } from "@markup-canvas/react";
 import { Moon, Sun, ZoomIn, ZoomOut } from "lucide-react";
 import "../App.css";
+import { useCallback, useEffect } from "react";
 import { Button } from "../components/Button";
 import { Content } from "../components/Content";
 import { Controls } from "../components/Controls";
@@ -30,6 +31,27 @@ function WindowExample() {
       console.warn("⚠️ Canvas not found on window");
     },
   });
+
+  const handleMessage = useCallback((event: MessageEvent) => {
+    if (event.data.source === "markup-canvas" && event.data.canvasName === "canvas") {
+      // Listen specifically for zoom events
+      if (event.data.event === "zoom") {
+        const zoomValue = event.data.data;
+        console.log("Current zoom value:", zoomValue);
+        // Use the zoom value here
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("message", (event) => {
+      handleMessage(event);
+    });
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
 
   return (
     <main className="app">
