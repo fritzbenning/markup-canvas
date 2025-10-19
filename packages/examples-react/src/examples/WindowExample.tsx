@@ -22,7 +22,7 @@ function WindowExample() {
     toggleGrid,
     showGridState,
   } = useMarkupCanvasWindow({
-    canvasName: "windowCanvas",
+    canvasName: "canvas",
     onCanvasReady: (canvas) => {
       console.log("✅ Canvas found and bound to window!", canvas);
     },
@@ -57,7 +57,7 @@ function WindowExample() {
       <MarkupCanvas
         width={20000}
         height={15000}
-        name="windowCanvas"
+        name="canvas"
         bindToWindow={true}
         enableKeyboard={true}
         requireSpaceForMouseDrag={false}

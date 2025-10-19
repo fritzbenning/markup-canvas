@@ -1,6 +1,6 @@
 {
   "name": "@markup-canvas/core",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "High-performance canvas-like container with pan and zoom capabilities",
   "type": "module",
   "main": "dist/markup-canvas.cjs.js",

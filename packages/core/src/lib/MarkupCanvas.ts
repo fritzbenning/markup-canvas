@@ -45,6 +45,7 @@ export class MarkupCanvas implements Canvas {
     this.baseCanvas = canvas;
 
     if (this.config.bindToWindow) {
+      console.log("bindToWindow:", "true");
       this.listen.setEmitInterceptor((event, data) => {
         this.broadcastEvent(event as string, data);
       });
@@ -66,8 +67,12 @@ export class MarkupCanvas implements Canvas {
     const canvasName = this.config.name || "markupCanvas";
     const windowObj = window as unknown as Record<string, unknown>;
 
+    console.log(windowObj);
+
     // Bind instance to window
     windowObj[canvasName] = this;
+
+    console.log(windowObj[canvasName]);
 
     // Track all instances
     if (!windowObj.__markupCanvasInstances) {
