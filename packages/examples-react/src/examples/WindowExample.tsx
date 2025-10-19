@@ -1,6 +1,5 @@
-import { MarkupCanvas, type MarkupCanvasRef, useMarkupCanvasWindow } from "@markup-canvas/react";
+import { MarkupCanvas, useMarkupCanvasWindow } from "@markup-canvas/react";
 import { Moon, Sun, ZoomIn, ZoomOut } from "lucide-react";
-import { useRef } from "react";
 import "../App.css";
 import { Button } from "../components/Button";
 import { Content } from "../components/Content";
@@ -8,8 +7,6 @@ import { Controls } from "../components/Controls";
 import { ZoomDisplay } from "../components/ZoomDisplay";
 
 function WindowExample() {
-  const canvasRef = useRef<MarkupCanvasRef>(null);
-
   const {
     zoom,
     zoomIn,
@@ -58,7 +55,6 @@ function WindowExample() {
       </Controls>
       <ZoomDisplay zoom={zoom} />
       <MarkupCanvas
-        ref={canvasRef}
         width={20000}
         height={15000}
         name="windowCanvas"

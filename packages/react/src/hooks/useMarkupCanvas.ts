@@ -3,7 +3,7 @@ import { type RefObject, useCallback, useEffect, useRef, useState } from "react"
 import type { MarkupCanvasRef, UseMarkupCanvasOptions } from "../types/index.js";
 
 export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, options: UseMarkupCanvasOptions = {}) {
-  const [canvasInstance, setCanvasInstance] = useState<MarkupCanvas | null>(null);
+  const [instance, setInstance] = useState<MarkupCanvas | null>(null);
   const [transform, setTransform] = useState<Transform>({ scale: 1, translateX: 0, translateY: 0 });
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -14,7 +14,7 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
   optionsRef.current = options;
 
   const handleCanvasInstance = useCallback((canvas: MarkupCanvas) => {
-    setCanvasInstance(canvas);
+    setInstance(canvas);
     optionsRef.current.onReady?.(canvas);
   }, []);
 
@@ -39,35 +39,35 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
   }, []);
 
   useEffect(() => {
-    console.log("useEffect", canvasInstance);
+    console.log("useEffect", instance);
 
-    if (!canvasInstance) {
+    if (!instance) {
       return;
     }
 
-    canvasInstance.on("transform", handleTransform);
-    canvasInstance.on("zoom", handleZoom);
-    canvasInstance.on("pan", handlePan);
-    canvasInstance.on("ready", handleReady);
+    instance.on("transform", handleTransform);
+    instance.on("zoom", handleZoom);
+    instance.on("pan", handlePan);
+    instance.on("ready", handleReady);
 
-    if (canvasInstance.transform) {
-      setTransform(canvasInstance.transform);
-      setZoom(canvasInstance.transform.scale);
-      setPan({ x: canvasInstance.transform.translateX, y: canvasInstance.transform.translateY });
+    if (instance.transform) {
+      setTransform(instance.transform);
+      setZoom(instance.transform.scale);
+      setPan({ x: instance.transform.translateX, y: instance.transform.translateY });
     }
 
-    if (canvasInstance.isReady) {
+    if (instance.isReady) {
       setIsReady(true);
-      optionsRef.current.onReady?.(canvasInstance);
+      optionsRef.current.onReady?.(instance);
     }
 
     return () => {
-      canvasInstance.off("transform", handleTransform);
-      canvasInstance.off("zoom", handleZoom);
-      canvasInstance.off("pan", handlePan);
-      canvasInstance.off("ready", handleReady);
+      instance.off("transform", handleTransform);
+      instance.off("zoom", handleZoom);
+      instance.off("pan", handlePan);
+      instance.off("ready", handleReady);
     };
-  }, [canvasInstance]);
+  }, [instance, handleTransform, handleZoom, handlePan, handleReady]);
 
   const zoomIn = useCallback(
     (factor = 0.5) => {

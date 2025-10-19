@@ -11,7 +11,7 @@ interface UseMarkupCanvasWindowOptions extends UseMarkupCanvasOptions {
 export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}) {
   const { canvasName = "markupCanvas" } = options;
 
-  const [canvasInstance, setCanvasInstance] = useState<MarkupCanvas | null>(null);
+  const [instance, setInstance] = useState<MarkupCanvas | null>(null);
   const [transform, setTransform] = useState<Transform>({ scale: 1, translateX: 0, translateY: 0 });
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -24,7 +24,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   optionsRef.current = options;
 
   const handleCanvasInstance = useCallback((canvas: MarkupCanvas) => {
-    setCanvasInstance(canvas);
+    setInstance(canvas);
     optionsRef.current.onReady?.(canvas);
   }, []);
 
@@ -55,55 +55,55 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
       return;
     }
 
-    const instance = (window as unknown as Record<string, unknown>)[canvasName] as MarkupCanvas | undefined;
-    if (instance && typeof instance === "object") {
-      handleCanvasInstance(instance);
-      optionsRef.current.onCanvasReady?.(instance);
+    const windowInstance = (window as unknown as Record<string, unknown>)[canvasName] as MarkupCanvas | undefined;
+    if (windowInstance && typeof windowInstance === "object") {
+      handleCanvasInstance(windowInstance);
+      optionsRef.current.onCanvasReady?.(windowInstance);
 
       // Set initial state from instance
-      if (instance.transform) {
-        setTransform(instance.transform);
-        setZoom(instance.transform.scale);
-        setPan({ x: instance.transform.translateX, y: instance.transform.translateY });
+      if (windowInstance.transform) {
+        setTransform(windowInstance.transform);
+        setZoom(windowInstance.transform.scale);
+        setPan({ x: windowInstance.transform.translateX, y: windowInstance.transform.translateY });
       }
 
-      if (instance.isReady) {
+      if (windowInstance.isReady) {
         setIsReady(true);
-        optionsRef.current.onReady?.(instance);
+        optionsRef.current.onReady?.(windowInstance);
       }
 
-      const config = instance.getConfig();
+      const config = windowInstance.getConfig();
       setThemeModeState(config.themeMode || "light");
 
-      if (instance.areRulersVisible?.()) {
+      if (windowInstance.areRulersVisible?.()) {
         setShowRulersState(true);
       }
-      if (instance.isGridVisible?.()) {
+      if (windowInstance.isGridVisible?.()) {
         setShowGridState(true);
       }
     } else {
       optionsRef.current.onCanvasUnavailable?.();
     }
-  }, [canvasName]);
+  }, [canvasName, handleCanvasInstance]);
 
   // Set up event listeners on canvas instance
   useEffect(() => {
-    if (!canvasInstance) {
+    if (!instance) {
       return;
     }
 
-    canvasInstance.on("transform", handleTransform);
-    canvasInstance.on("zoom", handleZoom);
-    canvasInstance.on("pan", handlePan);
-    canvasInstance.on("ready", handleReady);
+    instance.on("transform", handleTransform);
+    instance.on("zoom", handleZoom);
+    instance.on("pan", handlePan);
+    instance.on("ready", handleReady);
 
     return () => {
-      canvasInstance.off("transform", handleTransform);
-      canvasInstance.off("zoom", handleZoom);
-      canvasInstance.off("pan", handlePan);
-      canvasInstance.off("ready", handleReady);
+      instance.off("transform", handleTransform);
+      instance.off("zoom", handleZoom);
+      instance.off("pan", handlePan);
+      instance.off("ready", handleReady);
     };
-  }, [canvasInstance, handleTransform, handleZoom, handlePan, handleReady]);
+  }, [instance, handleTransform, handleZoom, handlePan, handleReady]);
 
   // Listen to window messages for state updates
   useEffect(() => {
@@ -138,85 +138,85 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   // Action methods
   const zoomIn = useCallback(
     (factor = 0.5) => {
-      canvasInstance?.zoomIn(factor);
+      instance?.zoomIn(factor);
     },
-    [canvasInstance]
+    [instance]
   );
 
   const zoomOut = useCallback(
     (factor = 0.5) => {
-      canvasInstance?.zoomOut(factor);
+      instance?.zoomOut(factor);
     },
-    [canvasInstance]
+    [instance]
   );
 
   const resetZoom = useCallback(() => {
-    canvasInstance?.resetZoom();
-  }, [canvasInstance]);
+    instance?.resetZoom();
+  }, [instance]);
 
   const panLeft = useCallback(
     (distance?: number) => {
-      canvasInstance?.panLeft(distance);
+      instance?.panLeft(distance);
     },
-    [canvasInstance]
+    [instance]
   );
 
   const panRight = useCallback(
     (distance?: number) => {
-      canvasInstance?.panRight(distance);
+      instance?.panRight(distance);
     },
-    [canvasInstance]
+    [instance]
   );
 
   const panUp = useCallback(
     (distance?: number) => {
-      canvasInstance?.panUp(distance);
+      instance?.panUp(distance);
     },
-    [canvasInstance]
+    [instance]
   );
 
   const panDown = useCallback(
     (distance?: number) => {
-      canvasInstance?.panDown(distance);
+      instance?.panDown(distance);
     },
-    [canvasInstance]
+    [instance]
   );
 
   const fitToContent = useCallback(() => {
-    canvasInstance?.fitToScreen();
-  }, [canvasInstance]);
+    instance?.fitToScreen();
+  }, [instance]);
 
   const centerContent = useCallback(() => {
-    canvasInstance?.centerContent();
-  }, [canvasInstance]);
+    instance?.centerContent();
+  }, [instance]);
 
   const resetView = useCallback(() => {
-    canvasInstance?.resetView();
-  }, [canvasInstance]);
+    instance?.resetView();
+  }, [instance]);
 
   const setTransitionMode = useCallback(
     (enabled: boolean) => {
-      canvasInstance?.updateConfig({ enableTransition: enabled });
+      instance?.updateConfig({ enableTransition: enabled });
     },
-    [canvasInstance]
+    [instance]
   );
 
   const toggleTransitionMode = useCallback(() => {
-    if (canvasInstance) {
-      const currentConfig = canvasInstance.getConfig();
+    if (instance) {
+      const currentConfig = instance.getConfig();
       const newEnableTransition = !currentConfig.enableTransition;
-      canvasInstance.updateConfig({ enableTransition: newEnableTransition });
+      instance.updateConfig({ enableTransition: newEnableTransition });
       return newEnableTransition;
     }
     return false;
-  }, [canvasInstance]);
+  }, [instance]);
 
   const updateThemeMode = useCallback(
     (mode: "light" | "dark") => {
       setThemeModeState(mode);
-      canvasInstance?.updateThemeMode(mode);
+      instance?.updateThemeMode(mode);
     },
-    [canvasInstance]
+    [instance]
   );
 
   const toggleThemeMode = useCallback(() => {
@@ -226,51 +226,51 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   }, [themeMode, updateThemeMode]);
 
   const showRulers = useCallback(() => {
-    if (canvasInstance?.showRulers?.()) {
+    if (instance?.showRulers?.()) {
       setShowRulersState(true);
     }
-  }, [canvasInstance]);
+  }, [instance]);
 
   const hideRulers = useCallback(() => {
-    if (canvasInstance?.hideRulers?.()) {
+    if (instance?.hideRulers?.()) {
       setShowRulersState(false);
     }
-  }, [canvasInstance]);
+  }, [instance]);
 
   const toggleRulers = useCallback(() => {
-    if (canvasInstance?.toggleRulers?.()) {
+    if (instance?.toggleRulers?.()) {
       setShowRulersState((prev) => !prev);
     }
-  }, [canvasInstance]);
+  }, [instance]);
 
   const areRulersVisible = useCallback(() => {
-    return canvasInstance?.areRulersVisible?.() ?? false;
-  }, [canvasInstance]);
+    return instance?.areRulersVisible?.() ?? false;
+  }, [instance]);
 
   const showGrid = useCallback(() => {
-    if (canvasInstance?.showGrid?.()) {
+    if (instance?.showGrid?.()) {
       setShowGridState(true);
     }
-  }, [canvasInstance]);
+  }, [instance]);
 
   const hideGrid = useCallback(() => {
-    if (canvasInstance?.hideGrid?.()) {
+    if (instance?.hideGrid?.()) {
       setShowGridState(false);
     }
-  }, [canvasInstance]);
+  }, [instance]);
 
   const toggleGrid = useCallback(() => {
-    if (canvasInstance?.toggleGrid?.()) {
+    if (instance?.toggleGrid?.()) {
       setShowGridState((prev) => !prev);
     }
-  }, [canvasInstance]);
+  }, [instance]);
 
   const isGridVisible = useCallback(() => {
-    return canvasInstance?.isGridVisible?.() ?? false;
-  }, [canvasInstance]);
+    return instance?.isGridVisible?.() ?? false;
+  }, [instance]);
 
   return {
-    canvas: canvasInstance,
+    canvas: instance,
     transform,
     zoom,
     pan,
