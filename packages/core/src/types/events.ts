@@ -33,6 +33,7 @@ export interface MouseDragControls {
 export type PostMessageAction =
   | "zoomIn"
   | "zoomOut"
+  | "setZoom"
   | "resetZoom"
   | "panLeft"
   | "panRight"

@@ -25,6 +25,12 @@ export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
         canvas.zoomIn(args[0] as number | undefined);
       } else if (action === "zoomOut") {
         canvas.zoomOut(args[0] as number | undefined);
+      } else if (action === "setZoom") {
+        const zoomLevel = args[0] as number;
+        if (typeof zoomLevel !== "number" || zoomLevel <= 0) {
+          throw new Error(`Invalid zoom level: ${zoomLevel}. Must be a positive number.`);
+        }
+        canvas.setZoom(zoomLevel);
       } else if (action === "resetZoom") {
         canvas.resetZoom();
       } else if (action === "panLeft") {
