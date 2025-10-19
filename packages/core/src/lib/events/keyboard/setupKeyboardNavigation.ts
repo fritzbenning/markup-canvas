@@ -81,14 +81,14 @@ export function setupKeyboardEvents(canvas: Canvas, config: Required<MarkupCanva
         break;
       case "g":
       case "G":
-        if (canvas.toggleGrid) {
+        if (event.shiftKey && canvas.toggleGrid) {
           canvas.toggleGrid();
         }
-        handled = true;
+        handled = event.shiftKey;
         break;
       case "r":
       case "R":
-        if (!event.metaKey && !event.ctrlKey && !event.altKey && canvas.toggleRulers) {
+        if (event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey && canvas.toggleRulers) {
           canvas.toggleRulers();
           handled = true;
         }
