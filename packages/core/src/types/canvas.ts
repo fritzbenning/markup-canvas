@@ -11,7 +11,6 @@ export interface CanvasOptions {
   height?: number;
   enableAcceleration?: boolean;
   enableEventHandling?: boolean;
-  onTransformUpdate?: (transform: Transform) => void;
 }
 
 export interface CanvasBounds {

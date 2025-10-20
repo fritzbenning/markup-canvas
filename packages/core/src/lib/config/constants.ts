@@ -71,7 +71,4 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
 
   // Theme
   themeMode: "light",
-
-  // Callbacks
-  onTransformUpdate: () => {},
 };

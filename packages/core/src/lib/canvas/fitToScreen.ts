@@ -18,7 +18,7 @@ export function fitToScreen(baseCanvas: BaseCanvas, transformLayer: HTMLElement,
     const centerX = (bounds.width - scaledWidth) / 2;
     const centerY = (bounds.height - scaledHeight) / 2;
 
-    return updateTransform(baseCanvas, config, {
+    return updateTransform(baseCanvas, {
       scale: fitScale,
       translateX: centerX,
       translateY: centerY,

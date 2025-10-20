@@ -72,7 +72,4 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
 
   // Theme
   themeMode: "light",
-
-  // Callbacks
-  onTransformUpdate: () => {},
 };

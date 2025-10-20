@@ -71,7 +71,4 @@ export interface MarkupCanvasConfig {
 
   // Theme
   themeMode?: "light" | "dark";
-
-  // Callbacks
-  onTransformUpdate?: (transform: Transform) => void;
 }
