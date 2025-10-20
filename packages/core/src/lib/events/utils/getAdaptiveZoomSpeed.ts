@@ -1,7 +1,7 @@
 import { ADAPTIVE_ZOOM_FACTOR, REFERENCE_DISPLAY_AREA } from "@/lib/events/constants.js";
-import type { BaseCanvas } from "@/types/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 
-export function getAdaptiveZoomSpeed(canvas: BaseCanvas, baseSpeed: number): number {
+export function getAdaptiveZoomSpeed(canvas: MarkupCanvas, baseSpeed: number): number {
   if (!canvas?.getBounds) {
     return baseSpeed;
   }

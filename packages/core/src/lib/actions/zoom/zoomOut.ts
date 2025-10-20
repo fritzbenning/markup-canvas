@@ -1,10 +1,11 @@
 import { getViewportCenter } from "@/lib/events/utils/getViewportCenter.js";
 import { withClampedZoom } from "@/lib/helpers/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 import { withTransition } from "@/lib/transition/withTransition.js";
-import type { BaseCanvas, Canvas, MarkupCanvasConfig } from "@/types/index.js";
+import type { BaseCanvas, MarkupCanvasConfig } from "@/types/index.js";
 
 export function zoomOut(
-  canvas: Canvas,
+  canvas: MarkupCanvas,
   baseCanvas: BaseCanvas,
   transformLayer: HTMLElement,
   config: Required<MarkupCanvasConfig>,

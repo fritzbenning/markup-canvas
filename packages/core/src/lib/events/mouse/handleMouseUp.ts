@@ -1,11 +1,12 @@
 import { handleClickToZoom } from "@/lib/events/mouse/handleClickToZoom.js";
 import { resetClickState } from "@/lib/events/utils/resetClickState.js";
 import { resetDragState } from "@/lib/events/utils/resetDragState.js";
-import type { Canvas, MarkupCanvasConfig } from "@/types/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
+import type { MarkupCanvasConfig } from "@/types/index.js";
 
 export function handleMouseUp(
   event: MouseEvent,
-  canvas: Canvas,
+  canvas: MarkupCanvas,
   config: Required<MarkupCanvasConfig>,
   isDragEnabled: boolean,
   isSpacePressed: boolean,

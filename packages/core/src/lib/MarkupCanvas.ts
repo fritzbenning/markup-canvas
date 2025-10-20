@@ -18,15 +18,7 @@ import { createRulers } from "@/lib/rulers/index.js";
 import { broadcastEvent } from "@/lib/window/broadcastEvent.js";
 import { cleanupGlobalBinding } from "@/lib/window/cleanupGlobalBinding.js";
 import { setupGlobalBinding } from "@/lib/window/setupGlobalBinding.js";
-import type {
-  BaseCanvas,
-  Canvas,
-  CanvasBounds,
-  MarkupCanvasConfig,
-  MarkupCanvasEvents,
-  MouseDragControls,
-  Transform,
-} from "@/types/index.js";
+import type { BaseCanvas, CanvasBounds, MarkupCanvasConfig, MarkupCanvasEvents, MouseDragControls, Transform } from "@/types/index.js";
 
 declare global {
   interface Window {
@@ -34,7 +26,7 @@ declare global {
   }
 }
 
-export class MarkupCanvas implements Canvas {
+export class MarkupCanvas {
   private baseCanvas: BaseCanvas;
   private cleanupFunctions: (() => void)[] = [];
   private rulers: ReturnType<typeof createRulers> | null = null;

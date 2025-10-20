@@ -1,7 +1,8 @@
 import { getAdaptiveZoomSpeed } from "@/lib/events/utils/getAdaptiveZoomSpeed.js";
-import type { Canvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
+import type { MarkupCanvasConfig, Transform } from "@/types/index.js";
 
-export function setupKeyboardEvents(canvas: Canvas, config: Required<MarkupCanvasConfig>): () => void {
+export function setupKeyboardEvents(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>): () => void {
   function handleKeyDown(event: Event): void {
     if (!(event instanceof KeyboardEvent)) return;
 

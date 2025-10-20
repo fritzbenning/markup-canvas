@@ -6,13 +6,14 @@ import { handleMouseMove } from "@/lib/events/mouse/handleMouseMove.js";
 import { handleMouseUp } from "@/lib/events/mouse/handleMouseUp.js";
 import { resetDragState } from "@/lib/events/utils/resetDragState.js";
 import { updateCursor } from "@/lib/events/utils/updateCursor.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 import type { MouseDragControls } from "@/types/events.js";
-import type { Canvas, MarkupCanvasConfig } from "@/types/index.js";
+import type { MarkupCanvasConfig } from "@/types/index.js";
 
-export function setupMouseEvents(canvas: Canvas, config: Required<MarkupCanvasConfig>, withControls: true): MouseDragControls;
-export function setupMouseEvents(canvas: Canvas, config: Required<MarkupCanvasConfig>, withControls: false): () => void;
+export function setupMouseEvents(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>, withControls: true): MouseDragControls;
+export function setupMouseEvents(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>, withControls: false): () => void;
 export function setupMouseEvents(
-  canvas: Canvas,
+  canvas: MarkupCanvas,
   config: Required<MarkupCanvasConfig>,
   withControls: boolean = true
 ): MouseDragControls | (() => void) {

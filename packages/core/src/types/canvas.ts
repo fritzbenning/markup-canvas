@@ -1,5 +1,3 @@
-import type { MarkupCanvasConfig } from "./config";
-
 export interface Transform {
   scale: number;
   translateX: number;
@@ -42,38 +40,4 @@ export interface BaseCanvas {
   transformLayer: HTMLElement;
   contentLayer: HTMLElement;
   transform: Transform;
-}
-
-// Legacy Canvas interface - kept for backwards compatibility with other parts of the codebase
-export interface Canvas extends BaseCanvas {
-  cleanup?: () => void;
-  // Exposed control functions for custom keyboard implementation
-  panLeft: (distance?: number) => boolean;
-  panRight: (distance?: number) => boolean;
-  panUp: (distance?: number) => boolean;
-  panDown: (distance?: number) => boolean;
-  zoomIn: (factor?: number) => boolean;
-  zoomOut: (factor?: number) => boolean;
-  resetZoom: (duration?: number) => boolean;
-  resetViewToCenter: () => boolean;
-  // Mouse drag control functions
-  enableMouseDrag: () => boolean;
-  disableMouseDrag: () => boolean;
-  isMouseDragEnabled: () => boolean;
-  // Grid control functions
-  toggleGrid?: () => boolean;
-  showGrid?: () => boolean;
-  hideGrid?: () => boolean;
-  isGridVisible?: () => boolean;
-  // Ruler control functions
-  toggleRulers?: () => boolean;
-  showRulers?: () => boolean;
-  hideRulers?: () => boolean;
-  areRulersVisible?: () => boolean;
-  // Additional utility functions
-  centerContent: () => boolean;
-  fitToScreen: () => boolean;
-  getVisibleArea: () => { x: number; y: number; width: number; height: number };
-  isPointVisible: (x: number, y: number) => boolean;
-  scrollToPoint: (x: number, y: number, duration?: number) => boolean;
 }

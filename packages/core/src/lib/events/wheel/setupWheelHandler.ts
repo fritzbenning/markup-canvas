@@ -1,9 +1,10 @@
 import { createTrackpadPanHandler } from "@/lib/events/trackpad/createTrackpadPanHandler";
 import { detectTrackpadGesture } from "@/lib/events/trackpad/detectTrackpadGesture";
 import { handleWheel } from "@/lib/events/wheel/handleWheel";
-import type { Canvas, MarkupCanvasConfig } from "@/types";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
+import type { MarkupCanvasConfig } from "@/types";
 
-export function setupWheelEvents(canvas: Canvas, config: Required<MarkupCanvasConfig>): () => void {
+export function setupWheelEvents(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>): () => void {
   const trackpadPanHandler = createTrackpadPanHandler(canvas);
 
   const wheelHandler = (event: WheelEvent) => {

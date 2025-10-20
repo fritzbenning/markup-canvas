@@ -1,7 +1,8 @@
-import type { Canvas, MarkupCanvasConfig } from "@/types/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
+import type { MarkupCanvasConfig } from "@/types/index.js";
 
 export function updateCursor(
-  canvas: Canvas,
+  canvas: MarkupCanvas,
   config: Required<MarkupCanvasConfig>,
   isDragEnabled: boolean,
   isSpacePressed: boolean,

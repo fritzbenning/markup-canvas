@@ -1,10 +1,11 @@
 import { resetDragState } from "@/lib/events/utils/resetDragState.js";
 import { updateCursor } from "@/lib/events/utils/updateCursor.js";
-import type { Canvas, MarkupCanvasConfig } from "@/types/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
+import type { MarkupCanvasConfig } from "@/types/index.js";
 
 export function handleKeyUp(
   event: KeyboardEvent,
-  canvas: Canvas,
+  canvas: MarkupCanvas,
   config: Required<MarkupCanvasConfig>,
   isDragEnabled: boolean,
   isDragging: boolean,

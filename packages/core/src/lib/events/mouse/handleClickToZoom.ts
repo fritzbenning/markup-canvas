@@ -1,11 +1,12 @@
 import { CLICK_THRESHOLDS } from "@/lib/events/constants.js";
 import { withRulerOffset } from "@/lib/helpers/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 import { withTransition } from "@/lib/transition/withTransition.js";
-import type { Canvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
+import type { MarkupCanvasConfig, Transform } from "@/types/index.js";
 
 export function handleClickToZoom(
   event: MouseEvent,
-  canvas: Canvas,
+  canvas: MarkupCanvas,
   config: Required<MarkupCanvasConfig>,
   mouseDownTime: number,
   hasDragged: boolean,

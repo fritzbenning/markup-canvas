@@ -1,10 +1,11 @@
 import { getTouchCenter } from "@/lib/events/touch/getTouchCenter.js";
 import { getTouchDistance } from "@/lib/events/touch/getTouchDistance.js";
 import { withRAFThrottle, withRulerOffsetObject } from "@/lib/helpers/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 import { applyZoomToCanvas } from "@/lib/transform/applyZoomToCanvas.js";
-import type { Canvas, TouchState, Transform } from "@/types/index.js";
+import type { TouchState, Transform } from "@/types/index.js";
 
-export function handleTouchMove(event: TouchEvent, canvas: Canvas, touchState: TouchState): void {
+export function handleTouchMove(event: TouchEvent, canvas: MarkupCanvas, touchState: TouchState): void {
   event.preventDefault();
 
   const currentTouches = Array.from(event.touches);

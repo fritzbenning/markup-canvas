@@ -1,5 +1,3 @@
-import type { Transform } from "./canvas";
-
 export interface MarkupCanvasConfig {
   // Canvas dimensions
   width?: number;

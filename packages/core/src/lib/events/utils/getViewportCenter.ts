@@ -1,6 +1,6 @@
-import type { Canvas } from "@/types/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 
-export function getViewportCenter(canvas: Canvas): { x: number; y: number } {
+export function getViewportCenter(canvas: MarkupCanvas): { x: number; y: number } {
   try {
     const bounds = canvas.getBounds();
     return {

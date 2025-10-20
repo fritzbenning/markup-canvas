@@ -1,10 +1,11 @@
 import { CLICK_THRESHOLDS } from "@/lib/events/constants.js";
 import { withRAFThrottle } from "@/lib/helpers/index.js";
-import type { Canvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
+import type { MarkupCanvasConfig, Transform } from "@/types/index.js";
 
 export function handleMouseMove(
   event: MouseEvent,
-  canvas: Canvas,
+  canvas: MarkupCanvas,
   config: Required<MarkupCanvasConfig>,
   isDragEnabled: boolean,
   isDragging: boolean,

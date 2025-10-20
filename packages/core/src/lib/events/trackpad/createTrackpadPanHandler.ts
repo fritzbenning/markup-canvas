@@ -1,8 +1,9 @@
 import { withRAFThrottle } from "@/lib/helpers/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 import { disableTransition } from "@/lib/transition";
-import type { BaseCanvas, Transform } from "@/types";
+import type { Transform } from "@/types";
 
-export const createTrackpadPanHandler = (canvas: BaseCanvas) =>
+export const createTrackpadPanHandler = (canvas: MarkupCanvas) =>
   withRAFThrottle((...args: unknown[]) => {
     const event = args[0] as WheelEvent;
     if (!event || !canvas?.updateTransform) {

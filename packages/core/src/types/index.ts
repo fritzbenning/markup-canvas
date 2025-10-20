@@ -1,7 +1,6 @@
 // Canvas types
 export type {
   BaseCanvas,
-  Canvas,
   CanvasBounds,
   CanvasOptions,
   Transform,

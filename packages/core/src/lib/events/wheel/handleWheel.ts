@@ -2,10 +2,11 @@ import { TRACKPAD_PINCH_SPEED_FACTOR } from "@/lib/events/constants.js";
 import { detectTrackpadGesture } from "@/lib/events/trackpad/detectTrackpadGesture.js";
 import { getAdaptiveZoomSpeed } from "@/lib/events/utils/getAdaptiveZoomSpeed.js";
 import { withRulerOffset } from "@/lib/helpers/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 import { applyZoomToCanvas } from "@/lib/transform/applyZoomToCanvas.js";
-import type { Canvas, MarkupCanvasConfig } from "@/types/index.js";
+import type { MarkupCanvasConfig } from "@/types/index.js";
 
-export function handleWheel(event: WheelEvent, canvas: Canvas, config: Required<MarkupCanvasConfig>): boolean {
+export function handleWheel(event: WheelEvent, canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>): boolean {
   if (!event || typeof event.deltaY !== "number") {
     console.warn("Invalid wheel event provided");
     return false;

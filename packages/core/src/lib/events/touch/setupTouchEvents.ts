@@ -1,9 +1,10 @@
 import { handleTouchEnd } from "@/lib/events/touch/handleTouchEnd.js";
 import { handleTouchMove } from "@/lib/events/touch/handleTouchMove.js";
 import { handleTouchStart } from "@/lib/events/touch/handleTouchStart.js";
-import type { Canvas, TouchState } from "@/types/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
+import type { TouchState } from "@/types/index.js";
 
-export function setupTouchEvents(canvas: Canvas): () => void {
+export function setupTouchEvents(canvas: MarkupCanvas): () => void {
   const touchState: TouchState = {
     touches: [],
     lastDistance: 0,
