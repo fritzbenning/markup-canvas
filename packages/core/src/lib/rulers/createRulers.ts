@@ -56,7 +56,6 @@ export function createRulers(canvas: Canvas, config: Required<MarkupCanvasConfig
         if (elements.horizontalRuler) elements.horizontalRuler.style.display = "block";
         if (elements.verticalRuler) elements.verticalRuler.style.display = "block";
         if (elements.cornerBox) elements.cornerBox.style.display = "flex";
-        if (elements.gridOverlay) elements.gridOverlay.style.display = "block";
       },
 
       hide: () => {

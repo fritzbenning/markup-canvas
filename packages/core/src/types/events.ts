@@ -6,6 +6,8 @@ export interface MarkupCanvasEvents {
   zoom: number;
   pan: { x: number; y: number };
   ready: MarkupCanvas;
+  rulersVisibility: boolean;
+  gridVisibility: boolean;
   [key: string]: unknown;
 }
 

@@ -48,6 +48,14 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
     optionsRef.current.onReady?.(canvas);
   }, []);
 
+  const handleRulersVisibilityChange = useCallback((isVisible: boolean) => {
+    setShowRulersState(isVisible);
+  }, []);
+
+  const handleGridVisibilityChange = useCallback((isVisible: boolean) => {
+    setShowGridState(isVisible);
+  }, []);
+
   // Get instance from window binding
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -96,14 +104,18 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
     instance.on("zoom", handleZoom);
     instance.on("pan", handlePan);
     instance.on("ready", handleReady);
+    instance.on("rulersVisibility", handleRulersVisibilityChange);
+    instance.on("gridVisibility", handleGridVisibilityChange);
 
     return () => {
       instance.off("transform", handleTransform);
       instance.off("zoom", handleZoom);
       instance.off("pan", handlePan);
       instance.off("ready", handleReady);
+      instance.off("rulersVisibility", handleRulersVisibilityChange);
+      instance.off("gridVisibility", handleGridVisibilityChange);
     };
-  }, [instance, handleTransform, handleZoom, handlePan, handleReady]);
+  }, [instance, handleTransform, handleZoom, handlePan, handleReady, handleRulersVisibilityChange, handleGridVisibilityChange]);
 
   // Listen to window messages for state updates
   useEffect(() => {
@@ -226,21 +238,15 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   }, [themeMode, updateThemeMode]);
 
   const showRulers = useCallback(() => {
-    if (instance?.showRulers?.()) {
-      setShowRulersState(true);
-    }
+    instance?.showRulers?.();
   }, [instance]);
 
   const hideRulers = useCallback(() => {
-    if (instance?.hideRulers?.()) {
-      setShowRulersState(false);
-    }
+    instance?.hideRulers?.();
   }, [instance]);
 
   const toggleRulers = useCallback(() => {
-    if (instance?.toggleRulers?.()) {
-      setShowRulersState((prev) => !prev);
-    }
+    instance?.toggleRulers?.();
   }, [instance]);
 
   const areRulersVisible = useCallback(() => {
@@ -248,21 +254,15 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   }, [instance]);
 
   const showGrid = useCallback(() => {
-    if (instance?.showGrid?.()) {
-      setShowGridState(true);
-    }
+    instance?.showGrid?.();
   }, [instance]);
 
   const hideGrid = useCallback(() => {
-    if (instance?.hideGrid?.()) {
-      setShowGridState(false);
-    }
+    instance?.hideGrid?.();
   }, [instance]);
 
   const toggleGrid = useCallback(() => {
-    if (instance?.toggleGrid?.()) {
-      setShowGridState((prev) => !prev);
-    }
+    instance?.toggleGrid?.();
   }, [instance]);
 
   const isGridVisible = useCallback(() => {

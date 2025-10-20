@@ -16,7 +16,7 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   enablePan: true,
   enableTouch: true,
   enableKeyboard: true,
-  bindKeyboardEventsTo: "canvas",
+  bindKeyboardEventsTo: "document",
 
   // Zoom behavior
   zoomSpeed: 1.5,

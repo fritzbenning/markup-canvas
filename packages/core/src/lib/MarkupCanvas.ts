@@ -235,15 +235,27 @@ export class MarkupCanvas {
   }
 
   toggleGrid(): boolean {
-    return toggleGrid(this.rulers);
+    const result = toggleGrid(this.rulers);
+    if (result) {
+      this.listen.emit("gridVisibility", this.isGridVisible());
+    }
+    return result;
   }
 
   showGrid(): boolean {
-    return showGrid(this.rulers);
+    const result = showGrid(this.rulers);
+    if (result) {
+      this.listen.emit("gridVisibility", true);
+    }
+    return result;
   }
 
   hideGrid(): boolean {
-    return hideGrid(this.rulers);
+    const result = hideGrid(this.rulers);
+    if (result) {
+      this.listen.emit("gridVisibility", false);
+    }
+    return result;
   }
 
   isGridVisible(): boolean {
@@ -251,15 +263,27 @@ export class MarkupCanvas {
   }
 
   toggleRulers(): boolean {
-    return toggleRulers(this.rulers, () => this.areRulersVisible());
+    const result = toggleRulers(this.rulers, () => this.areRulersVisible());
+    if (result) {
+      this.listen.emit("rulersVisibility", this.areRulersVisible());
+    }
+    return result;
   }
 
   showRulers(): boolean {
-    return showRulers(this.rulers);
+    const result = showRulers(this.rulers);
+    if (result) {
+      this.listen.emit("rulersVisibility", true);
+    }
+    return result;
   }
 
   hideRulers(): boolean {
-    return hideRulers(this.rulers);
+    const result = hideRulers(this.rulers);
+    if (result) {
+      this.listen.emit("rulersVisibility", false);
+    }
+    return result;
   }
 
   areRulersVisible(): boolean {

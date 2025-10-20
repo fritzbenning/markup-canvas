@@ -9,6 +9,8 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isReady, setIsReady] = useState(false);
   const [themeMode, setThemeModeState] = useState<"light" | "dark">("light");
+  const [showRulersState, setShowRulersState] = useState(false);
+  const [showGridState, setShowGridState] = useState(false);
 
   const optionsRef = useRef(options);
   optionsRef.current = options;
@@ -38,6 +40,14 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
     optionsRef.current.onReady?.(canvas);
   }, []);
 
+  const handleRulersVisibilityChange = useCallback((isVisible: boolean) => {
+    setShowRulersState(isVisible);
+  }, []);
+
+  const handleGridVisibilityChange = useCallback((isVisible: boolean) => {
+    setShowGridState(isVisible);
+  }, []);
+
   useEffect(() => {
     console.log("useEffect", instance);
 
@@ -49,6 +59,8 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
     instance.on("zoom", handleZoom);
     instance.on("pan", handlePan);
     instance.on("ready", handleReady);
+    instance.on("rulersVisibility", handleRulersVisibilityChange);
+    instance.on("gridVisibility", handleGridVisibilityChange);
 
     if (instance.transform) {
       setTransform(instance.transform);
@@ -66,8 +78,10 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
       instance.off("zoom", handleZoom);
       instance.off("pan", handlePan);
       instance.off("ready", handleReady);
+      instance.off("rulersVisibility", handleRulersVisibilityChange);
+      instance.off("gridVisibility", handleGridVisibilityChange);
     };
-  }, [instance, handleTransform, handleZoom, handlePan, handleReady]);
+  }, [instance, handleTransform, handleZoom, handlePan, handleReady, handleRulersVisibilityChange, handleGridVisibilityChange]);
 
   const zoomIn = useCallback(() => {
     canvasRef.current?.zoomIn();
@@ -165,7 +179,9 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
     toggleThemeMode,
     toggleRulers,
     areRulersVisible,
+    showRulersState,
     toggleGrid,
     isGridVisible,
+    showGridState,
   };
 }
