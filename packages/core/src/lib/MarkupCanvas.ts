@@ -168,7 +168,11 @@ export class MarkupCanvas {
   }
 
   zoomToPoint(x: number, y: number, targetScale: number): boolean {
-    return zoomToPoint(this.canvas, this.transformLayer, this.config, x, y, targetScale);
+    const result = zoomToPoint(this.canvas, this.transformLayer, this.config, x, y, targetScale);
+    if (result) {
+      emitTransformEvents(this.event, this.canvas);
+    }
+    return result;
   }
 
   resetView(): boolean {

@@ -127,6 +127,7 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions = {}) {
             handleTransform(event.data.data);
             break;
           case "zoom":
+            console.log("zoom", event.data.data);
             handleZoom(event.data.data);
             break;
           case "pan":
