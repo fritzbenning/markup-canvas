@@ -6,8 +6,7 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
   height: 4000,
   enableAcceleration: true,
 
-  // Global Binding & Instance Access
-  bindToWindow: true,
+  // Global Instance Access
   name: "canvas",
   enablePostMessageAPI: true,
 

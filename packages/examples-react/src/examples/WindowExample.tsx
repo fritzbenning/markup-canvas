@@ -1,4 +1,4 @@
-import { MarkupCanvas, useMarkupCanvasWindow } from "@markup-canvas/react";
+import { MarkupCanvas, useMarkupCanvas } from "@markup-canvas/react";
 import { Moon, Sun, ZoomIn, ZoomOut } from "lucide-react";
 import "../App.css";
 import { useCallback, useEffect } from "react";
@@ -22,7 +22,7 @@ function WindowExample() {
     showRulersState,
     toggleGrid,
     showGridState,
-  } = useMarkupCanvasWindow({
+  } = useMarkupCanvas({
     canvasName: "canvas",
     onReady: (canvas) => {
       console.log("✅ Canvas found and bound to window!", canvas);
@@ -35,7 +35,7 @@ function WindowExample() {
   const handleMessage = useCallback((event: MessageEvent) => {
     if (event.data.source === "markup-canvas" && event.data.canvasName === "canvas") {
       if (event.data.event === "zoom") {
-        const zoomValue = event.data.data;
+        // Handle zoom events if needed
       }
     }
   }, []);
@@ -75,7 +75,6 @@ function WindowExample() {
         width={20000}
         height={15000}
         name="canvas"
-        bindToWindow={true}
         enablePostMessageAPI={true}
         enableKeyboard={true}
         requireSpaceForMouseDrag={false}

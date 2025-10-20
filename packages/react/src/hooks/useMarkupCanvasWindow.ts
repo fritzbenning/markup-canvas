@@ -2,13 +2,13 @@ import type { Transform, WindowAPI } from "@markup-canvas/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { UseMarkupCanvasOptions } from "../types/index.js";
 
-interface UseMarkupCanvasWindowOptions extends Omit<UseMarkupCanvasOptions, "onReady"> {
+interface UseMarkupCanvasHookOptions extends Omit<UseMarkupCanvasOptions, "onReady"> {
   canvasName?: string;
   onError?: () => void;
   onReady?: (canvas: WindowAPI) => void;
 }
 
-export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}) {
+export function useMarkupCanvas(options: UseMarkupCanvasHookOptions = {}) {
   const { canvasName = "markupCanvas" } = options;
 
   const [canvas, setCanvas] = useState<WindowAPI | null>(null);

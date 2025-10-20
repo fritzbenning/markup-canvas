@@ -6,8 +6,7 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   height: 8000,
   enableAcceleration: true,
 
-  // Global Binding & Instance Access
-  bindToWindow: false,
+  // Global Instance Access
   name: "markupCanvas",
   enablePostMessageAPI: false,
 

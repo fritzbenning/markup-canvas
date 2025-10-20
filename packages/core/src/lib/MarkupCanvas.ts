@@ -49,18 +49,17 @@ export class MarkupCanvas {
 
     this.canvas = canvas;
 
-    if (this.config.bindToWindow) {
-      this.event.setEmitInterceptor((event, data) => {
-        broadcastEvent(event as string, data, this.config);
-      });
+    // Always bind canvas to window
+    this.event.setEmitInterceptor((event, data) => {
+      broadcastEvent(event as string, data, this.config);
+    });
 
-      bindCanvasToWindow(this, this.config);
+    bindCanvasToWindow(this, this.config);
 
-      // Set up postMessage listener
-      if (this.config.enablePostMessageAPI) {
-        const postMessageCleanup = setupPostMessageEvents(this);
-        this.cleanupCallbacks.push(postMessageCleanup);
-      }
+    // Set up postMessage listener
+    if (this.config.enablePostMessageAPI) {
+      const postMessageCleanup = setupPostMessageEvents(this);
+      this.cleanupCallbacks.push(postMessageCleanup);
     }
 
     this.setupEventHandlers();

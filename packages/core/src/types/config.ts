@@ -4,8 +4,7 @@ export interface MarkupCanvasConfig {
   height?: number;
   enableAcceleration?: boolean;
 
-  // Global Binding & Instance Access
-  bindToWindow?: boolean;
+  // Global Instance Access
   name?: string;
 
   // Post Message API
