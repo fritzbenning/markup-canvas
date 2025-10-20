@@ -45,6 +45,7 @@ export type PostMessageAction =
   | "centerContent"
   | "scrollToPoint"
   | "resetView"
+  | "resetViewToCenter"
   | "toggleRulers"
   | "showRulers"
   | "hideRulers"

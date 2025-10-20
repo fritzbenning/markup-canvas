@@ -49,6 +49,8 @@ export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
         canvas.scrollToPoint(args[0] as number, args[1] as number);
       } else if (action === "resetView") {
         canvas.resetView();
+      } else if (action === "resetViewToCenter") {
+        canvas.resetViewToCenter();
       }
       // Ruler/Grid methods
       else if (action === "toggleRulers") {
