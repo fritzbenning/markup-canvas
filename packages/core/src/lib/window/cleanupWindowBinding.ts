@@ -1,6 +1,6 @@
 import type { MarkupCanvasConfig } from "@/types/index.js";
 
-export function cleanupGlobalBinding(config: Required<MarkupCanvasConfig>): void {
+export function cleanupWindowBinding(config: Required<MarkupCanvasConfig>): void {
   if (typeof window === "undefined") {
     return;
   }

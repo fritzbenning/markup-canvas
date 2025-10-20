@@ -16,7 +16,7 @@ import { canvasToContent } from "@/lib/matrix/canvasToContent.js";
 import { createMatrix } from "@/lib/matrix/createMatrix.js";
 import { createRulers } from "@/lib/rulers/index.js";
 import { broadcastEvent } from "@/lib/window/broadcastEvent.js";
-import { cleanupGlobalBinding } from "@/lib/window/cleanupGlobalBinding.js";
+import { cleanupWindowBinding } from "@/lib/window/cleanupWindowBinding.js";
 import { bindCanvasToWindow } from "@/lib/window/index.js";
 import type { Canvas, CanvasBounds, MarkupCanvasConfig, MarkupCanvasEvents, MouseDragControls, Transform } from "@/types/index.js";
 
@@ -53,6 +53,7 @@ export class MarkupCanvas {
       this.event.setEmitInterceptor((event, data) => {
         broadcastEvent(event as string, data, this.config);
       });
+
       bindCanvasToWindow(this, this.config);
 
       // Set up postMessage listener
@@ -111,7 +112,6 @@ export class MarkupCanvas {
     }
   }
 
-  // Base canvas properties and methods
   get container(): HTMLElement {
     return this.canvas.container;
   }
@@ -327,7 +327,7 @@ export class MarkupCanvas {
 
   // Cleanup method
   cleanup(): void {
-    cleanupGlobalBinding(this.config);
+    cleanupWindowBinding(this.config);
 
     this.cleanupCallbacks.forEach((cleanup) => {
       try {

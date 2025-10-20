@@ -10,6 +10,11 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
   const windowObj = window as unknown as Record<string, unknown>;
 
   const api: WindowAPI = {
+    config: {
+      current: canvas.config,
+      get: canvas.getConfig.bind(canvas),
+      update: canvas.updateConfig.bind(canvas),
+    },
     // Transform group
     transform: {
       update: canvas.updateTransform.bind(canvas),
@@ -23,8 +28,8 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
       in: canvas.zoomIn.bind(canvas),
       out: canvas.zoomOut.bind(canvas),
       reset: canvas.resetZoom.bind(canvas),
-      resetView: canvas.resetView.bind(canvas),
-      resetViewToCenter: canvas.resetViewToCenter.bind(canvas),
+      resetToCenter: canvas.resetViewToCenter.bind(canvas),
+      fitToScreen: canvas.fitToScreen.bind(canvas),
     },
 
     // Pan group
@@ -34,8 +39,7 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
       up: canvas.panUp.bind(canvas),
       down: canvas.panDown.bind(canvas),
       toPoint: canvas.scrollToPoint.bind(canvas),
-      center: canvas.centerContent.bind(canvas),
-      fitToScreen: canvas.fitToScreen.bind(canvas),
+      toCenter: canvas.centerContent.bind(canvas),
     },
 
     // Mouse drag group
@@ -62,14 +66,16 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
     },
 
     // Utility group
-    utils: {
+    canvas: {
       canvasToContent: canvas.canvasToContent.bind(canvas),
       getVisibleArea: canvas.getVisibleArea.bind(canvas),
       isPointVisible: canvas.isPointVisible.bind(canvas),
       getBounds: canvas.getBounds.bind(canvas),
-      getConfig: canvas.getConfig.bind(canvas),
-      updateConfig: canvas.updateConfig.bind(canvas),
-      updateThemeMode: canvas.updateThemeMode.bind(canvas),
+    },
+
+    theme: {
+      current: canvas.config.themeMode,
+      update: canvas.updateThemeMode.bind(canvas),
     },
 
     // Event group
@@ -95,11 +101,6 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
       get transform() {
         return canvas.transform;
       },
-    },
-
-    // Config
-    get config() {
-      return canvas.config;
     },
   };
 

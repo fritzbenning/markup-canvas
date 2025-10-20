@@ -82,8 +82,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
         optionsRef.current.onReady?.(windowInstance);
       }
 
-      const config = windowInstance.config;
-      setThemeModeState((config?.themeMode as "light" | "dark" | undefined) || "light");
+      setThemeModeState((windowInstance?.theme?.current as "light" | "dark" | undefined) || "light");
 
       if (windowInstance.rulers?.isVisible?.()) {
         setShowRulersState(true);
@@ -197,29 +196,29 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   );
 
   const fitToContent = useCallback(() => {
-    instance?.pan?.fitToScreen?.();
+    instance?.zoom?.fitToScreen?.();
   }, [instance]);
 
   const centerContent = useCallback(() => {
-    instance?.pan?.center?.();
+    instance?.pan?.toCenter?.();
   }, [instance]);
 
   const resetView = useCallback(() => {
-    instance?.zoom?.resetView?.();
+    instance?.zoom?.resetToCenter?.();
   }, [instance]);
 
   const setTransitionMode = useCallback(
     (enabled: boolean) => {
-      instance?.utils?.updateConfig?.({ enableTransition: enabled });
+      instance?.config?.update?.({ enableTransition: enabled });
     },
     [instance]
   );
 
   const toggleTransitionMode = useCallback(() => {
     if (instance) {
-      const currentConfig = instance.config;
+      const currentConfig = instance.config.current;
       const newEnableTransition = !currentConfig?.enableTransition;
-      instance.utils?.updateConfig?.({ enableTransition: newEnableTransition });
+      instance.config?.update?.({ enableTransition: newEnableTransition });
       return newEnableTransition;
     }
     return false;
@@ -228,7 +227,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   const updateThemeMode = useCallback(
     (mode: "light" | "dark") => {
       setThemeModeState(mode);
-      instance?.utils?.updateThemeMode?.(mode);
+      instance?.theme?.update?.(mode);
     },
     [instance]
   );
