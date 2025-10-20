@@ -1,7 +1,11 @@
+import { resetTransform, updateTransform } from "@/lib/actions/transform/index.js";
+import { resetView, zoomToPoint } from "@/lib/actions/zoom/index.js";
 import { createCanvasLayers } from "@/lib/canvas/createCanvasLayers.js";
-import { getCanvasMethods } from "@/lib/canvas/getCanvasMethods.js";
+import { fitToScreen } from "@/lib/canvas/fitToScreen.js";
+import { getCanvasBounds } from "@/lib/canvas/getCanvasBounds.js";
 import { setupCanvasContainer } from "@/lib/canvas/setupCanvasContainer.js";
 import { DEFAULT_ZOOM } from "@/lib/constants.js";
+import { canvasToContent } from "@/lib/matrix/canvasToContent.js";
 import { createMatrix } from "@/lib/matrix/createMatrix.js";
 import { applyTransform, enableHardwareAcceleration } from "@/lib/transform/index.js";
 import type { BaseCanvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
@@ -48,8 +52,21 @@ export function createCanvas(container: HTMLElement, config: Required<MarkupCanv
       // Current state
       transform: initialTransform,
 
-      // Add all canvas methods
-      ...getCanvasMethods(),
+      // Utility methods
+      getBounds: () => getCanvasBounds(canvas),
+      canvasToContent: (x: number, y: number) => {
+        const matrix = createMatrix(canvas.transform.scale, canvas.transform.translateX, canvas.transform.translateY);
+        return canvasToContent(x, y, matrix);
+      },
+
+      // Transform methods
+      updateTransform: (newTransform: Partial<Transform>) => updateTransform(canvas, newTransform),
+      reset: () => resetTransform(canvas),
+
+      // View and zoom methods
+      zoomToPoint: (x: number, y: number, targetScale: number) => zoomToPoint(canvas, transformLayer, config, x, y, targetScale),
+      resetView: () => resetView(canvas, transformLayer, config),
+      fitToScreen: () => fitToScreen(canvas, transformLayer, config),
     };
 
     return canvas;

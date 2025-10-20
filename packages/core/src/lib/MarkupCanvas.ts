@@ -159,10 +159,6 @@ export class MarkupCanvas implements Canvas {
     return this.baseCanvas.reset();
   }
 
-  handleResize(): boolean {
-    return this.baseCanvas.handleResize();
-  }
-
   setZoom(zoomLevel: number): boolean {
     return setZoom(this, this.transformLayer, this.config, this.zoomToPoint.bind(this), zoomLevel);
   }

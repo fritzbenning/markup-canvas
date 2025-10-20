@@ -47,8 +47,6 @@ export interface BaseCanvas {
   getBounds: () => CanvasBounds;
   updateTransform: (newTransform: Partial<Transform>) => boolean;
   reset: () => boolean;
-  handleResize: () => boolean;
-  setZoom: (zoomLevel: number) => boolean;
   canvasToContent: (x: number, y: number) => { x: number; y: number };
   zoomToPoint: (x: number, y: number, targetScale: number) => boolean;
   resetView: () => boolean;
