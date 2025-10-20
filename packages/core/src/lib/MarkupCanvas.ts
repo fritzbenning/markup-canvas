@@ -1,13 +1,13 @@
-import { centerContent, panDown, panLeft, panRight, panUp } from "@/lib/actions/pan/index.js";
+import { centerContent, panDown, panLeft, panRight, panUp, scrollToPoint } from "@/lib/actions/pan/index.js";
 import { hideGrid, isGridVisible, showGrid, toggleGrid } from "@/lib/actions/ui/grid/index.js";
 import { areRulersVisible, hideRulers, showRulers, toggleRulers } from "@/lib/actions/ui/rulers/index.js";
+import { resetViewToCenter, setZoom, zoomIn, zoomOut } from "@/lib/actions/zoom/index.js";
 import { createCanvas } from "@/lib/canvas/index.js";
 import { createMarkupCanvasConfig } from "@/lib/config/createMarkupCanvasConfig.js";
 import { EventEmitter } from "@/lib/events/EventEmitter.js";
 import { emitTransformEvents } from "@/lib/events/emitTransformEvents.js";
 import { setupKeyboardEvents, setupMouseEvents, setupPostMessageEvents, setupTouchEvents, setupWheelEvents } from "@/lib/events/index.js";
-import { getViewportCenter } from "@/lib/events/utils/getViewportCenter.js";
-import { getThemeValue, getVisibleArea, isPointVisible, withClampedZoom, withFeatureEnabled } from "@/lib/helpers/index.js";
+import { getThemeValue, getVisibleArea, isPointVisible, withFeatureEnabled } from "@/lib/helpers/index.js";
 import { createRulers } from "@/lib/rulers/index.js";
 import { withTransition } from "@/lib/transition/withTransition.js";
 import { broadcastEvent } from "@/lib/window/broadcastEvent.js";
@@ -164,18 +164,7 @@ export class MarkupCanvas implements Canvas {
   }
 
   setZoom(zoomLevel: number): boolean {
-    return withTransition(this.transformLayer, this.config, () => {
-      return withClampedZoom(this.config, (clamp) => {
-        const newScale = clamp(zoomLevel);
-
-        const center = getViewportCenter(this);
-        const result = this.zoomToPoint(center.x, center.y, newScale);
-        if (result) {
-          emitTransformEvents(this.listen, this.baseCanvas);
-        }
-        return result;
-      });
-    });
+    return setZoom(this, this.transformLayer, this.config, this.zoomToPoint.bind(this), zoomLevel);
   }
 
   canvasToContent(x: number, y: number): { x: number; y: number } {
@@ -201,18 +190,7 @@ export class MarkupCanvas implements Canvas {
   }
 
   resetViewToCenter(): boolean {
-    return withTransition(this.transformLayer, this.config, () => {
-      return withClampedZoom(this.config, (clamp) => {
-        const newScale = clamp(1.0);
-
-        const center = getViewportCenter(this);
-        const result = this.zoomToPoint(center.x, center.y, newScale);
-        if (result) {
-          emitTransformEvents(this.listen, this.baseCanvas);
-        }
-        return result;
-      });
-    });
+    return resetViewToCenter(this, this.transformLayer, this.config, this.zoomToPoint.bind(this));
   }
 
   zoomToFitContent(): boolean {
@@ -254,23 +232,11 @@ export class MarkupCanvas implements Canvas {
   }
 
   zoomIn(factor: number = 0.5): boolean {
-    return withTransition(this.transformLayer, this.config, () => {
-      return withClampedZoom(this.config, (clamp) => {
-        const newScale = clamp(this.baseCanvas.transform.scale * (1 + factor));
-        const center = getViewportCenter(this);
-        return this.zoomToPoint(center.x, center.y, newScale);
-      });
-    });
+    return zoomIn(this, this.baseCanvas, this.transformLayer, this.config, this.zoomToPoint.bind(this), factor);
   }
 
   zoomOut(factor: number = 0.5): boolean {
-    return withTransition(this.transformLayer, this.config, () => {
-      return withClampedZoom(this.config, (clamp) => {
-        const newScale = clamp(this.baseCanvas.transform.scale * (1 - factor));
-        const center = getViewportCenter(this);
-        return this.zoomToPoint(center.x, center.y, newScale);
-      });
-    });
+    return zoomOut(this, this.baseCanvas, this.transformLayer, this.config, this.zoomToPoint.bind(this), factor);
   }
 
   resetZoom(): boolean {
@@ -348,18 +314,7 @@ export class MarkupCanvas implements Canvas {
 
   scrollToPoint(x: number, y: number): boolean {
     return withTransition(this.transformLayer, this.config, () => {
-      const bounds = this.baseCanvas.getBounds();
-      const centerX = bounds.width / 2;
-      const centerY = bounds.height / 2;
-
-      // Calculate new translation to center the point
-      const newTranslateX = centerX - x * this.baseCanvas.transform.scale;
-      const newTranslateY = centerY - y * this.baseCanvas.transform.scale;
-
-      return this.updateTransform({
-        translateX: newTranslateX,
-        translateY: newTranslateY,
-      });
+      return scrollToPoint(this.baseCanvas, this.config, x, y, this.updateTransform.bind(this));
     });
   }
 
