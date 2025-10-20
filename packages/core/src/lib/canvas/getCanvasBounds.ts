@@ -1,4 +1,4 @@
-import { calculateVisibleArea } from "@/lib/canvas/calcVisibleArea.js";
+import { calculateVisibleArea } from "@/lib/canvas/calculateVisibleArea.js";
 import { getEmptyBounds } from "@/lib/canvas/getEmptyBounds.js";
 import { withRulerSize } from "@/lib/helpers/index.js";
 import type { BaseCanvas, CanvasBounds } from "@/types/index.js";

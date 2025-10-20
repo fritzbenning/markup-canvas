@@ -1,3 +1,5 @@
+export { getVisibleArea } from "./getVisibleArea.js";
+export { isPointVisible } from "./isPointVisible.js";
 export { withClampedZoom } from "./withClampedZoom.js";
 export { withDebounce } from "./withDebounce.js";
 export { withFeatureEnabled } from "./withFeatureEnabled.js";
