@@ -18,7 +18,7 @@ import { createRulers } from "@/lib/rulers/index.js";
 import { broadcastEvent } from "@/lib/window/broadcastEvent.js";
 import { cleanupGlobalBinding } from "@/lib/window/cleanupGlobalBinding.js";
 import { setupGlobalBinding } from "@/lib/window/setupGlobalBinding.js";
-import type { BaseCanvas, CanvasBounds, MarkupCanvasConfig, MarkupCanvasEvents, MouseDragControls, Transform } from "@/types/index.js";
+import type { Canvas, CanvasBounds, MarkupCanvasConfig, MarkupCanvasEvents, MouseDragControls, Transform } from "@/types/index.js";
 
 declare global {
   interface Window {
@@ -27,7 +27,7 @@ declare global {
 }
 
 export class MarkupCanvas {
-  private baseCanvas: BaseCanvas;
+  private canvas: Canvas;
   private cleanupFunctions: (() => void)[] = [];
   private rulers: ReturnType<typeof createRulers> | null = null;
   private dragSetup: MouseDragControls | null = null;
@@ -48,7 +48,7 @@ export class MarkupCanvas {
       throw new Error("Failed to create canvas");
     }
 
-    this.baseCanvas = canvas;
+    this.canvas = canvas;
 
     if (this.config.bindToWindow) {
       this.listen.setEmitInterceptor((event, data) => {
@@ -113,19 +113,19 @@ export class MarkupCanvas {
 
   // Base canvas properties and methods
   get container(): HTMLElement {
-    return this.baseCanvas.container;
+    return this.canvas.container;
   }
 
   get transformLayer(): HTMLElement {
-    return this.baseCanvas.transformLayer;
+    return this.canvas.transformLayer;
   }
 
   get contentLayer(): HTMLElement {
-    return this.baseCanvas.contentLayer;
+    return this.canvas.contentLayer;
   }
 
   get transform(): Transform {
-    return this.baseCanvas.transform;
+    return this.canvas.transform;
   }
 
   get isReady(): boolean {
@@ -141,21 +141,21 @@ export class MarkupCanvas {
   }
 
   getBounds(): CanvasBounds {
-    return getCanvasBounds(this.baseCanvas, this.config);
+    return getCanvasBounds(this.canvas, this.config);
   }
 
   updateTransform(newTransform: Partial<Transform>): boolean {
-    const result = updateTransform(this.baseCanvas, newTransform);
+    const result = updateTransform(this.canvas, newTransform);
     if (result) {
-      emitTransformEvents(this.listen, this.baseCanvas);
+      emitTransformEvents(this.listen, this.canvas);
     }
     return result;
   }
 
   reset(): boolean {
-    const result = resetTransform(this.baseCanvas);
+    const result = resetTransform(this.canvas);
     if (result) {
-      emitTransformEvents(this.listen, this.baseCanvas);
+      emitTransformEvents(this.listen, this.canvas);
     }
     return result;
   }
@@ -165,20 +165,16 @@ export class MarkupCanvas {
   }
 
   canvasToContent(x: number, y: number): { x: number; y: number } {
-    const matrix = createMatrix(
-      this.baseCanvas.transform.scale,
-      this.baseCanvas.transform.translateX,
-      this.baseCanvas.transform.translateY
-    );
+    const matrix = createMatrix(this.canvas.transform.scale, this.canvas.transform.translateX, this.canvas.transform.translateY);
     return canvasToContent(x, y, matrix);
   }
 
   zoomToPoint(x: number, y: number, targetScale: number): boolean {
-    return zoomToPoint(this.baseCanvas, this.transformLayer, this.config, x, y, targetScale);
+    return zoomToPoint(this.canvas, this.transformLayer, this.config, x, y, targetScale);
   }
 
   resetView(): boolean {
-    return resetView(this.baseCanvas, this.transformLayer, this.config);
+    return resetView(this.canvas, this.transformLayer, this.config);
   }
 
   resetViewToCenter(): boolean {
@@ -187,38 +183,38 @@ export class MarkupCanvas {
 
   panLeft(distance?: number): boolean {
     return (
-      panLeft(this.baseCanvas, this.config, this.updateTransform.bind(this)) ||
-      (distance ? panLeft(this.baseCanvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
+      panLeft(this.canvas, this.config, this.updateTransform.bind(this)) ||
+      (distance ? panLeft(this.canvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
     );
   }
 
   panRight(distance?: number): boolean {
     return (
-      panRight(this.baseCanvas, this.config, this.updateTransform.bind(this)) ||
-      (distance ? panRight(this.baseCanvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
+      panRight(this.canvas, this.config, this.updateTransform.bind(this)) ||
+      (distance ? panRight(this.canvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
     );
   }
 
   panUp(distance?: number): boolean {
     return (
-      panUp(this.baseCanvas, this.config, this.updateTransform.bind(this)) ||
-      (distance ? panUp(this.baseCanvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
+      panUp(this.canvas, this.config, this.updateTransform.bind(this)) ||
+      (distance ? panUp(this.canvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
     );
   }
 
   panDown(distance?: number): boolean {
     return (
-      panDown(this.baseCanvas, this.config, this.updateTransform.bind(this)) ||
-      (distance ? panDown(this.baseCanvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
+      panDown(this.canvas, this.config, this.updateTransform.bind(this)) ||
+      (distance ? panDown(this.canvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
     );
   }
 
   zoomIn(factor: number = 0.5): boolean {
-    return zoomIn(this, this.baseCanvas, this.transformLayer, this.config, this.zoomToPoint.bind(this), factor);
+    return zoomIn(this, this.transformLayer, this.config, this.zoomToPoint.bind(this), factor);
   }
 
   zoomOut(factor: number = 0.5): boolean {
-    return zoomOut(this, this.baseCanvas, this.transformLayer, this.config, this.zoomToPoint.bind(this), factor);
+    return zoomOut(this, this.transformLayer, this.config, this.zoomToPoint.bind(this), factor);
   }
 
   resetZoom(): boolean {
@@ -271,11 +267,11 @@ export class MarkupCanvas {
   }
 
   centerContent(): boolean {
-    return centerContent(this.baseCanvas, this.config, this.updateTransform.bind(this), this.transformLayer);
+    return centerContent(this.canvas, this.config, this.updateTransform.bind(this), this.transformLayer);
   }
 
   fitToScreen(): boolean {
-    return fitToScreen(this.baseCanvas, this.transformLayer, this.config);
+    return fitToScreen(this.canvas, this.transformLayer, this.config);
   }
 
   getVisibleArea(): { x: number; y: number; width: number; height: number } {
@@ -287,7 +283,7 @@ export class MarkupCanvas {
   }
 
   scrollToPoint(x: number, y: number): boolean {
-    return scrollToPoint(this.baseCanvas, this.config, x, y, this.updateTransform.bind(this), this.transformLayer);
+    return scrollToPoint(this.canvas, this.config, x, y, this.updateTransform.bind(this), this.transformLayer);
   }
 
   // Configuration access
@@ -302,7 +298,7 @@ export class MarkupCanvas {
   // Theme management
   updateThemeMode(mode: "light" | "dark"): void {
     this.config = createMarkupCanvasConfig({ ...this.config, themeMode: mode });
-    updateThemeMode(this.baseCanvas.container, this.config, this.rulers, mode);
+    updateThemeMode(this.canvas.container, this.config, this.rulers, mode);
   }
 
   // Cleanup method

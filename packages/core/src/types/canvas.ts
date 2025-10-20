@@ -35,7 +35,7 @@ export interface CanvasBounds {
   canZoomOut: boolean;
 }
 
-export interface BaseCanvas {
+export interface Canvas {
   container: HTMLElement;
   transformLayer: HTMLElement;
   contentLayer: HTMLElement;

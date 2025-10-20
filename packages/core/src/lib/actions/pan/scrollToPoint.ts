@@ -1,9 +1,9 @@
 import { getCanvasBounds } from "@/lib/canvas/getCanvasBounds.js";
 import { withTransition } from "@/lib/transition/withTransition.js";
-import type { BaseCanvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
+import type { Canvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
 
 export function scrollToPoint(
-  baseCanvas: BaseCanvas,
+  canvas: Canvas,
   config: Required<MarkupCanvasConfig>,
   x: number,
   y: number,
@@ -11,13 +11,13 @@ export function scrollToPoint(
   transformLayer: HTMLElement
 ): boolean {
   return withTransition(transformLayer, config, () => {
-    const bounds = getCanvasBounds(baseCanvas, config);
+    const bounds = getCanvasBounds(canvas, config);
     const centerX = bounds.width / 2;
     const centerY = bounds.height / 2;
 
     // Calculate new translation to center the point
-    const newTranslateX = centerX - x * baseCanvas.transform.scale;
-    const newTranslateY = centerY - y * baseCanvas.transform.scale;
+    const newTranslateX = centerX - x * canvas.transform.scale;
+    const newTranslateY = centerY - y * canvas.transform.scale;
 
     return updateTransform({
       translateX: newTranslateX,

@@ -1,11 +1,11 @@
-import type { BaseCanvas, Transform } from "@/types/index.js";
+import type { Canvas, Transform } from "@/types/index.js";
 import { updateTransform } from "./updateTransform.js";
 
-export function resetTransform(baseCanvas: BaseCanvas): boolean {
+export function resetTransform(canvas: Canvas): boolean {
   const resetTransformData: Transform = {
     scale: 1.0,
     translateX: 0,
     translateY: 0,
   };
-  return updateTransform(baseCanvas, resetTransformData);
+  return updateTransform(canvas, resetTransformData);
 }

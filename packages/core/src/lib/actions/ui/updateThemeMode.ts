@@ -3,7 +3,7 @@ import { getThemeValue } from "@/lib/helpers/index.js";
 import type { MarkupCanvasConfig, RulerSystem } from "@/types/index.js";
 
 export function updateThemeMode(
-  baseCanvasContainer: HTMLElement,
+  canvasContainer: HTMLElement,
   config: Required<MarkupCanvasConfig>,
   rulers: RulerSystem | null,
   mode: "light" | "dark"
@@ -16,7 +16,7 @@ export function updateThemeMode(
 
   // Update canvas background color
   const backgroundColor = getThemeValue(updatedConfig, "canvasBackgroundColor");
-  baseCanvasContainer.style.backgroundColor = backgroundColor;
+  canvasContainer.style.backgroundColor = backgroundColor;
 
   // Update rulers if they exist
   if (rulers) {

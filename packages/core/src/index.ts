@@ -1,7 +1,7 @@
 export { EDITOR_PRESET } from "./lib/config/presets";
 export { MarkupCanvas, MarkupCanvas as default } from "./lib/MarkupCanvas.js";
 export type {
-  BaseCanvas,
+  Canvas,
   CanvasBounds,
   CanvasOptions,
   GestureInfo,

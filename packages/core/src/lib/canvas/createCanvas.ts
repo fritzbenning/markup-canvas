@@ -4,10 +4,9 @@ import { DEFAULT_ZOOM } from "@/lib/constants.js";
 import { withFeatureEnabled } from "@/lib/helpers/index.js";
 import { createMatrix } from "@/lib/matrix/createMatrix.js";
 import { applyTransform, enableHardwareAcceleration } from "@/lib/transform/index.js";
-import type { BaseCanvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
+import type { Canvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
 
-// Creates and initializes a canvas with the required DOM structure
-export function createCanvas(container: HTMLElement, config: Required<MarkupCanvasConfig>): BaseCanvas | null {
+export function createCanvas(container: HTMLElement, config: Required<MarkupCanvasConfig>): Canvas | null {
   if (!container?.appendChild) {
     console.error("Invalid container element provided to createCanvas");
     return null;
@@ -35,7 +34,7 @@ export function createCanvas(container: HTMLElement, config: Required<MarkupCanv
 
     applyTransform(transformLayer, initialMatrix);
 
-    const canvas: BaseCanvas = {
+    const canvas: Canvas = {
       // DOM references
       container,
       transformLayer,
