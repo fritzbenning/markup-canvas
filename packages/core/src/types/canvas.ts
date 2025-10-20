@@ -52,7 +52,7 @@ export interface BaseCanvas {
   canvasToContent: (x: number, y: number) => { x: number; y: number };
   zoomToPoint: (x: number, y: number, targetScale: number) => boolean;
   resetView: () => boolean;
-  zoomToFitContent: () => boolean;
+  fitToScreen: () => boolean;
 }
 
 // Legacy Canvas interface - kept for backwards compatibility with other parts of the codebase

@@ -78,7 +78,7 @@ export function getCanvasMethods() {
     },
 
     // Zoom to fit content in canvas
-    zoomToFitContent: function (this: BaseCanvas) {
+    fitToScreen: function (this: BaseCanvas) {
       return withTransition(this.transformLayer, this.config, () => {
         const bounds = this.getBounds();
         const scaleX = bounds.width / this.config.width;

@@ -194,10 +194,6 @@ export class MarkupCanvas implements Canvas {
     return resetViewToCenter(this, this.transformLayer, this.config, this.zoomToPoint.bind(this));
   }
 
-  zoomToFitContent(): boolean {
-    return this.fitToScreen();
-  }
-
   panLeft(distance?: number): boolean {
     return (
       panLeft(this.baseCanvas, this.config, this.updateTransform.bind(this)) ||
@@ -291,7 +287,7 @@ export class MarkupCanvas implements Canvas {
 
   fitToScreen(): boolean {
     return withTransition(this.transformLayer, this.config, () => {
-      const result = this.baseCanvas.zoomToFitContent();
+      const result = this.baseCanvas.fitToScreen();
       if (result) {
         emitTransformEvents(this.listen, this.baseCanvas);
       }
