@@ -238,10 +238,13 @@ export class MarkupCanvas implements Canvas {
     return withTransition(this.transformLayer, this.config, () => {
       return withClampedZoom(this.config, (clamp) => {
         const newScale = clamp(zoomLevel);
-        const newTransform: Partial<Transform> = {
-          scale: newScale,
-        };
-        return this.updateTransform(newTransform);
+
+        const center = getViewportCenter(this);
+        const result = this.zoomToPoint(center.x, center.y, newScale);
+        if (result) {
+          this.emitTransformEvents();
+        }
+        return result;
       });
     });
   }
