@@ -209,19 +209,13 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions = {}) {
 
   const setTransitionMode = useCallback(
     (enabled: boolean) => {
-      canvas?.config?.update?.({ enableTransition: enabled });
+      canvas?.transition?.set?.(enabled);
     },
     [canvas]
   );
 
   const toggleTransitionMode = useCallback(() => {
-    if (canvas) {
-      const currentConfig = canvas.config.current;
-      const newEnableTransition = !currentConfig?.enableTransition;
-      canvas.config?.update?.({ enableTransition: newEnableTransition });
-      return newEnableTransition;
-    }
-    return false;
+    return canvas?.transition?.toggle?.() ?? false;
   }, [canvas]);
 
   const updateThemeMode = useCallback(

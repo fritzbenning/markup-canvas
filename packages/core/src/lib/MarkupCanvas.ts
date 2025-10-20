@@ -1,7 +1,6 @@
 import { centerContent, panDown, panLeft, panRight, panUp, scrollToPoint } from "@/lib/actions/pan/index.js";
 import { resetTransform, updateTransform } from "@/lib/actions/transform/index.js";
-import { hideGrid, isGridVisible, showGrid, toggleGrid } from "@/lib/actions/ui/grid/index.js";
-import { updateThemeMode } from "@/lib/actions/ui/index.js";
+import { hideGrid, isGridVisible, showGrid, toggleGrid, toggleTransition, updateThemeMode } from "@/lib/actions/ui/index.js";
 import { areRulersVisible, hideRulers, showRulers, toggleRulers } from "@/lib/actions/ui/rulers/index.js";
 import { resetView, resetViewToCenter, setZoom, zoomIn, zoomOut, zoomToPoint } from "@/lib/actions/zoom/index.js";
 import { fitToScreen } from "@/lib/canvas/fitToScreen.js";
@@ -329,6 +328,17 @@ export class MarkupCanvas {
     const newMode = currentMode === "light" ? "dark" : "light";
     this.updateThemeMode(newMode);
     return newMode;
+  }
+
+  // Transition management
+  updateTransition(enabled: boolean): void {
+    this.config = createMarkupCanvasConfig({ ...this.config, enableTransition: enabled });
+  }
+
+  toggleTransitionMode(): boolean {
+    const newEnableTransition = toggleTransition(this.config.enableTransition);
+    this.updateTransition(newEnableTransition);
+    return newEnableTransition;
   }
 
   // Cleanup method

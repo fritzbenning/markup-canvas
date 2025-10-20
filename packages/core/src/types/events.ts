@@ -52,7 +52,9 @@ export type PostMessageAction =
   | "showGrid"
   | "hideGrid"
   | "updateThemeMode"
-  | "toggleThemeMode";
+  | "toggleThemeMode"
+  | "updateTransition"
+  | "toggleTransitionMode";
 
 export interface PostMessageRequest {
   source: "markup-canvas";

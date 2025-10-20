@@ -58,6 +58,11 @@ export interface WindowAPI {
     readonly update: (mode: "light" | "dark") => void;
     readonly toggle: () => "light" | "dark";
   };
+  transition: {
+    readonly current: boolean;
+    readonly set: (enabled: boolean) => void;
+    readonly toggle: () => boolean;
+  };
   event: EventEmitter<MarkupCanvasEvents>;
   lifecycle: {
     readonly cleanup: () => void;

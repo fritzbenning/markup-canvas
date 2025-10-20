@@ -79,6 +79,12 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
       toggle: canvas.toggleThemeMode.bind(canvas),
     },
 
+    transition: {
+      current: canvas.config.enableTransition,
+      set: canvas.updateTransition.bind(canvas),
+      toggle: canvas.toggleTransitionMode.bind(canvas),
+    },
+
     // Event group
     event: canvas.event,
 

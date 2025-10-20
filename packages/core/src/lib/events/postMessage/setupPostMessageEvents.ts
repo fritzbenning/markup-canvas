@@ -75,6 +75,16 @@ export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
         const currentConfig = canvas.getConfig();
         const newMode = currentConfig.themeMode === "light" ? "dark" : "light";
         canvas.updateThemeMode(newMode);
+      }
+      // Transition methods
+      else if (action === "updateTransition") {
+        const enabled = args[0] as boolean;
+        if (typeof enabled !== "boolean") {
+          throw new Error(`Invalid transition enabled value: ${enabled}. Must be a boolean.`);
+        }
+        canvas.updateTransition(enabled);
+      } else if (action === "toggleTransitionMode") {
+        canvas.toggleTransitionMode();
       } else {
         throw new Error(`Unknown action: ${action}`);
       }
