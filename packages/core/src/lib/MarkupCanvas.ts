@@ -1,4 +1,4 @@
-import { panDown, panLeft, panRight, panUp } from "@/lib/actions/pan/index.js";
+import { centerContent, panDown, panLeft, panRight, panUp } from "@/lib/actions/pan/index.js";
 import { hideGrid, isGridVisible, showGrid, toggleGrid } from "@/lib/actions/ui/grid/index.js";
 import { areRulersVisible, hideRulers, showRulers, toggleRulers } from "@/lib/actions/ui/rulers/index.js";
 import { createCanvas } from "@/lib/canvas/index.js";
@@ -74,26 +74,25 @@ export class MarkupCanvas implements Canvas {
 
   private setupEventHandlers(): void {
     try {
-      // Wheel zoom
+      // Wheel events
       withFeatureEnabled(this.config, "enableZoom", () => {
         const wheelCleanup = setupWheelEvents(this, this.config);
         this.cleanupFunctions.push(wheelCleanup);
       });
 
-      // Mouse events (drag and click-to-zoom)
-      // Set up mouse events if either pan or click-to-zoom is enabled
+      // Mouse events
       if (this.config.enablePan || this.config.enableClickToZoom) {
         this.dragSetup = setupMouseEvents(this, this.config, true);
         this.cleanupFunctions.push(this.dragSetup.cleanup);
       }
 
-      // Keyboard navigation
+      // Keyboard events
       withFeatureEnabled(this.config, "enableKeyboard", () => {
         const keyboardCleanup = setupKeyboardEvents(this, this.config);
         this.cleanupFunctions.push(keyboardCleanup);
       });
 
-      // Touch events (if enabled)
+      // Touch events
       withFeatureEnabled(this.config, "enableTouch", () => {
         const touchCleanup = setupTouchEvents(this);
         this.cleanupFunctions.push(touchCleanup);
@@ -132,7 +131,6 @@ export class MarkupCanvas implements Canvas {
     return this.baseCanvas.transform;
   }
 
-  // State management getters for React integration
   get isReady(): boolean {
     return this._isReady;
   }
@@ -195,7 +193,7 @@ export class MarkupCanvas implements Canvas {
   }
 
   resetView(): boolean {
-    const result = this.baseCanvas.resetView ? this.baseCanvas.resetView() : false;
+    const result = this.baseCanvas.resetView();
     if (result) {
       emitTransformEvents(this.listen, this.baseCanvas);
     }
@@ -326,14 +324,7 @@ export class MarkupCanvas implements Canvas {
 
   centerContent(): boolean {
     return withTransition(this.transformLayer, this.config, () => {
-      const bounds = this.baseCanvas.getBounds();
-      const centerX = (bounds.width - bounds.contentWidth * this.baseCanvas.transform.scale) / 2;
-      const centerY = (bounds.height - bounds.contentHeight * this.baseCanvas.transform.scale) / 2;
-
-      return this.updateTransform({
-        translateX: centerX,
-        translateY: centerY,
-      });
+      return centerContent(this.baseCanvas, this.config, this.updateTransform.bind(this));
     });
   }
 
