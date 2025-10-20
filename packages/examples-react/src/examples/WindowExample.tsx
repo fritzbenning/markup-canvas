@@ -24,10 +24,10 @@ function WindowExample() {
     showGridState,
   } = useMarkupCanvasWindow({
     canvasName: "canvas",
-    onCanvasReady: (canvas) => {
+    onReady: (canvas) => {
       console.log("✅ Canvas found and bound to window!", canvas);
     },
-    onCanvasUnavailable: () => {
+    onError: () => {
       console.warn("⚠️ Canvas not found on window");
     },
   });
@@ -36,7 +36,6 @@ function WindowExample() {
     if (event.data.source === "markup-canvas" && event.data.canvasName === "canvas") {
       if (event.data.event === "zoom") {
         const zoomValue = event.data.data;
-        console.log("Current zoom value:", zoomValue);
       }
     }
   }, []);

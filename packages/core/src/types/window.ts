@@ -56,6 +56,7 @@ export interface WindowAPI {
   theme: {
     readonly current: "light" | "dark";
     readonly update: (mode: "light" | "dark") => void;
+    readonly toggle: () => "light" | "dark";
   };
   event: EventEmitter<MarkupCanvasEvents>;
   lifecycle: {

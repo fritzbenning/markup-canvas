@@ -76,6 +76,7 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
     theme: {
       current: canvas.config.themeMode,
       update: canvas.updateThemeMode.bind(canvas),
+      toggle: canvas.toggleThemeMode.bind(canvas),
     },
 
     // Event group

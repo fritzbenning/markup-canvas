@@ -3,7 +3,7 @@ import { type RefObject, useCallback, useEffect, useRef, useState } from "react"
 import type { MarkupCanvasRef, UseMarkupCanvasOptions } from "../types/index.js";
 
 export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, options: UseMarkupCanvasOptions = {}) {
-  const [instance, setInstance] = useState<MarkupCanvas | null>(null);
+  const [canvas, setCanvas] = useState<MarkupCanvas | null>(null);
   const [transform, setTransform] = useState<Transform>({ scale: 1, translateX: 0, translateY: 0 });
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -15,9 +15,9 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
   const optionsRef = useRef(options);
   optionsRef.current = options;
 
-  const handleCanvasInstance = useCallback((canvas: MarkupCanvas) => {
-    setInstance(canvas);
-    optionsRef.current.onReady?.(canvas);
+  const handleCanvasInstance = useCallback((markupCanvas: MarkupCanvas) => {
+    setCanvas(markupCanvas);
+    optionsRef.current.onReady?.(markupCanvas);
   }, []);
 
   const handleTransform = useCallback((newTransform: Transform) => {
@@ -35,9 +35,9 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
     optionsRef.current.onPanChange?.(newPan);
   }, []);
 
-  const handleReady = useCallback((canvas: MarkupCanvas) => {
+  const handleReady = useCallback((markupCanvas: MarkupCanvas) => {
     setIsReady(true);
-    optionsRef.current.onReady?.(canvas);
+    optionsRef.current.onReady?.(markupCanvas);
   }, []);
 
   const handleRulersVisibilityChange = useCallback((isVisible: boolean) => {
@@ -49,39 +49,37 @@ export function useMarkupCanvas(canvasRef: RefObject<MarkupCanvasRef | null>, op
   }, []);
 
   useEffect(() => {
-    console.log("useEffect", instance);
-
-    if (!instance) {
+    if (!canvas) {
       return;
     }
 
-    instance.on("transform", handleTransform);
-    instance.on("zoom", handleZoom);
-    instance.on("pan", handlePan);
-    instance.on("ready", handleReady);
-    instance.on("rulersVisibility", handleRulersVisibilityChange);
-    instance.on("gridVisibility", handleGridVisibilityChange);
+    canvas.on("transform", handleTransform);
+    canvas.on("zoom", handleZoom);
+    canvas.on("pan", handlePan);
+    canvas.on("ready", handleReady);
+    canvas.on("rulersVisibility", handleRulersVisibilityChange);
+    canvas.on("gridVisibility", handleGridVisibilityChange);
 
-    if (instance.transform) {
-      setTransform(instance.transform);
-      setZoom(instance.transform.scale);
-      setPan({ x: instance.transform.translateX, y: instance.transform.translateY });
+    if (canvas.transform) {
+      setTransform(canvas.transform);
+      setZoom(canvas.transform.scale);
+      setPan({ x: canvas.transform.translateX, y: canvas.transform.translateY });
     }
 
-    if (instance.isReady) {
+    if (canvas.isReady) {
       setIsReady(true);
-      optionsRef.current.onReady?.(instance);
+      optionsRef.current.onReady?.(canvas);
     }
 
     return () => {
-      instance.off("transform", handleTransform);
-      instance.off("zoom", handleZoom);
-      instance.off("pan", handlePan);
-      instance.off("ready", handleReady);
-      instance.off("rulersVisibility", handleRulersVisibilityChange);
-      instance.off("gridVisibility", handleGridVisibilityChange);
+      canvas.off("transform", handleTransform);
+      canvas.off("zoom", handleZoom);
+      canvas.off("pan", handlePan);
+      canvas.off("ready", handleReady);
+      canvas.off("rulersVisibility", handleRulersVisibilityChange);
+      canvas.off("gridVisibility", handleGridVisibilityChange);
     };
-  }, [instance, handleTransform, handleZoom, handlePan, handleReady, handleRulersVisibilityChange, handleGridVisibilityChange]);
+  }, [canvas, handleTransform, handleZoom, handlePan, handleReady, handleRulersVisibilityChange, handleGridVisibilityChange]);
 
   const zoomIn = useCallback(() => {
     canvasRef.current?.zoomIn();

@@ -4,15 +4,14 @@ import type { UseMarkupCanvasOptions } from "../types/index.js";
 
 interface UseMarkupCanvasWindowOptions extends Omit<UseMarkupCanvasOptions, "onReady"> {
   canvasName?: string;
-  onCanvasReady?: (canvas: WindowAPI) => void;
-  onCanvasUnavailable?: () => void;
+  onError?: () => void;
   onReady?: (canvas: WindowAPI) => void;
 }
 
 export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}) {
   const { canvasName = "markupCanvas" } = options;
 
-  const [instance, setInstance] = useState<WindowAPI | null>(null);
+  const [canvas, setCanvas] = useState<WindowAPI | null>(null);
   const [transform, setTransform] = useState<Transform>({ scale: 1, translateX: 0, translateY: 0 });
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -24,9 +23,9 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   const optionsRef = useRef(options);
   optionsRef.current = options;
 
-  const handleCanvasInstance = useCallback((canvas: WindowAPI) => {
-    setInstance(canvas);
-    optionsRef.current.onReady?.(canvas);
+  const handleCanvasInstance = useCallback((canvasInstance: WindowAPI) => {
+    setCanvas(canvasInstance);
+    optionsRef.current.onReady?.(canvasInstance);
   }, []);
 
   const handleTransform = useCallback((newTransform: Transform) => {
@@ -44,9 +43,9 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
     optionsRef.current.onPanChange?.(newPan);
   }, []);
 
-  const handleReady = useCallback((canvas: WindowAPI) => {
+  const handleReady = useCallback((canvasInstance: WindowAPI) => {
     setIsReady(true);
-    optionsRef.current.onReady?.(canvas);
+    optionsRef.current.onReady?.(canvasInstance);
   }, []);
 
   const handleRulersVisibilityChange = useCallback((isVisible: boolean) => {
@@ -60,63 +59,64 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   // Get instance from window binding
   useEffect(() => {
     if (typeof window === "undefined") {
-      optionsRef.current.onCanvasUnavailable?.();
+      optionsRef.current.onError?.();
       return;
     }
 
-    const windowInstance = (window as unknown as Record<string, unknown>)[canvasName] as WindowAPI;
-    if (windowInstance && typeof windowInstance === "object") {
-      handleCanvasInstance(windowInstance);
-      optionsRef.current.onCanvasReady?.(windowInstance);
+    const windowCanvas = (window as unknown as Record<string, unknown>)[canvasName] as WindowAPI;
+
+    if (windowCanvas && typeof windowCanvas === "object") {
+      handleCanvasInstance(windowCanvas);
+      optionsRef.current.onReady?.(windowCanvas);
 
       // Set initial state from instance
-      if (windowInstance.state?.transform) {
-        const transform = windowInstance.state.transform;
+      if (windowCanvas.state?.transform) {
+        const transform = windowCanvas.state.transform;
         setTransform(transform);
         setZoom(transform.scale);
         setPan({ x: transform.translateX, y: transform.translateY });
       }
 
-      if (windowInstance.state?.isReady) {
+      if (windowCanvas.state?.isReady) {
         setIsReady(true);
-        optionsRef.current.onReady?.(windowInstance);
+        optionsRef.current.onReady?.(windowCanvas);
       }
 
-      setThemeModeState((windowInstance?.theme?.current as "light" | "dark" | undefined) || "light");
+      setThemeModeState((windowCanvas?.theme?.current as "light" | "dark" | undefined) || "light");
 
-      if (windowInstance.rulers?.isVisible?.()) {
+      if (windowCanvas.rulers?.isVisible?.()) {
         setShowRulersState(true);
       }
-      if (windowInstance.grid?.isVisible?.()) {
+      if (windowCanvas.grid?.isVisible?.()) {
         setShowGridState(true);
       }
     } else {
-      optionsRef.current.onCanvasUnavailable?.();
+      optionsRef.current.onError?.();
     }
   }, [canvasName, handleCanvasInstance]);
 
   // Set up event listeners on canvas instance
   useEffect(() => {
-    if (!instance) {
+    if (!canvas) {
       return;
     }
 
-    instance.event.on("transform", handleTransform);
-    instance.event.on("zoom", handleZoom);
-    instance.event.on("pan", handlePan);
-    instance.event.on("ready", handleReady);
-    instance.event.on("rulersVisibility", handleRulersVisibilityChange);
-    instance.event.on("gridVisibility", handleGridVisibilityChange);
+    canvas.event.on("transform", handleTransform);
+    canvas.event.on("zoom", handleZoom);
+    canvas.event.on("pan", handlePan);
+    canvas.event.on("ready", handleReady);
+    canvas.event.on("rulersVisibility", handleRulersVisibilityChange);
+    canvas.event.on("gridVisibility", handleGridVisibilityChange);
 
     return () => {
-      instance.event.off("transform", handleTransform);
-      instance.event.off("zoom", handleZoom);
-      instance.event.off("pan", handlePan);
-      instance.event.off("ready", handleReady);
-      instance.event.off("rulersVisibility", handleRulersVisibilityChange);
-      instance.event.off("gridVisibility", handleGridVisibilityChange);
+      canvas.event.off("transform", handleTransform);
+      canvas.event.off("zoom", handleZoom);
+      canvas.event.off("pan", handlePan);
+      canvas.event.off("ready", handleReady);
+      canvas.event.off("rulersVisibility", handleRulersVisibilityChange);
+      canvas.event.off("gridVisibility", handleGridVisibilityChange);
     };
-  }, [instance, handleTransform, handleZoom, handlePan, handleReady, handleRulersVisibilityChange, handleGridVisibilityChange]);
+  }, [canvas, handleTransform, handleZoom, handlePan, handleReady, handleRulersVisibilityChange, handleGridVisibilityChange]);
 
   // Listen to window messages for state updates
   useEffect(() => {
@@ -151,127 +151,125 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   // Action methods
   const zoomIn = useCallback(
     (factor = 0.5) => {
-      instance?.zoom?.in?.(factor);
+      canvas?.zoom?.in?.(factor);
     },
-    [instance]
+    [canvas]
   );
 
   const zoomOut = useCallback(
     (factor = 0.5) => {
-      instance?.zoom?.out?.(factor);
+      canvas?.zoom?.out?.(factor);
     },
-    [instance]
+    [canvas]
   );
 
   const resetZoom = useCallback(() => {
-    instance?.zoom?.reset?.();
-  }, [instance]);
+    canvas?.zoom?.reset?.();
+  }, [canvas]);
 
   const panLeft = useCallback(
     (distance?: number) => {
-      instance?.pan?.left?.(distance);
+      canvas?.pan?.left?.(distance);
     },
-    [instance]
+    [canvas]
   );
 
   const panRight = useCallback(
     (distance?: number) => {
-      instance?.pan?.right?.(distance);
+      canvas?.pan?.right?.(distance);
     },
-    [instance]
+    [canvas]
   );
 
   const panUp = useCallback(
     (distance?: number) => {
-      instance?.pan?.up?.(distance);
+      canvas?.pan?.up?.(distance);
     },
-    [instance]
+    [canvas]
   );
 
   const panDown = useCallback(
     (distance?: number) => {
-      instance?.pan?.down?.(distance);
+      canvas?.pan?.down?.(distance);
     },
-    [instance]
+    [canvas]
   );
 
   const fitToContent = useCallback(() => {
-    instance?.zoom?.fitToScreen?.();
-  }, [instance]);
+    canvas?.zoom?.fitToScreen?.();
+  }, [canvas]);
 
   const centerContent = useCallback(() => {
-    instance?.pan?.toCenter?.();
-  }, [instance]);
+    canvas?.pan?.toCenter?.();
+  }, [canvas]);
 
   const resetView = useCallback(() => {
-    instance?.zoom?.resetToCenter?.();
-  }, [instance]);
+    canvas?.zoom?.resetToCenter?.();
+  }, [canvas]);
 
   const setTransitionMode = useCallback(
     (enabled: boolean) => {
-      instance?.config?.update?.({ enableTransition: enabled });
+      canvas?.config?.update?.({ enableTransition: enabled });
     },
-    [instance]
+    [canvas]
   );
 
   const toggleTransitionMode = useCallback(() => {
-    if (instance) {
-      const currentConfig = instance.config.current;
+    if (canvas) {
+      const currentConfig = canvas.config.current;
       const newEnableTransition = !currentConfig?.enableTransition;
-      instance.config?.update?.({ enableTransition: newEnableTransition });
+      canvas.config?.update?.({ enableTransition: newEnableTransition });
       return newEnableTransition;
     }
     return false;
-  }, [instance]);
+  }, [canvas]);
 
   const updateThemeMode = useCallback(
     (mode: "light" | "dark") => {
       setThemeModeState(mode);
-      instance?.theme?.update?.(mode);
+      canvas?.theme?.update?.(mode);
     },
-    [instance]
+    [canvas]
   );
 
   const toggleThemeMode = useCallback(() => {
-    const newMode = themeMode === "light" ? "dark" : "light";
-    updateThemeMode(newMode);
-    return newMode;
-  }, [themeMode, updateThemeMode]);
+    canvas?.theme?.toggle?.();
+  }, [canvas]);
 
   const showRulers = useCallback(() => {
-    instance?.rulers?.show?.();
-  }, [instance]);
+    canvas?.rulers?.show?.();
+  }, [canvas]);
 
   const hideRulers = useCallback(() => {
-    instance?.rulers?.hide?.();
-  }, [instance]);
+    canvas?.rulers?.hide?.();
+  }, [canvas]);
 
   const toggleRulers = useCallback(() => {
-    instance?.rulers?.toggle?.();
-  }, [instance]);
+    canvas?.rulers?.toggle?.();
+  }, [canvas]);
 
   const areRulersVisible = useCallback(() => {
-    return instance?.rulers?.isVisible?.() ?? false;
-  }, [instance]);
+    return canvas?.rulers?.isVisible?.() ?? false;
+  }, [canvas]);
 
   const showGrid = useCallback(() => {
-    instance?.grid?.show?.();
-  }, [instance]);
+    canvas?.grid?.show?.();
+  }, [canvas]);
 
   const hideGrid = useCallback(() => {
-    instance?.grid?.hide?.();
-  }, [instance]);
+    canvas?.grid?.hide?.();
+  }, [canvas]);
 
   const toggleGrid = useCallback(() => {
-    instance?.grid?.toggle?.();
-  }, [instance]);
+    canvas?.grid?.toggle?.();
+  }, [canvas]);
 
   const isGridVisible = useCallback(() => {
-    return instance?.grid?.isVisible?.() ?? false;
-  }, [instance]);
+    return canvas?.grid?.isVisible?.() ?? false;
+  }, [canvas]);
 
   return {
-    canvas: instance,
+    canvas: canvas,
     transform,
     zoom,
     pan,

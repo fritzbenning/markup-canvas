@@ -325,6 +325,13 @@ export class MarkupCanvas {
     updateThemeMode(this.canvas.container, this.config, this.rulers, mode);
   }
 
+  toggleThemeMode(): "light" | "dark" {
+    const currentMode = this.config.themeMode;
+    const newMode = currentMode === "light" ? "dark" : "light";
+    this.updateThemeMode(newMode);
+    return newMode;
+  }
+
   // Cleanup method
   cleanup(): void {
     cleanupWindowBinding(this.config);
