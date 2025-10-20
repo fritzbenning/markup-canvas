@@ -14,6 +14,7 @@ export interface WindowAPI {
     readonly reset: () => void;
   };
   zoom: {
+    readonly current: number;
     readonly set: (zoomLevel: number) => void;
     readonly toPoint: (x: number, y: number, zoomLevel: number) => void;
     readonly in: (factor?: number) => void;

@@ -25,6 +25,9 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
 
     // Zoom group
     zoom: {
+      get current() {
+        return canvas.transform.scale || 1;
+      },
       set: canvas.setZoom.bind(canvas),
       toPoint: canvas.zoomToPoint.bind(canvas),
       in: canvas.zoomIn.bind(canvas),
