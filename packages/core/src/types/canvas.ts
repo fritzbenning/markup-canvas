@@ -44,13 +44,6 @@ export interface BaseCanvas {
   contentLayer: HTMLElement;
   config: Required<MarkupCanvasConfig>;
   transform: Transform;
-  getBounds: () => CanvasBounds;
-  updateTransform: (newTransform: Partial<Transform>) => boolean;
-  reset: () => boolean;
-  canvasToContent: (x: number, y: number) => { x: number; y: number };
-  zoomToPoint: (x: number, y: number, targetScale: number) => boolean;
-  resetView: () => boolean;
-  fitToScreen: () => boolean;
 }
 
 // Legacy Canvas interface - kept for backwards compatibility with other parts of the codebase

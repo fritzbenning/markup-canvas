@@ -43,7 +43,7 @@ export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
 
   // Visual elements
   enableRulers: true,
-  enableGrid: false,
+  enableGrid: true,
   showRulers: true,
   showGrid: false,
 

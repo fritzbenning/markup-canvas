@@ -1,14 +1,19 @@
 import { centerContent, panDown, panLeft, panRight, panUp, scrollToPoint } from "@/lib/actions/pan/index.js";
+import { resetTransform, updateTransform } from "@/lib/actions/transform/index.js";
 import { hideGrid, isGridVisible, showGrid, toggleGrid } from "@/lib/actions/ui/grid/index.js";
 import { updateThemeMode } from "@/lib/actions/ui/index.js";
 import { areRulersVisible, hideRulers, showRulers, toggleRulers } from "@/lib/actions/ui/rulers/index.js";
-import { resetViewToCenter, setZoom, zoomIn, zoomOut } from "@/lib/actions/zoom/index.js";
+import { resetView, resetViewToCenter, setZoom, zoomIn, zoomOut, zoomToPoint } from "@/lib/actions/zoom/index.js";
+import { fitToScreen } from "@/lib/canvas/fitToScreen.js";
+import { getCanvasBounds } from "@/lib/canvas/getCanvasBounds.js";
 import { createCanvas } from "@/lib/canvas/index.js";
 import { createMarkupCanvasConfig } from "@/lib/config/createMarkupCanvasConfig.js";
 import { EventEmitter } from "@/lib/events/EventEmitter.js";
 import { emitTransformEvents } from "@/lib/events/emitTransformEvents.js";
 import { setupKeyboardEvents, setupMouseEvents, setupPostMessageEvents, setupTouchEvents, setupWheelEvents } from "@/lib/events/index.js";
 import { getVisibleArea, isPointVisible, withFeatureEnabled } from "@/lib/helpers/index.js";
+import { canvasToContent } from "@/lib/matrix/canvasToContent.js";
+import { createMatrix } from "@/lib/matrix/createMatrix.js";
 import { createRulers } from "@/lib/rulers/index.js";
 import { broadcastEvent } from "@/lib/window/broadcastEvent.js";
 import { cleanupGlobalBinding } from "@/lib/window/cleanupGlobalBinding.js";
@@ -100,7 +105,7 @@ export class MarkupCanvas implements Canvas {
 
       // Set up rulers and grid
       withFeatureEnabled(this.config, "enableRulers", () => {
-        this.rulers = createRulers(this.baseCanvas, this.config);
+        this.rulers = createRulers(this, this.config);
         this.cleanupFunctions.push(() => {
           if (this.rulers) {
             this.rulers.destroy();
@@ -144,11 +149,11 @@ export class MarkupCanvas implements Canvas {
   }
 
   getBounds(): CanvasBounds {
-    return this.baseCanvas.getBounds();
+    return getCanvasBounds(this.baseCanvas);
   }
 
   updateTransform(newTransform: Partial<Transform>): boolean {
-    const result = this.baseCanvas.updateTransform(newTransform);
+    const result = updateTransform(this.baseCanvas, newTransform);
     if (result) {
       emitTransformEvents(this.listen, this.baseCanvas);
     }
@@ -156,7 +161,11 @@ export class MarkupCanvas implements Canvas {
   }
 
   reset(): boolean {
-    return this.baseCanvas.reset();
+    const result = resetTransform(this.baseCanvas);
+    if (result) {
+      emitTransformEvents(this.listen, this.baseCanvas);
+    }
+    return result;
   }
 
   setZoom(zoomLevel: number): boolean {
@@ -164,15 +173,20 @@ export class MarkupCanvas implements Canvas {
   }
 
   canvasToContent(x: number, y: number): { x: number; y: number } {
-    return this.baseCanvas.canvasToContent(x, y);
+    const matrix = createMatrix(
+      this.baseCanvas.transform.scale,
+      this.baseCanvas.transform.translateX,
+      this.baseCanvas.transform.translateY
+    );
+    return canvasToContent(x, y, matrix);
   }
 
   zoomToPoint(x: number, y: number, targetScale: number): boolean {
-    return this.baseCanvas.zoomToPoint(x, y, targetScale);
+    return zoomToPoint(this.baseCanvas, this.transformLayer, this.config, x, y, targetScale);
   }
 
   resetView(): boolean {
-    return this.baseCanvas.resetView();
+    return resetView(this.baseCanvas, this.transformLayer, this.config);
   }
 
   resetViewToCenter(): boolean {
@@ -269,7 +283,7 @@ export class MarkupCanvas implements Canvas {
   }
 
   fitToScreen(): boolean {
-    return this.baseCanvas.fitToScreen();
+    return fitToScreen(this.baseCanvas, this.transformLayer, this.config);
   }
 
   getVisibleArea(): { x: number; y: number; width: number; height: number } {
