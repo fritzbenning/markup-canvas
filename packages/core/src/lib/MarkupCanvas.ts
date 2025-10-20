@@ -149,11 +149,11 @@ export class MarkupCanvas implements Canvas {
   }
 
   getBounds(): CanvasBounds {
-    return getCanvasBounds(this.baseCanvas);
+    return getCanvasBounds(this.baseCanvas, this.config);
   }
 
   updateTransform(newTransform: Partial<Transform>): boolean {
-    const result = updateTransform(this.baseCanvas, newTransform);
+    const result = updateTransform(this.baseCanvas, this.config, newTransform);
     if (result) {
       emitTransformEvents(this.listen, this.baseCanvas);
     }
@@ -161,7 +161,7 @@ export class MarkupCanvas implements Canvas {
   }
 
   reset(): boolean {
-    const result = resetTransform(this.baseCanvas);
+    const result = resetTransform(this.baseCanvas, this.config);
     if (result) {
       emitTransformEvents(this.listen, this.baseCanvas);
     }

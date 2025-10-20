@@ -13,6 +13,6 @@ export function zoomToPoint(
 ): boolean {
   return withTransition(transformLayer, config, () => {
     const newTransform = getZoomToMouseTransform(x, y, baseCanvas.transform, targetScale / baseCanvas.transform.scale, config);
-    return updateTransform(baseCanvas, newTransform);
+    return updateTransform(baseCanvas, config, newTransform);
   });
 }

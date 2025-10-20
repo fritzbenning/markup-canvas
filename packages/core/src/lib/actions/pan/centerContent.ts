@@ -5,15 +5,15 @@ import type { BaseCanvas, MarkupCanvasConfig, Transform } from "@/types/index.js
 export function centerContent(
   baseCanvas: BaseCanvas,
   config: Required<MarkupCanvasConfig>,
-  updateTransform: (newTransform: Partial<Transform>) => boolean,
+  updateTransformFn: (newTransform: Partial<Transform>) => boolean,
   transformLayer: HTMLElement
 ): boolean {
   return withTransition(transformLayer, config, () => {
-    const bounds = getCanvasBounds(baseCanvas);
+    const bounds = getCanvasBounds(baseCanvas, config);
     const centerX = (bounds.width - bounds.contentWidth * baseCanvas.transform.scale) / 2;
     const centerY = (bounds.height - bounds.contentHeight * baseCanvas.transform.scale) / 2;
 
-    return updateTransform({
+    return updateTransformFn({
       translateX: centerX,
       translateY: centerY,
     });

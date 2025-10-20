@@ -11,7 +11,7 @@ export function resetView(baseCanvas: BaseCanvas, transformLayer: HTMLElement, c
         translateX: rulerSize * -1,
         translateY: rulerSize * -1,
       };
-      return updateTransform(baseCanvas, resetTransformData);
+      return updateTransform(baseCanvas, config, resetTransformData);
     });
   });
 }

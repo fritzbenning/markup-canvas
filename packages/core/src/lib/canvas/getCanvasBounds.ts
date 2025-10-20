@@ -1,14 +1,13 @@
 import { calculateVisibleArea } from "@/lib/canvas/calculateVisibleArea.js";
 import { getEmptyBounds } from "@/lib/canvas/getEmptyBounds.js";
 import { withRulerSize } from "@/lib/helpers/index.js";
-import type { BaseCanvas, CanvasBounds } from "@/types/index.js";
+import type { BaseCanvas, CanvasBounds, MarkupCanvasConfig } from "@/types/index.js";
 import { DEFAULT_CONFIG } from "../config/constants";
 
-export function getCanvasBounds(canvas: BaseCanvas): CanvasBounds {
+export function getCanvasBounds(baseCanvas: BaseCanvas, config: Required<MarkupCanvasConfig>): CanvasBounds {
   try {
-    const container = canvas.container;
-    const config = canvas.config;
-    const transform = canvas.transform || {
+    const container = baseCanvas.container;
+    const transform = baseCanvas.transform || {
       scale: 1.0,
       translateX: 0,
       translateY: 0,

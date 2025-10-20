@@ -42,7 +42,6 @@ export interface BaseCanvas {
   container: HTMLElement;
   transformLayer: HTMLElement;
   contentLayer: HTMLElement;
-  config: Required<MarkupCanvasConfig>;
   transform: Transform;
 }
 

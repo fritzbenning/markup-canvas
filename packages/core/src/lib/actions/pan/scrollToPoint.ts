@@ -11,7 +11,7 @@ export function scrollToPoint(
   transformLayer: HTMLElement
 ): boolean {
   return withTransition(transformLayer, config, () => {
-    const bounds = getCanvasBounds(baseCanvas);
+    const bounds = getCanvasBounds(baseCanvas, config);
     const centerX = bounds.width / 2;
     const centerY = bounds.height / 2;
 

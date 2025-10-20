@@ -7,7 +7,7 @@ import type { BaseCanvas, MarkupCanvasConfig } from "@/types/index.js";
 
 export function fitToScreen(baseCanvas: BaseCanvas, transformLayer: HTMLElement, config: Required<MarkupCanvasConfig>): boolean {
   return withTransition(transformLayer, config, () => {
-    const bounds = getCanvasBounds(baseCanvas);
+    const bounds = getCanvasBounds(baseCanvas, config);
     const scaleX = bounds.width / config.width;
     const scaleY = bounds.height / config.height;
     const fitScale = withClampedZoom(config, (clamp) => clamp(Math.min(scaleX, scaleY) * ZOOM_FIT_PADDING));
@@ -18,7 +18,7 @@ export function fitToScreen(baseCanvas: BaseCanvas, transformLayer: HTMLElement,
     const centerX = (bounds.width - scaledWidth) / 2;
     const centerY = (bounds.height - scaledHeight) / 2;
 
-    return updateTransform(baseCanvas, {
+    return updateTransform(baseCanvas, config, {
       scale: fitScale,
       translateX: centerX,
       translateY: centerY,
