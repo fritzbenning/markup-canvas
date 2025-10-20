@@ -1,88 +1,18 @@
-import type { Transform } from "@markup-canvas/core";
+import type { Transform, WindowAPI } from "@markup-canvas/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { UseMarkupCanvasOptions } from "../types/index.js";
 
-interface MarkupCanvasWindowAPI {
-  transform: {
-    update: (transform: Transform) => void;
-    reset: () => void;
-  };
-  zoom: {
-    set: (zoomLevel: number) => void;
-    toPoint: (x: number, y: number, zoomLevel: number) => void;
-    in: (factor?: number) => void;
-    out: (factor?: number) => void;
-    reset: () => void;
-    resetView: () => void;
-    resetViewToCenter: () => void;
-  };
-  pan: {
-    left: (distance?: number) => void;
-    right: (distance?: number) => void;
-    up: (distance?: number) => void;
-    down: (distance?: number) => void;
-    toPoint: (x: number, y: number) => void;
-    center: () => void;
-    fitToScreen: () => void;
-  };
-  mouseDrag: {
-    enable: () => void;
-    disable: () => void;
-    isEnabled: () => boolean;
-  };
-  grid: {
-    toggle: () => void;
-    show: () => void;
-    hide: () => void;
-    isVisible: () => boolean;
-  };
-  rulers: {
-    toggle: () => void;
-    show: () => void;
-    hide: () => void;
-    isVisible: () => boolean;
-  };
-  utils: {
-    canvasToContent: (x: number, y: number) => { x: number; y: number };
-    getVisibleArea: () => Record<string, unknown>;
-    isPointVisible: (x: number, y: number) => boolean;
-    getBounds: () => Record<string, unknown>;
-    getConfig: () => Record<string, unknown>;
-    updateConfig: (config: Record<string, unknown>) => void;
-    updateThemeMode: (mode: "light" | "dark") => void;
-  };
-  event: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    on: (event: string, handler: (...args: any[]) => void) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    off: (event: string, handler: (...args: any[]) => void) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    emit: (event: string, ...args: any[]) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
-  };
-  lifecycle: {
-    cleanup: () => void;
-    destroy: () => void;
-  };
-  state: {
-    readonly isReady: boolean;
-    readonly isTransforming: boolean;
-    readonly visibleBounds: Record<string, unknown>;
-    readonly transform: Transform;
-  };
-  readonly config: Record<string, unknown>;
-}
-
 interface UseMarkupCanvasWindowOptions extends Omit<UseMarkupCanvasOptions, "onReady"> {
   canvasName?: string;
-  onCanvasReady?: (canvas: MarkupCanvasWindowAPI) => void;
+  onCanvasReady?: (canvas: WindowAPI) => void;
   onCanvasUnavailable?: () => void;
-  onReady?: (canvas: MarkupCanvasWindowAPI) => void;
+  onReady?: (canvas: WindowAPI) => void;
 }
 
 export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}) {
   const { canvasName = "markupCanvas" } = options;
 
-  const [instance, setInstance] = useState<MarkupCanvasWindowAPI | null>(null);
+  const [instance, setInstance] = useState<WindowAPI | null>(null);
   const [transform, setTransform] = useState<Transform>({ scale: 1, translateX: 0, translateY: 0 });
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -94,7 +24,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
   const optionsRef = useRef(options);
   optionsRef.current = options;
 
-  const handleCanvasInstance = useCallback((canvas: MarkupCanvasWindowAPI) => {
+  const handleCanvasInstance = useCallback((canvas: WindowAPI) => {
     setInstance(canvas);
     optionsRef.current.onReady?.(canvas);
   }, []);
@@ -114,7 +44,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
     optionsRef.current.onPanChange?.(newPan);
   }, []);
 
-  const handleReady = useCallback((canvas: MarkupCanvasWindowAPI) => {
+  const handleReady = useCallback((canvas: WindowAPI) => {
     setIsReady(true);
     optionsRef.current.onReady?.(canvas);
   }, []);
@@ -134,7 +64,7 @@ export function useMarkupCanvasWindow(options: UseMarkupCanvasWindowOptions = {}
       return;
     }
 
-    const windowInstance = (window as unknown as Record<string, unknown>)[canvasName] as MarkupCanvasWindowAPI;
+    const windowInstance = (window as unknown as Record<string, unknown>)[canvasName] as WindowAPI;
     if (windowInstance && typeof windowInstance === "object") {
       handleCanvasInstance(windowInstance);
       optionsRef.current.onCanvasReady?.(windowInstance);

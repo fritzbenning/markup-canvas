@@ -13,6 +13,7 @@ export type {
   RulerSystem,
   TouchState,
   Transform,
+  WindowAPI,
   ZoomBoundaryOptions,
   ZoomBoundaryResult,
 } from "./types/index.js";

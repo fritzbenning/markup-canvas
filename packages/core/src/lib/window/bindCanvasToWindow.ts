@@ -1,7 +1,7 @@
 import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
-import type { MarkupCanvasConfig } from "@/types/index.js";
+import type { MarkupCanvasConfig, WindowAPI } from "@/types/index.js";
 
-export function setupGlobalBinding(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>): void {
+export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>): void {
   if (typeof window === "undefined") {
     return;
   }
@@ -9,7 +9,7 @@ export function setupGlobalBinding(canvas: MarkupCanvas, config: Required<Markup
   const canvasName = config.name || "markupCanvas";
   const windowObj = window as unknown as Record<string, unknown>;
 
-  const api = {
+  const api: WindowAPI = {
     // Transform group
     transform: {
       update: canvas.updateTransform.bind(canvas),
@@ -73,11 +73,7 @@ export function setupGlobalBinding(canvas: MarkupCanvas, config: Required<Markup
     },
 
     // Event group
-    event: {
-      on: canvas.on.bind(canvas),
-      off: canvas.off.bind(canvas),
-      emit: canvas.emit.bind(canvas),
-    },
+    event: canvas.event,
 
     // Lifecycle group
     lifecycle: {

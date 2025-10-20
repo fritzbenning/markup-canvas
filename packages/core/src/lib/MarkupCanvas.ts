@@ -17,7 +17,7 @@ import { createMatrix } from "@/lib/matrix/createMatrix.js";
 import { createRulers } from "@/lib/rulers/index.js";
 import { broadcastEvent } from "@/lib/window/broadcastEvent.js";
 import { cleanupGlobalBinding } from "@/lib/window/cleanupGlobalBinding.js";
-import { setupGlobalBinding } from "@/lib/window/setupGlobalBinding.js";
+import { bindCanvasToWindow } from "@/lib/window/index.js";
 import type { Canvas, CanvasBounds, MarkupCanvasConfig, MarkupCanvasEvents, MouseDragControls, Transform } from "@/types/index.js";
 
 declare global {
@@ -32,8 +32,8 @@ export class MarkupCanvas {
   private rulers: ReturnType<typeof createRulers> | null = null;
   private dragSetup: MouseDragControls | null = null;
   public config: Required<MarkupCanvasConfig>;
+  public event = new EventEmitter<MarkupCanvasEvents>();
   private _isReady = false;
-  private event = new EventEmitter<MarkupCanvasEvents>();
 
   constructor(container: HTMLElement, options: MarkupCanvasConfig = {}) {
     if (!container) {
@@ -53,7 +53,7 @@ export class MarkupCanvas {
       this.event.setEmitInterceptor((event, data) => {
         broadcastEvent(event as string, data, this.config);
       });
-      setupGlobalBinding(this, this.config);
+      bindCanvasToWindow(this, this.config);
 
       // Set up postMessage listener
       if (this.config.enablePostMessageAPI) {

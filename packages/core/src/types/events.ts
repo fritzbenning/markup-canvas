@@ -60,3 +60,5 @@ export interface PostMessageRequest {
   action: PostMessageAction;
   args?: unknown[];
 }
+
+export type CallbackEventName = "transform" | "zoom" | "pan" | "ready" | "rulersVisibility" | "gridVisibility";

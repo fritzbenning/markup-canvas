@@ -10,7 +10,7 @@ export type {
 export type { MarkupCanvasConfig } from "./config.js";
 
 // Event types
-export type { GestureInfo, MarkupCanvasEvents, MouseDragControls, TouchState } from "./events.js";
+export type { CallbackEventName, GestureInfo, MarkupCanvasEvents, MouseDragControls, TouchState } from "./events.js";
 
 // Matrix types
 export type {
@@ -25,3 +25,6 @@ export type {
   RulerElements,
   RulerSystem,
 } from "./rulers.js";
+
+// Window API types
+export type { WindowAPI } from "./window.js";
