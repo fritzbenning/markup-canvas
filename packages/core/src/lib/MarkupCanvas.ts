@@ -10,7 +10,6 @@ import { emitTransformEvents } from "@/lib/events/emitTransformEvents.js";
 import { setupKeyboardEvents, setupMouseEvents, setupPostMessageEvents, setupTouchEvents, setupWheelEvents } from "@/lib/events/index.js";
 import { getVisibleArea, isPointVisible, withFeatureEnabled } from "@/lib/helpers/index.js";
 import { createRulers } from "@/lib/rulers/index.js";
-import { withTransition } from "@/lib/transition/withTransition.js";
 import { broadcastEvent } from "@/lib/window/broadcastEvent.js";
 import { cleanupGlobalBinding } from "@/lib/window/cleanupGlobalBinding.js";
 import { setupGlobalBinding } from "@/lib/window/setupGlobalBinding.js";
@@ -173,21 +172,11 @@ export class MarkupCanvas implements Canvas {
   }
 
   zoomToPoint(x: number, y: number, targetScale: number): boolean {
-    return withTransition(this.transformLayer, this.config, () => {
-      const result = this.baseCanvas.zoomToPoint(x, y, targetScale);
-      if (result) {
-        emitTransformEvents(this.listen, this.baseCanvas);
-      }
-      return result;
-    });
+    return this.baseCanvas.zoomToPoint(x, y, targetScale);
   }
 
   resetView(): boolean {
-    const result = this.baseCanvas.resetView();
-    if (result) {
-      emitTransformEvents(this.listen, this.baseCanvas);
-    }
-    return result;
+    return this.baseCanvas.resetView();
   }
 
   resetViewToCenter(): boolean {
@@ -280,19 +269,11 @@ export class MarkupCanvas implements Canvas {
   }
 
   centerContent(): boolean {
-    return withTransition(this.transformLayer, this.config, () => {
-      return centerContent(this.baseCanvas, this.config, this.updateTransform.bind(this));
-    });
+    return centerContent(this.baseCanvas, this.config, this.updateTransform.bind(this), this.transformLayer);
   }
 
   fitToScreen(): boolean {
-    return withTransition(this.transformLayer, this.config, () => {
-      const result = this.baseCanvas.fitToScreen();
-      if (result) {
-        emitTransformEvents(this.listen, this.baseCanvas);
-      }
-      return result;
-    });
+    return this.baseCanvas.fitToScreen();
   }
 
   getVisibleArea(): { x: number; y: number; width: number; height: number } {
@@ -304,9 +285,7 @@ export class MarkupCanvas implements Canvas {
   }
 
   scrollToPoint(x: number, y: number): boolean {
-    return withTransition(this.transformLayer, this.config, () => {
-      return scrollToPoint(this.baseCanvas, this.config, x, y, this.updateTransform.bind(this));
-    });
+    return scrollToPoint(this.baseCanvas, this.config, x, y, this.updateTransform.bind(this), this.transformLayer);
   }
 
   // Configuration access

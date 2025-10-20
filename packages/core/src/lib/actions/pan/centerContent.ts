@@ -1,16 +1,20 @@
+import { withTransition } from "@/lib/transition/withTransition.js";
 import type { BaseCanvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
 
 export function centerContent(
   baseCanvas: BaseCanvas,
-  _config: Required<MarkupCanvasConfig>,
-  updateTransform: (newTransform: Partial<Transform>) => boolean
+  config: Required<MarkupCanvasConfig>,
+  updateTransform: (newTransform: Partial<Transform>) => boolean,
+  transformLayer: HTMLElement
 ): boolean {
-  const bounds = baseCanvas.getBounds();
-  const centerX = (bounds.width - bounds.contentWidth * baseCanvas.transform.scale) / 2;
-  const centerY = (bounds.height - bounds.contentHeight * baseCanvas.transform.scale) / 2;
+  return withTransition(transformLayer, config, () => {
+    const bounds = baseCanvas.getBounds();
+    const centerX = (bounds.width - bounds.contentWidth * baseCanvas.transform.scale) / 2;
+    const centerY = (bounds.height - bounds.contentHeight * baseCanvas.transform.scale) / 2;
 
-  return updateTransform({
-    translateX: centerX,
-    translateY: centerY,
+    return updateTransform({
+      translateX: centerX,
+      translateY: centerY,
+    });
   });
 }
