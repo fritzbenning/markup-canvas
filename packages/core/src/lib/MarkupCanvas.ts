@@ -1,5 +1,6 @@
 import { centerContent, panDown, panLeft, panRight, panUp, scrollToPoint } from "@/lib/actions/pan/index.js";
 import { hideGrid, isGridVisible, showGrid, toggleGrid } from "@/lib/actions/ui/grid/index.js";
+import { updateThemeMode } from "@/lib/actions/ui/index.js";
 import { areRulersVisible, hideRulers, showRulers, toggleRulers } from "@/lib/actions/ui/rulers/index.js";
 import { resetViewToCenter, setZoom, zoomIn, zoomOut } from "@/lib/actions/zoom/index.js";
 import { createCanvas } from "@/lib/canvas/index.js";
@@ -7,7 +8,7 @@ import { createMarkupCanvasConfig } from "@/lib/config/createMarkupCanvasConfig.
 import { EventEmitter } from "@/lib/events/EventEmitter.js";
 import { emitTransformEvents } from "@/lib/events/emitTransformEvents.js";
 import { setupKeyboardEvents, setupMouseEvents, setupPostMessageEvents, setupTouchEvents, setupWheelEvents } from "@/lib/events/index.js";
-import { getThemeValue, getVisibleArea, isPointVisible, withFeatureEnabled } from "@/lib/helpers/index.js";
+import { getVisibleArea, isPointVisible, withFeatureEnabled } from "@/lib/helpers/index.js";
 import { createRulers } from "@/lib/rulers/index.js";
 import { withTransition } from "@/lib/transition/withTransition.js";
 import { broadcastEvent } from "@/lib/window/broadcastEvent.js";
@@ -194,13 +195,7 @@ export class MarkupCanvas implements Canvas {
   }
 
   zoomToFitContent(): boolean {
-    return withTransition(this.transformLayer, this.config, () => {
-      const result = this.baseCanvas.zoomToFitContent();
-      if (result) {
-        emitTransformEvents(this.listen, this.baseCanvas);
-      }
-      return result;
-    });
+    return this.fitToScreen();
   }
 
   panLeft(distance?: number): boolean {
@@ -329,20 +324,8 @@ export class MarkupCanvas implements Canvas {
 
   // Theme management
   updateThemeMode(mode: "light" | "dark"): void {
-    const newConfig = {
-      ...this.config,
-      themeMode: mode,
-    };
-    this.config = createMarkupCanvasConfig(newConfig);
-
-    // Update canvas background color
-    const backgroundColor = getThemeValue(this.config, "canvasBackgroundColor");
-    this.baseCanvas.container.style.backgroundColor = backgroundColor;
-
-    // Update rulers if they exist
-    if (this.rulers) {
-      this.rulers.updateTheme(this.config);
-    }
+    this.config = createMarkupCanvasConfig({ ...this.config, themeMode: mode });
+    updateThemeMode(this.baseCanvas.container, this.config, this.rulers, mode);
   }
 
   // Cleanup method
