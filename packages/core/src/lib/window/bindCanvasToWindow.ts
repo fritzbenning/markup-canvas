@@ -11,7 +11,9 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
 
   const api: WindowAPI = {
     config: {
-      current: canvas.config,
+      get current() {
+        return canvas.config;
+      },
       get: canvas.getConfig.bind(canvas),
       update: canvas.updateConfig.bind(canvas),
     },
@@ -74,13 +76,17 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
     },
 
     theme: {
-      current: canvas.config.themeMode,
+      get current() {
+        return canvas.config.themeMode;
+      },
       update: canvas.updateThemeMode.bind(canvas),
       toggle: canvas.toggleThemeMode.bind(canvas),
     },
 
     transition: {
-      current: canvas.config.enableTransition,
+      get current() {
+        return canvas.config.enableTransition;
+      },
       set: canvas.updateTransition.bind(canvas),
       toggle: canvas.toggleTransitionMode.bind(canvas),
     },
