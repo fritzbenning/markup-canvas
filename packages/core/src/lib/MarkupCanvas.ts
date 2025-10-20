@@ -28,13 +28,12 @@ declare global {
 
 export class MarkupCanvas {
   private canvas: Canvas;
-  private cleanupFunctions: (() => void)[] = [];
+  private cleanupCallbacks: (() => void)[] = [];
   private rulers: ReturnType<typeof createRulers> | null = null;
   private dragSetup: MouseDragControls | null = null;
   public config: Required<MarkupCanvasConfig>;
   private _isReady = false;
-  private listen = new EventEmitter<MarkupCanvasEvents>();
-  private postMessageCleanup: (() => void) | null = null;
+  private event = new EventEmitter<MarkupCanvasEvents>();
 
   constructor(container: HTMLElement, options: MarkupCanvasConfig = {}) {
     if (!container) {
@@ -51,14 +50,15 @@ export class MarkupCanvas {
     this.canvas = canvas;
 
     if (this.config.bindToWindow) {
-      this.listen.setEmitInterceptor((event, data) => {
+      this.event.setEmitInterceptor((event, data) => {
         broadcastEvent(event as string, data, this.config);
       });
       setupGlobalBinding(this, this.config);
 
       // Set up postMessage listener
       if (this.config.enablePostMessageAPI) {
-        this.postMessageCleanup = setupPostMessageEvents(this);
+        const postMessageCleanup = setupPostMessageEvents(this);
+        this.cleanupCallbacks.push(postMessageCleanup);
       }
     }
 
@@ -66,7 +66,7 @@ export class MarkupCanvas {
     this._isReady = true;
 
     // Emit ready event
-    this.listen.emit("ready", this);
+    this.event.emit("ready", this);
   }
 
   private setupEventHandlers(): void {
@@ -74,31 +74,31 @@ export class MarkupCanvas {
       // Wheel events
       withFeatureEnabled(this.config, "enableZoom", () => {
         const wheelCleanup = setupWheelEvents(this, this.config);
-        this.cleanupFunctions.push(wheelCleanup);
+        this.cleanupCallbacks.push(wheelCleanup);
       });
 
       // Mouse events
       if (this.config.enablePan || this.config.enableClickToZoom) {
         this.dragSetup = setupMouseEvents(this, this.config, true);
-        this.cleanupFunctions.push(this.dragSetup.cleanup);
+        this.cleanupCallbacks.push(this.dragSetup.cleanup);
       }
 
       // Keyboard events
       withFeatureEnabled(this.config, "enableKeyboard", () => {
         const keyboardCleanup = setupKeyboardEvents(this, this.config);
-        this.cleanupFunctions.push(keyboardCleanup);
+        this.cleanupCallbacks.push(keyboardCleanup);
       });
 
       // Touch events
       withFeatureEnabled(this.config, "enableTouch", () => {
         const touchCleanup = setupTouchEvents(this);
-        this.cleanupFunctions.push(touchCleanup);
+        this.cleanupCallbacks.push(touchCleanup);
       });
 
       // Set up rulers and grid
       withFeatureEnabled(this.config, "enableRulers", () => {
         this.rulers = createRulers(this, this.config);
-        this.cleanupFunctions.push(() => {
+        this.cleanupCallbacks.push(() => {
           if (this.rulers) {
             this.rulers.destroy();
           }
@@ -147,7 +147,7 @@ export class MarkupCanvas {
   updateTransform(newTransform: Partial<Transform>): boolean {
     const result = updateTransform(this.canvas, newTransform);
     if (result) {
-      emitTransformEvents(this.listen, this.canvas);
+      emitTransformEvents(this.event, this.canvas);
     }
     return result;
   }
@@ -155,7 +155,7 @@ export class MarkupCanvas {
   reset(): boolean {
     const result = resetTransform(this.canvas);
     if (result) {
-      emitTransformEvents(this.listen, this.canvas);
+      emitTransformEvents(this.event, this.canvas);
     }
     return result;
   }
@@ -237,7 +237,7 @@ export class MarkupCanvas {
   toggleGrid(): boolean {
     const result = toggleGrid(this.rulers);
     if (result) {
-      this.listen.emit("gridVisibility", this.isGridVisible());
+      this.event.emit("gridVisibility", this.isGridVisible());
     }
     return result;
   }
@@ -245,7 +245,7 @@ export class MarkupCanvas {
   showGrid(): boolean {
     const result = showGrid(this.rulers);
     if (result) {
-      this.listen.emit("gridVisibility", true);
+      this.event.emit("gridVisibility", true);
     }
     return result;
   }
@@ -253,7 +253,7 @@ export class MarkupCanvas {
   hideGrid(): boolean {
     const result = hideGrid(this.rulers);
     if (result) {
-      this.listen.emit("gridVisibility", false);
+      this.event.emit("gridVisibility", false);
     }
     return result;
   }
@@ -265,7 +265,7 @@ export class MarkupCanvas {
   toggleRulers(): boolean {
     const result = toggleRulers(this.rulers, () => this.areRulersVisible());
     if (result) {
-      this.listen.emit("rulersVisibility", this.areRulersVisible());
+      this.event.emit("rulersVisibility", this.areRulersVisible());
     }
     return result;
   }
@@ -273,7 +273,7 @@ export class MarkupCanvas {
   showRulers(): boolean {
     const result = showRulers(this.rulers);
     if (result) {
-      this.listen.emit("rulersVisibility", true);
+      this.event.emit("rulersVisibility", true);
     }
     return result;
   }
@@ -281,7 +281,7 @@ export class MarkupCanvas {
   hideRulers(): boolean {
     const result = hideRulers(this.rulers);
     if (result) {
-      this.listen.emit("rulersVisibility", false);
+      this.event.emit("rulersVisibility", false);
     }
     return result;
   }
@@ -329,20 +329,14 @@ export class MarkupCanvas {
   cleanup(): void {
     cleanupGlobalBinding(this.config);
 
-    // Cleanup postMessage listener
-    if (this.postMessageCleanup) {
-      this.postMessageCleanup();
-      this.postMessageCleanup = null;
-    }
-
-    this.cleanupFunctions.forEach((cleanup) => {
+    this.cleanupCallbacks.forEach((cleanup) => {
       try {
         cleanup();
       } catch (cleanupError) {
         console.warn("Error during cleanup:", cleanupError);
       }
     });
-    this.cleanupFunctions = [];
+    this.cleanupCallbacks = [];
 
     // Remove all event listeners
     this.removeAllListeners();
@@ -350,19 +344,19 @@ export class MarkupCanvas {
 
   // Event emitter delegation methods
   on<K extends keyof MarkupCanvasEvents>(event: K, handler: (data: MarkupCanvasEvents[K]) => void): void {
-    this.listen.on(event, handler);
+    this.event.on(event, handler);
   }
 
   off<K extends keyof MarkupCanvasEvents>(event: K, handler: (data: MarkupCanvasEvents[K]) => void): void {
-    this.listen.off(event, handler);
+    this.event.off(event, handler);
   }
 
   emit<K extends keyof MarkupCanvasEvents>(event: K, data: MarkupCanvasEvents[K]): void {
-    this.listen.emit(event, data);
+    this.event.emit(event, data);
   }
 
   removeAllListeners(): void {
-    this.listen.removeAllListeners();
+    this.event.removeAllListeners();
   }
 
   destroy(): void {
