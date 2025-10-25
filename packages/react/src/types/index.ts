@@ -1,11 +1,11 @@
-import type { MarkupCanvas as CoreMarkupCanvas, Transform } from "@markup-canvas/core";
+import type { MarkupCanvas as CoreMarkupCanvas, Transform, WindowAPI } from "@markup-canvas/core";
 
 export interface MarkupCanvasRef {
   canvas: CoreMarkupCanvas | null;
   zoomIn: (factor?: number) => void;
   zoomOut: (factor?: number) => void;
   resetZoom: () => void;
-  panTo: (x: number, y: number) => void;
+  panToPoint: (x: number, y: number) => void;
   fitToContent: () => void;
   centerContent: () => void;
   getTransform: () => Transform;
@@ -36,8 +36,7 @@ export interface CanvasEventHandlers {
 }
 
 export interface UseMarkupCanvasReturn {
-  canvas: CoreMarkupCanvas | null;
-  initCanvasUtils: (canvas: CoreMarkupCanvas) => void;
+  canvas: WindowAPI | null;
   transform: Transform;
   zoom: number;
   pan: { x: number; y: number };
@@ -45,9 +44,14 @@ export interface UseMarkupCanvasReturn {
   zoomIn: (factor?: number) => void;
   zoomOut: (factor?: number) => void;
   resetZoom: () => void;
-  panTo: (x: number, y: number) => void;
+  panLeft: (distance?: number) => void;
+  panRight: (distance?: number) => void;
+  panUp: (distance?: number) => void;
+  panDown: (distance?: number) => void;
+  panToPoint: (x: number, y: number) => void;
   fitToContent: () => void;
   centerContent: () => void;
+  resetView: () => void;
   setTransitionMode: (enabled: boolean) => void;
   toggleTransitionMode: () => boolean;
   themeMode: "light" | "dark";

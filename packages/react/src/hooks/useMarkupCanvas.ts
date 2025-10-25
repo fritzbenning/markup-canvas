@@ -1,6 +1,6 @@
 import type { Transform, WindowAPI } from "@markup-canvas/core";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { UseMarkupCanvasOptions } from "../types/index.js";
+import type { UseMarkupCanvasOptions, UseMarkupCanvasReturn } from "../types/index.js";
 
 interface UseMarkupCanvasHookOptions extends Omit<UseMarkupCanvasOptions, "onReady"> {
   canvasName?: string;
@@ -8,7 +8,7 @@ interface UseMarkupCanvasHookOptions extends Omit<UseMarkupCanvasOptions, "onRea
   onReady?: (canvas: WindowAPI) => void;
 }
 
-export function useMarkupCanvas(options: UseMarkupCanvasHookOptions = {}) {
+export function useMarkupCanvas(options: UseMarkupCanvasHookOptions = {}): UseMarkupCanvasReturn {
   const { canvasName = "markupCanvas" } = options;
 
   const [canvas, setCanvas] = useState<WindowAPI | null>(null);
@@ -234,7 +234,8 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions = {}) {
   );
 
   const toggleThemeMode = useCallback(() => {
-    canvas?.theme?.toggle?.();
+    const newMode = canvas?.theme?.toggle?.() ?? "light";
+    return newMode;
   }, [canvas]);
 
   const showRulers = useCallback(() => {

@@ -1073,8 +1073,8 @@ packages:
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
     hasBin: true
     peerDependencies:
-      '@swc/core': '>=1.2.60'
-      '@swc/wasm': '>=1.2.60'
+      '@swc/core': '>=1.2.70'
+      '@swc/wasm': '>=1.2.70'
       '@types/node': '*'
       typescript: '>=2.7'
     peerDependenciesMeta:

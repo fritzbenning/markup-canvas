@@ -290,7 +290,7 @@ The `useMarkupCanvas` hook returns an object with the following properties and m
 | `zoomIn` | `(factor?: number) => void` | Zoom in by factor |
 | `zoomOut` | `(factor?: number) => void` | Zoom out by factor |
 | `resetZoom` | `() => void` | Reset zoom to 100% |
-| `panTo` | `(x: number, y: number) => void` | Pan to specific coordinates |
+| `panToPoint` | `(x: number, y: number) => void` | Pan to specific coordinates |
 | `fitToContent` | `() => void` | Fit content to viewport |
 | `centerContent` | `() => void` | Center content on canvas |
 | `setTransitionMode` | `(enabled: boolean) => void` | Enable/disable transitions |

@@ -7,7 +7,7 @@ import { Content } from "../components/Content";
 import { Controls } from "../components/Controls";
 import { ZoomDisplay } from "../components/ZoomDisplay";
 
-function WindowExample() {
+export default function WindowExample() {
   const {
     zoom,
     zoomIn,
@@ -16,6 +16,7 @@ function WindowExample() {
     resetZoom,
     centerContent,
     toggleTransitionMode,
+    panToPoint,
     themeMode,
     updateThemeMode,
     toggleRulers,
@@ -26,6 +27,7 @@ function WindowExample() {
     canvasName: "canvas",
     onReady: (canvas) => {
       console.log("✅ Canvas found and bound to window!", canvas);
+      panToPoint(400, 800);
     },
     onError: () => {
       console.warn("⚠️ Canvas not found on window");
@@ -85,9 +87,15 @@ function WindowExample() {
         enableGrid={true}
       >
         <Content />
+        <button
+          type="button"
+          onClick={() => {
+            panToPoint(400, 800);
+          }}
+        >
+          Pan to (400, 400)
+        </button>
       </MarkupCanvas>
     </main>
   );
 }
-
-export default WindowExample;
