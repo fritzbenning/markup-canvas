@@ -1,6 +1,6 @@
 {
   "name": "markup-canvas",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "private": true,
   "description": "High-performance canvas-like container with pan and zoom capabilities",
   "scripts": {
