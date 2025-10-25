@@ -203,6 +203,13 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions = {}) {
     canvas?.pan?.toCenter?.();
   }, [canvas]);
 
+  const panToPoint = useCallback(
+    (x: number, y: number) => {
+      canvas?.pan?.toPoint?.(x, y);
+    },
+    [canvas]
+  );
+
   const resetView = useCallback(() => {
     canvas?.zoom?.resetToCenter?.();
   }, [canvas]);
@@ -275,6 +282,7 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions = {}) {
     panRight,
     panUp,
     panDown,
+    panToPoint,
     fitToContent,
     centerContent,
     resetView,
