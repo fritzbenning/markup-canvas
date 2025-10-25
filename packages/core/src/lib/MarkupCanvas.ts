@@ -30,6 +30,7 @@ export class MarkupCanvas {
   private cleanupCallbacks: (() => void)[] = [];
   private rulers: ReturnType<typeof createRulers> | null = null;
   private dragSetup: MouseDragControls | null = null;
+  private keyboardCleanup: (() => void) | null = null;
   public config: Required<MarkupCanvasConfig>;
   public event = new EventEmitter<MarkupCanvasEvents>();
   private _isReady = false;
@@ -99,6 +100,7 @@ export class MarkupCanvas {
       // Keyboard events
       withFeatureEnabled(this.config, "enableKeyboard", () => {
         const keyboardCleanup = setupKeyboardEvents(this, this.config);
+        this.keyboardCleanup = keyboardCleanup;
         this.cleanupCallbacks.push(keyboardCleanup);
       });
 
@@ -238,6 +240,29 @@ export class MarkupCanvas {
 
   isMouseDragEnabled(): boolean {
     return this.dragSetup?.isEnabled() ?? false;
+  }
+
+  // Keyboard control methods
+  enableKeyboard(): boolean {
+    if (this.keyboardCleanup) {
+      return true; // Already enabled
+    }
+    this.keyboardCleanup = setupKeyboardEvents(this, this.config);
+    this.cleanupCallbacks.push(this.keyboardCleanup);
+    return true;
+  }
+
+  disableKeyboard(): boolean {
+    if (this.keyboardCleanup) {
+      this.keyboardCleanup();
+      this.keyboardCleanup = null;
+      return true;
+    }
+    return false;
+  }
+
+  isKeyboardEnabled(): boolean {
+    return this.keyboardCleanup !== null;
   }
 
   toggleGrid(): boolean {

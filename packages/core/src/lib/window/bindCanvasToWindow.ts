@@ -54,6 +54,13 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
       isEnabled: canvas.isMouseDragEnabled.bind(canvas),
     },
 
+    // Keyboard group
+    keyboard: {
+      enable: canvas.enableKeyboard.bind(canvas),
+      disable: canvas.disableKeyboard.bind(canvas),
+      isEnabled: canvas.isKeyboardEnabled.bind(canvas),
+    },
+
     // Grid group
     grid: {
       toggle: canvas.toggleGrid.bind(canvas),
