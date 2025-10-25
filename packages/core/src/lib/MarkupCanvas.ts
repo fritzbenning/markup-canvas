@@ -48,6 +48,19 @@ export class MarkupCanvas {
 
     this.canvas = canvas;
 
+    withFeatureEnabled(this.config, "enableRulers", () => {
+      this.rulers = createRulers(this, this.config);
+      this.cleanupCallbacks.push(() => {
+        if (this.rulers) {
+          this.rulers.destroy();
+        }
+      });
+    });
+
+    if (options.themeMode) {
+      updateThemeMode(this.canvas.container, this.config, this.rulers, options.themeMode);
+    }
+
     // Always bind canvas to window
     this.event.setEmitInterceptor((event, data) => {
       broadcastEvent(event as string, data, this.config);
@@ -62,6 +75,7 @@ export class MarkupCanvas {
     }
 
     this.setupEventHandlers();
+
     this._isReady = true;
 
     // Emit ready event
@@ -92,16 +106,6 @@ export class MarkupCanvas {
       withFeatureEnabled(this.config, "enableTouch", () => {
         const touchCleanup = setupTouchEvents(this);
         this.cleanupCallbacks.push(touchCleanup);
-      });
-
-      // Set up rulers and grid
-      withFeatureEnabled(this.config, "enableRulers", () => {
-        this.rulers = createRulers(this, this.config);
-        this.cleanupCallbacks.push(() => {
-          if (this.rulers) {
-            this.rulers.destroy();
-          }
-        });
       });
     } catch (error) {
       console.error("Failed to set up event handlers:", error);

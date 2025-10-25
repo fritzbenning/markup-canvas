@@ -26,7 +26,6 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
   ({ children, className, style, onTransformChange, onZoomChange, onPanChange, onReady, ...options }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [canvasInstance, setCanvasInstance] = useState<CoreMarkupCanvas | null>(null);
-    const themeModeRef = useRef<"light" | "dark" | undefined>(options.themeMode);
 
     useImperativeHandle(
       ref,
@@ -79,17 +78,12 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
       onReadyRef.current?.(canvas);
     }, []);
 
-    // Separate theme mode from other options
-    const { themeMode, ...configOptions } = options;
+    const stableConfigJson = useMemo(() => JSON.stringify(options), [options]);
 
-    // Create stable reference for non-theme options using JSON serialization
-    const stableConfigJson = useMemo(() => JSON.stringify(configOptions), [configOptions]);
-
-    // Handle canvas creation with non-theme options
     useEffect(() => {
       if (!containerRef.current) return;
 
-      const canvas = new CoreMarkupCanvas(containerRef.current, configOptions as MarkupCanvasConfig);
+      const canvas = new CoreMarkupCanvas(containerRef.current, options as MarkupCanvasConfig);
       setCanvasInstance(canvas);
 
       canvas.on("transform", handleTransformChange);
@@ -114,14 +108,6 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
         setCanvasInstance(null);
       };
     }, [stableConfigJson, handleTransformChange, handleZoomChange, handlePanChange, handleReady]);
-
-    // Handle theme changes separately without recreating the canvas
-    useEffect(() => {
-      if (!canvasInstance || themeMode === themeModeRef.current) return;
-
-      canvasInstance.updateThemeMode(themeMode || "light");
-      themeModeRef.current = themeMode;
-    }, [canvasInstance, themeMode]);
 
     return (
       <div ref={containerRef} className={className} style={{ width: "100%", height: "100%", ...style }}>
