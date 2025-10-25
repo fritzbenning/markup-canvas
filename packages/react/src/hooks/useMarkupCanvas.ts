@@ -122,7 +122,7 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions = {}) {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.source === "markup-canvas" && event.data.canvasName === canvasName) {
-        switch (event.data.event) {
+        switch (event.data.action) {
           case "transform":
             handleTransform(event.data.data);
             break;

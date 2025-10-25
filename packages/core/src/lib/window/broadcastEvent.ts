@@ -12,13 +12,15 @@ export function broadcastEvent(event: string, data: unknown, config: Required<Ma
     broadcastData = { ready: true };
   }
 
+  const canvasName = config.name || "markupCanvas";
+
   window.postMessage(
     {
       source: "markup-canvas",
-      event,
+      action: event,
       data: broadcastData,
       timestamp: Date.now(),
-      canvasName: config.name,
+      canvasName,
     },
     "*"
   );
@@ -27,10 +29,10 @@ export function broadcastEvent(event: string, data: unknown, config: Required<Ma
     window.parent.postMessage(
       {
         source: "markup-canvas",
-        event,
+        action: event,
         data: broadcastData,
         timestamp: Date.now(),
-        canvasName: config.name,
+        canvasName,
       },
       "*"
     );
