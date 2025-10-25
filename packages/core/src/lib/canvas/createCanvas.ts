@@ -24,9 +24,9 @@ export function createCanvas(container: HTMLElement, config: Required<MarkupCanv
     const rulerOffset = config.enableRulers ? -config.rulerSize : 0;
 
     const initialTransform: Transform = {
-      scale: DEFAULT_ZOOM,
-      translateX: rulerOffset,
-      translateY: rulerOffset,
+      scale: config.initialZoom ?? DEFAULT_ZOOM,
+      translateX: (config.initialPan?.x ?? 0) + rulerOffset,
+      translateY: (config.initialPan?.y ?? 0) + rulerOffset,
     };
 
     // Apply initial transform

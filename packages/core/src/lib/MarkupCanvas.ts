@@ -78,13 +78,6 @@ export class MarkupCanvas {
 
     this._isReady = true;
 
-    if (options.initialZoom !== undefined) {
-      this.setZoom(options.initialZoom);
-    }
-    if (options.initialPan !== undefined) {
-      this.panToPoint(options.initialPan.x, options.initialPan.y);
-    }
-
     // Emit ready event
     this.event.emit("ready", this);
   }

@@ -84,18 +84,8 @@ export default function WindowExample() {
         enableTransition={false}
         enableRulers={true}
         enableGrid={true}
-        initialZoom={1}
-        initialPan={{ x: 400, y: 800 }}
       >
         <Content />
-        <button
-          type="button"
-          onClick={() => {
-            panToPoint(400, 800);
-          }}
-        >
-          Pan to (400, 400)
-        </button>
       </MarkupCanvas>
     </main>
   );
