@@ -6,6 +6,10 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   height: 8000,
   enableAcceleration: true,
 
+  // Initial view transform
+  initialZoom: 1,
+  initialPan: { x: 0, y: 0 },
+
   // Global Instance Access
   name: "markupCanvas",
   enablePostMessageAPI: false,

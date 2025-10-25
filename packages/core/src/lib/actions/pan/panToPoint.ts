@@ -2,7 +2,7 @@ import { getCanvasBounds } from "@/lib/canvas/getCanvasBounds.js";
 import { withTransition } from "@/lib/transition/withTransition.js";
 import type { Canvas, MarkupCanvasConfig, Transform } from "@/types/index.js";
 
-export function scrollToPoint(
+export function panToPoint(
   canvas: Canvas,
   config: Required<MarkupCanvasConfig>,
   x: number,

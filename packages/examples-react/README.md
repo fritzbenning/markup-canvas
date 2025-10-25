@@ -162,7 +162,7 @@ iframe.contentWindow.postMessage({
 - `panLeft(distance?)`, `panRight(distance?)`, `panUp(distance?)`, `panDown(distance?)` - Pan operations
 - `fitToScreen()` - Fit content to viewport
 - `centerContent()` - Center content
-- `scrollToPoint(x, y)` - Pan to specific coordinates
+- `panToPoint(x, y)` - Pan to specific coordinates
 
 **Rulers & Grid:**
 - `toggleRulers()`, `showRulers()`, `hideRulers()`

@@ -43,7 +43,7 @@ export type PostMessageAction =
   | "panDown"
   | "fitToScreen"
   | "centerContent"
-  | "scrollToPoint"
+  | "panToPoint"
   | "resetView"
   | "resetViewToCenter"
   | "toggleRulers"

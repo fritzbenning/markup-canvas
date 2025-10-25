@@ -1,6 +1,6 @@
 import type { MarkupCanvasConfig } from "@/types";
 
-export const EDITOR_PRESET: Required<MarkupCanvasConfig> = {
+export const EDITOR_PRESET: MarkupCanvasConfig = {
   // Canvas dimensions
   width: 4000,
   height: 4000,

@@ -43,7 +43,7 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
       right: canvas.panRight.bind(canvas),
       up: canvas.panUp.bind(canvas),
       down: canvas.panDown.bind(canvas),
-      toPoint: canvas.scrollToPoint.bind(canvas),
+      toPoint: canvas.panToPoint.bind(canvas),
       toCenter: canvas.centerContent.bind(canvas),
     },
 

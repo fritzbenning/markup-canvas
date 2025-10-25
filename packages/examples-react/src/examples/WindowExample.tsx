@@ -26,8 +26,7 @@ export default function WindowExample() {
   } = useMarkupCanvas({
     canvasName: "canvas",
     onReady: (canvas) => {
-      console.log("✅ Canvas found and bound to window!", canvas);
-      panToPoint(400, 800);
+      console.log("✅ Canvas ready with initial transform!", canvas);
     },
     onError: () => {
       console.warn("⚠️ Canvas not found on window");
@@ -85,6 +84,8 @@ export default function WindowExample() {
         enableTransition={false}
         enableRulers={true}
         enableGrid={true}
+        initialZoom={1}
+        initialPan={{ x: 400, y: 800 }}
       >
         <Content />
         <button

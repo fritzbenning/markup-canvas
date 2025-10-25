@@ -45,8 +45,8 @@ export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
         canvas.fitToScreen();
       } else if (action === "centerContent") {
         canvas.centerContent();
-      } else if (action === "scrollToPoint") {
-        canvas.scrollToPoint(args[0] as number, args[1] as number);
+      } else if (action === "panToPoint") {
+        canvas.panToPoint(args[0] as number, args[1] as number);
       } else if (action === "resetView") {
         canvas.resetView();
       } else if (action === "resetViewToCenter") {

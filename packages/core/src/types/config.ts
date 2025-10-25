@@ -4,6 +4,10 @@ export interface MarkupCanvasConfig {
   height?: number;
   enableAcceleration?: boolean;
 
+  // Initial view transform
+  initialZoom?: number;
+  initialPan?: { x: number; y: number };
+
   // Global Instance Access
   name?: string;
 

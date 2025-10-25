@@ -123,7 +123,7 @@ iframe.contentWindow.postMessage({
 - `panLeft`, `panRight`, `panUp`, `panDown` - Pan in directions
 - `fitToScreen` - Fit content to viewport
 - `centerContent` - Center content
-- `scrollToPoint` - Pan to specific coordinates
+- `panToPoint` - Pan to specific coordinates
 
 **Ruler & Grid:**
 - `toggleRulers`, `showRulers`, `hideRulers`

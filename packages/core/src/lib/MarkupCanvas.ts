@@ -1,4 +1,4 @@
-import { centerContent, panDown, panLeft, panRight, panUp, scrollToPoint } from "@/lib/actions/pan/index.js";
+import { centerContent, panDown, panLeft, panRight, panToPoint, panUp } from "@/lib/actions/pan/index.js";
 import { resetTransform, updateTransform } from "@/lib/actions/transform/index.js";
 import { hideGrid, isGridVisible, showGrid, toggleGrid, toggleTransition, updateThemeMode } from "@/lib/actions/ui/index.js";
 import { areRulersVisible, hideRulers, showRulers, toggleRulers } from "@/lib/actions/ui/rulers/index.js";
@@ -77,6 +77,13 @@ export class MarkupCanvas {
     this.setupEventHandlers();
 
     this._isReady = true;
+
+    if (options.initialZoom !== undefined) {
+      this.setZoom(options.initialZoom);
+    }
+    if (options.initialPan !== undefined) {
+      this.panToPoint(options.initialPan.x, options.initialPan.y);
+    }
 
     // Emit ready event
     this.event.emit("ready", this);
@@ -312,8 +319,8 @@ export class MarkupCanvas {
     return isPointVisible(this, x, y);
   }
 
-  scrollToPoint(x: number, y: number): boolean {
-    return scrollToPoint(this.canvas, this.config, x, y, this.updateTransform.bind(this), this.transformLayer);
+  panToPoint(x: number, y: number): boolean {
+    return panToPoint(this.canvas, this.config, x, y, this.updateTransform.bind(this), this.transformLayer);
   }
 
   // Configuration access

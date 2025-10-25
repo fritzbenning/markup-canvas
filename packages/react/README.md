@@ -141,6 +141,15 @@ The `MarkupCanvas` component accepts the following props:
 | `rulerTickColorDark` | `string` | `"#383838"` | Dark mode tick mark color |
 | `gridColorDark` | `string` | `"rgba(255, 255, 255, 0.1)"` | Dark mode grid line color |
 
+**Initial Transform**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `initialZoom` | `number` | `1` | Initial zoom level (scale factor) |
+| `initialPan` | `{ x: number; y: number }` | `{ x: 0, y: 0 }` | Initial pan position |
+
+These props set the initial view transform when the canvas is created. This is useful for setting a default zoom level and pan position without needing to do it in the `onReady` callback.
+
 **React-Specific Props**
 
 | Prop | Type | Default | Description |
@@ -179,6 +188,8 @@ The `MarkupCanvas` component accepts the following props:
   themeMode="light"
   enableClickToZoom={true}
   clickZoomLevel={2}
+  initialZoom={2}
+  initialPan={{ x: 400, y: 800 }}
   onZoomChange={(zoom) => console.log('Zoom:', zoom)}
   onPanChange={(pan) => console.log('Pan:', pan)}
   onReady={(canvas) => console.log('Canvas ready:', canvas)}

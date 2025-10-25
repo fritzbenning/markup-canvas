@@ -194,7 +194,7 @@ iframe.contentWindow.postMessage({
 - `panLeft(distance?)`, `panRight(distance?)`, `panUp(distance?)`, `panDown(distance?)` - Pan operations
 - `fitToScreen()` - Fit content to viewport
 - `centerContent()` - Center content
-- `scrollToPoint(x, y)` - Pan to specific coordinates
+- `panToPoint(x, y)` - Pan to specific coordinates
 
 **Rulers & Grid:**
 - `toggleRulers()`, `showRulers()`, `hideRulers()`
@@ -259,7 +259,7 @@ canvas.resetZoom();      // Reset to 100%
 canvas.setZoom(2.0);     // Set specific zoom level
 
 // Pan controls
-canvas.scrollToPoint(x, y);  // Pan to specific coordinates
+canvas.panToPoint(x, y);  // Pan to specific coordinates
 canvas.centerContent();      // Center the content
 
 // Fit to screen

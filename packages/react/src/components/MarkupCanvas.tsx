@@ -20,10 +20,12 @@ export interface MarkupCanvasProps extends Omit<MarkupCanvasConfig, "container">
   onZoomChange?: (zoom: number) => void;
   onPanChange?: (pan: { x: number; y: number }) => void;
   onReady?: (canvas: CoreMarkupCanvas) => void;
+  initialZoom?: number;
+  initialPan?: { x: number; y: number };
 }
 
 export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
-  ({ children, className, style, onTransformChange, onZoomChange, onPanChange, onReady, ...options }, ref) => {
+  ({ children, className, style, onTransformChange, onZoomChange, onPanChange, onReady, initialZoom, initialPan, ...options }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [canvasInstance, setCanvasInstance] = useState<CoreMarkupCanvas | null>(null);
 
@@ -34,7 +36,7 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
         zoomIn: () => canvasInstance?.zoomIn(),
         zoomOut: () => canvasInstance?.zoomOut(),
         resetZoom: () => canvasInstance?.resetZoom(),
-        panToPoint: (x, y) => canvasInstance?.scrollToPoint(x, y),
+        panToPoint: (x, y) => canvasInstance?.panToPoint(x, y),
         fitToContent: () => canvasInstance?.fitToScreen(),
         centerContent: () => canvasInstance?.centerContent(),
         getTransform: () => canvasInstance?.transform || { scale: 1, translateX: 0, translateY: 0 },
@@ -78,12 +80,16 @@ export const MarkupCanvas = forwardRef<MarkupCanvasRef, MarkupCanvasProps>(
       onReadyRef.current?.(canvas);
     }, []);
 
-    const stableConfigJson = useMemo(() => JSON.stringify(options), [options]);
+    const stableConfigJson = useMemo(() => JSON.stringify({ ...options, initialZoom, initialPan }), [options, initialZoom, initialPan]);
 
     useEffect(() => {
       if (!containerRef.current) return;
 
-      const canvas = new CoreMarkupCanvas(containerRef.current, options as MarkupCanvasConfig);
+      const canvas = new CoreMarkupCanvas(containerRef.current, {
+        ...options,
+        initialZoom,
+        initialPan,
+      } as MarkupCanvasConfig);
       setCanvasInstance(canvas);
 
       canvas.on("transform", handleTransformChange);
