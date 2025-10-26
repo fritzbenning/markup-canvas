@@ -1,6 +1,6 @@
 {
   "name": "@markup-canvas/examples-vanilla",
-  "version": "1.3.0",
+  "version": "1.3.2",
   "private": true,
   "description": "Vanilla JavaScript examples for markup-canvas",
   "type": "module",

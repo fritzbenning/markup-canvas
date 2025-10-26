@@ -10,9 +10,12 @@ export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
       return;
     }
 
+    console.log("data", event.data);
+
     const canvasName = canvas.config.name || "markupCanvas";
 
     if (data.canvasName !== canvasName) {
+      console.log("canvasName", data.canvasName, "!==", canvasName);
       return;
     }
 
@@ -22,6 +25,7 @@ export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
     try {
       // View methods
       if (action === "zoomIn") {
+        console.log("zoomIn", payload);
         canvas.zoomIn(payload as number | undefined);
       } else if (action === "zoomOut") {
         canvas.zoomOut(payload as number | undefined);
