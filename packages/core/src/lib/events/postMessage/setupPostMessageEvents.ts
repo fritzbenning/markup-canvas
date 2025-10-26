@@ -6,27 +6,27 @@ export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
   const handleMessage = (event: MessageEvent): void => {
     const data = event.data as PostMessageRequest;
 
-    // Validate message structure
-    if (data.source !== "markup-canvas") {
+    if (!["markup-canvas", "application"].includes(data.source)) {
       return;
     }
 
     const canvasName = canvas.config.name || "markupCanvas";
+
     if (data.canvasName !== canvasName) {
       return;
     }
 
     const action = data.action as PostMessageAction;
-    const args = data.args || [];
+    const payload = data.data as string | number | boolean | object;
 
     try {
       // View methods
       if (action === "zoomIn") {
-        canvas.zoomIn(args[0] as number | undefined);
+        canvas.zoomIn(payload as number | undefined);
       } else if (action === "zoomOut") {
-        canvas.zoomOut(args[0] as number | undefined);
+        canvas.zoomOut(payload as number | undefined);
       } else if (action === "setZoom") {
-        const zoomLevel = args[0] as number;
+        const zoomLevel = payload as number;
         if (typeof zoomLevel !== "number" || zoomLevel <= 0) {
           throw new Error(`Invalid zoom level: ${zoomLevel}. Must be a positive number.`);
         }
@@ -34,19 +34,19 @@ export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
       } else if (action === "resetZoom") {
         canvas.resetZoom();
       } else if (action === "panLeft") {
-        canvas.panLeft(args[0] as number | undefined);
+        canvas.panLeft(payload as number | undefined);
       } else if (action === "panRight") {
-        canvas.panRight(args[0] as number | undefined);
+        canvas.panRight(payload as number | undefined);
       } else if (action === "panUp") {
-        canvas.panUp(args[0] as number | undefined);
+        canvas.panUp(payload as number | undefined);
       } else if (action === "panDown") {
-        canvas.panDown(args[0] as number | undefined);
+        canvas.panDown(payload as number | undefined);
       } else if (action === "fitToScreen") {
         canvas.fitToScreen();
       } else if (action === "centerContent") {
         canvas.centerContent();
       } else if (action === "panToPoint") {
-        canvas.panToPoint(args[0] as number, args[1] as number);
+        canvas.panToPoint((payload as { x: number; y: number }).x, (payload as { x: number; y: number }).y);
       } else if (action === "resetView") {
         canvas.resetView();
       } else if (action === "resetViewToCenter") {
@@ -68,7 +68,7 @@ export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
       }
       // Config methods
       else if (action === "updateThemeMode") {
-        const mode = args[0] as "light" | "dark";
+        const mode = payload as "light" | "dark";
         if (mode !== "light" && mode !== "dark") {
           throw new Error(`Invalid theme mode: ${mode}`);
         }
@@ -80,7 +80,7 @@ export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
       }
       // Transition methods
       else if (action === "updateTransition") {
-        const enabled = args[0] as boolean;
+        const enabled = payload as boolean;
         if (typeof enabled !== "boolean") {
           throw new Error(`Invalid transition enabled value: ${enabled}. Must be a boolean.`);
         }

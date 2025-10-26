@@ -109,7 +109,7 @@ iframe.contentWindow.postMessage({
   source: "markup-canvas",
   canvasName: "canvas",
   action: "zoomIn",
-  args: [0.1]
+  data: 0.1
 }, "*");
 ```
 
@@ -141,7 +141,7 @@ iframe.contentWindow.postMessage({
   source: "markup-canvas",
   canvasName: "canvas",
   action: "setZoom",
-  args: [2.0]
+  data: 2.0
 }, "*");
 
 // Toggle dark mode

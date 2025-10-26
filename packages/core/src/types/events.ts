@@ -61,7 +61,7 @@ export interface PostMessageRequest {
   source: "markup-canvas";
   canvasName: string;
   action: PostMessageAction;
-  args?: unknown[];
+  data: unknown;
 }
 
 export type CallbackEventName = "transform" | "zoom" | "pan" | "ready" | "rulersVisibility" | "gridVisibility";

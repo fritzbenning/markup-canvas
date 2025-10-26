@@ -165,7 +165,7 @@ iframe.contentWindow.postMessage({
   source: "markup-canvas",
   canvasName: "canvas",
   action: "setZoom",
-  args: [2.0]
+  data: 2.0
 }, "*");
 
 // Pan left by 100 pixels
@@ -173,7 +173,7 @@ iframe.contentWindow.postMessage({
   source: "markup-canvas",
   canvasName: "canvas",
   action: "panLeft",
-  args: [100]
+  data: 100
 }, "*");
 
 // Toggle theme
