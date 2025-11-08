@@ -31,6 +31,7 @@ export class MarkupCanvas {
   private rulers: ReturnType<typeof createRulers> | null = null;
   private dragSetup: MouseDragControls | null = null;
   private keyboardCleanup: (() => void) | null = null;
+  private textEditModeEnabled = false;
   public config: Required<MarkupCanvasConfig>;
   public event = new EventEmitter<MarkupCanvasEvents>();
   private _isReady = false;
@@ -99,7 +100,9 @@ export class MarkupCanvas {
 
       // Keyboard events
       withFeatureEnabled(this.config, "enableKeyboard", () => {
-        const keyboardCleanup = setupKeyboardEvents(this, this.config);
+        const keyboardCleanup = setupKeyboardEvents(this, this.config, {
+          textEditModeEnabled: this.textEditModeEnabled,
+        });
         this.keyboardCleanup = keyboardCleanup;
         this.cleanupCallbacks.push(keyboardCleanup);
       });
@@ -247,7 +250,9 @@ export class MarkupCanvas {
     if (this.keyboardCleanup) {
       return true; // Already enabled
     }
-    this.keyboardCleanup = setupKeyboardEvents(this, this.config);
+    this.keyboardCleanup = setupKeyboardEvents(this, this.config, {
+      textEditModeEnabled: this.textEditModeEnabled,
+    });
     this.cleanupCallbacks.push(this.keyboardCleanup);
     return true;
   }
@@ -263,6 +268,61 @@ export class MarkupCanvas {
 
   isKeyboardEnabled(): boolean {
     return this.keyboardCleanup !== null;
+  }
+
+  // Text edit mode control methods
+  enableTextEditMode(): boolean {
+    if (this.textEditModeEnabled) {
+      return true; // Already enabled
+    }
+    this.textEditModeEnabled = true;
+
+    // If keyboard is currently enabled, re-setup with new option
+    if (this.keyboardCleanup) {
+      // Remove old cleanup from callbacks
+      const index = this.cleanupCallbacks.indexOf(this.keyboardCleanup);
+      if (index > -1) {
+        this.cleanupCallbacks.splice(index, 1);
+      }
+      // Cleanup old handler
+      this.keyboardCleanup();
+      // Setup new handler with text edit mode enabled
+      this.keyboardCleanup = setupKeyboardEvents(this, this.config, {
+        textEditModeEnabled: true,
+      });
+      this.cleanupCallbacks.push(this.keyboardCleanup);
+    }
+
+    return true;
+  }
+
+  disableTextEditMode(): boolean {
+    if (!this.textEditModeEnabled) {
+      return true; // Already disabled
+    }
+    this.textEditModeEnabled = false;
+
+    // If keyboard is currently enabled, re-setup with new option
+    if (this.keyboardCleanup) {
+      // Remove old cleanup from callbacks
+      const index = this.cleanupCallbacks.indexOf(this.keyboardCleanup);
+      if (index > -1) {
+        this.cleanupCallbacks.splice(index, 1);
+      }
+      // Cleanup old handler
+      this.keyboardCleanup();
+      // Setup new handler with text edit mode disabled
+      this.keyboardCleanup = setupKeyboardEvents(this, this.config, {
+        textEditModeEnabled: false,
+      });
+      this.cleanupCallbacks.push(this.keyboardCleanup);
+    }
+
+    return true;
+  }
+
+  isTextEditModeEnabled(): boolean {
+    return this.textEditModeEnabled;
   }
 
   toggleGrid(): boolean {

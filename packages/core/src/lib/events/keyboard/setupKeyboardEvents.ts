@@ -2,7 +2,13 @@ import { getAdaptiveZoomSpeed } from "@/lib/events/utils/getAdaptiveZoomSpeed.js
 import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 import type { MarkupCanvasConfig, Transform } from "@/types/index.js";
 
-export function setupKeyboardEvents(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>): () => void {
+export function setupKeyboardEvents(
+  canvas: MarkupCanvas,
+  config: Required<MarkupCanvasConfig>,
+  options?: { textEditModeEnabled?: boolean }
+): () => void {
+  const textEditModeEnabled = options?.textEditModeEnabled ?? false;
+
   function handleKeyDown(event: Event): void {
     if (!(event instanceof KeyboardEvent)) return;
 
@@ -13,23 +19,38 @@ export function setupKeyboardEvents(canvas: MarkupCanvas, config: Required<Marku
 
     switch (event.key) {
       case "ArrowLeft":
+        if (textEditModeEnabled) {
+          return;
+        }
         newTransform.translateX = canvas.transform.translateX + config.keyboardPanStep;
         handled = true;
         break;
       case "ArrowRight":
+        if (textEditModeEnabled) {
+          return;
+        }
         newTransform.translateX = canvas.transform.translateX - config.keyboardPanStep;
         handled = true;
         break;
       case "ArrowUp":
+        if (textEditModeEnabled) {
+          return;
+        }
         newTransform.translateY = canvas.transform.translateY + config.keyboardPanStep;
         handled = true;
         break;
       case "ArrowDown":
+        if (textEditModeEnabled) {
+          return;
+        }
         newTransform.translateY = canvas.transform.translateY - config.keyboardPanStep;
         handled = true;
         break;
       case "=":
       case "+":
+        if (textEditModeEnabled) {
+          return;
+        }
         {
           const adaptiveZoomStep = config.enableAdaptiveSpeed
             ? getAdaptiveZoomSpeed(canvas, config.keyboardZoomStep)
@@ -39,6 +60,9 @@ export function setupKeyboardEvents(canvas: MarkupCanvas, config: Required<Marku
         }
         break;
       case "-":
+        if (textEditModeEnabled) {
+          return;
+        }
         {
           const adaptiveZoomStep = config.enableAdaptiveSpeed
             ? getAdaptiveZoomSpeed(canvas, config.keyboardZoomStep)

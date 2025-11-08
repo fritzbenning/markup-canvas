@@ -59,6 +59,9 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
       enable: canvas.enableKeyboard.bind(canvas),
       disable: canvas.disableKeyboard.bind(canvas),
       isEnabled: canvas.isKeyboardEnabled.bind(canvas),
+      enableTextEditMode: canvas.enableTextEditMode.bind(canvas),
+      disableTextEditMode: canvas.disableTextEditMode.bind(canvas),
+      isTextEditModeEnabled: canvas.isTextEditModeEnabled.bind(canvas),
     },
 
     // Grid group

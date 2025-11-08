@@ -39,7 +39,10 @@ export interface WindowAPI {
   keyboard: {
     readonly enable: () => boolean;
     readonly disable: () => boolean;
-    isEnabled: () => boolean;
+    readonly isEnabled: () => boolean;
+    readonly enableTextEditMode: () => boolean;
+    readonly disableTextEditMode: () => boolean;
+    readonly isTextEditModeEnabled: () => boolean;
   };
   grid: {
     readonly toggle: () => void;
