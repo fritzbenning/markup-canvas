@@ -57,6 +57,9 @@ export function processPostMessage(
       case "resetViewToCenter":
         canvas.resetViewToCenter();
         break;
+      case "resetToInitial":
+        canvas.resetToInitial();
+        break;
       // Ruler/Grid methods
       case "toggleRulers":
         canvas.toggleRulers();

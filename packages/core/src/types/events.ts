@@ -46,6 +46,7 @@ export type PostMessageAction =
   | "panToPoint"
   | "resetView"
   | "resetViewToCenter"
+  | "resetToInitial"
   | "toggleRulers"
   | "showRulers"
   | "hideRulers"
