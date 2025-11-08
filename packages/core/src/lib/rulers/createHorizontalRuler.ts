@@ -13,7 +13,6 @@ export function createHorizontalRuler(config: Required<MarkupCanvasConfig>): HTM
 	height: ${config.rulerSize}px;
 	background: var(--ruler-background-color);
 	border-bottom: 1px solid var(--ruler-border-color);
-	border-right: 1px solid var(--ruler-border-color);
 	z-index: ${RULER_Z_INDEX.RULERS};
 	pointer-events: none;
 	font-family: ${config.rulerFontFamily};

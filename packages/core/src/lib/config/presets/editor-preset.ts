@@ -18,7 +18,7 @@ export const EDITOR_PRESET: MarkupCanvasConfig = {
   bindKeyboardEventsTo: "document",
 
   // Zoom behavior
-  zoomSpeed: 1.5,
+  zoomSpeed: 4,
   minZoom: 0.05,
   maxZoom: 80,
   enableTransition: false,
@@ -57,7 +57,7 @@ export const EDITOR_PRESET: MarkupCanvasConfig = {
 
   // Ruler styling
   rulerBackgroundColor: "oklch(100% 0 0 / 0.96)",
-  rulerBorderColor: "oklch(96.7% 0.001 286.375)",
+  rulerBorderColor: "oklch(0.322 0.0095 285.919)",
   rulerTextColor: "oklch(70.5% 0.015 286.067)",
   rulerTickColor: "oklch(92% 0.004 286.32)",
   gridColor: "rgba(232, 86, 193, 0.5)",
