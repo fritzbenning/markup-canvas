@@ -1,5 +1,5 @@
 import { centerContent, panDown, panLeft, panRight, panToPoint, panUp } from "@/lib/actions/pan/index.js";
-import { resetTransform, updateTransform } from "@/lib/actions/transform/index.js";
+import { resetToInitialTransform, resetTransform, updateTransform } from "@/lib/actions/transform/index.js";
 import { hideGrid, isGridVisible, showGrid, toggleGrid, toggleTransition, updateThemeMode } from "@/lib/actions/ui/index.js";
 import { areRulersVisible, hideRulers, showRulers, toggleRulers } from "@/lib/actions/ui/rulers/index.js";
 import { resetView, resetViewToCenter, setZoom, zoomIn, zoomOut, zoomToPoint } from "@/lib/actions/zoom/index.js";
@@ -161,6 +161,14 @@ export class MarkupCanvas {
 
   reset(): boolean {
     const result = resetTransform(this.canvas);
+    if (result) {
+      emitTransformEvents(this.event, this.canvas);
+    }
+    return result;
+  }
+
+  resetToInitial(): boolean {
+    const result = resetToInitialTransform(this.canvas, this.transformLayer, this.config);
     if (result) {
       emitTransformEvents(this.event, this.canvas);
     }

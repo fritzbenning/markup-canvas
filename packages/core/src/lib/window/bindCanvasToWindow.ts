@@ -21,6 +21,7 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
     transform: {
       update: canvas.updateTransform.bind(canvas),
       reset: canvas.reset.bind(canvas),
+      resetToInitial: canvas.resetToInitial.bind(canvas),
     },
 
     // Zoom group

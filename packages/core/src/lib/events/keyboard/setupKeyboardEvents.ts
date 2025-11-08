@@ -77,7 +77,7 @@ export function setupKeyboardEvents(
             canvas.resetView();
           }
           handled = true;
-        } else if (event.metaKey || event.ctrlKey) {
+        } else if (event.metaKey) {
           if (canvas.resetViewToCenter) {
             canvas.resetViewToCenter();
           }

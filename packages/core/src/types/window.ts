@@ -12,6 +12,7 @@ export interface WindowAPI {
   transform: {
     readonly update: (transform: Transform) => void;
     readonly reset: () => void;
+    readonly resetToInitial: () => void;
   };
   zoom: {
     readonly current: number;
