@@ -3,6 +3,7 @@ import { getAdaptiveZoomSpeed } from "@/lib/events/utils/getAdaptiveZoomSpeed.js
 import { withFeatureEnabled } from "@/lib/helpers/withFeatureEnabled.js";
 import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 import type { MarkupCanvasConfig, Transform } from "@/types/index.js";
+import { isCanvasShortcut } from "./isCanvasShortcut";
 
 export function setupKeyboardEvents(
   canvas: MarkupCanvas,
@@ -17,11 +18,9 @@ export function setupKeyboardEvents(
     if (config.bindKeyboardEventsTo === "canvas" && document.activeElement !== canvas.container) return;
 
     withFeatureEnabled(config, "sendKeyboardEventsToParent", () => {
-      if (textEditModeEnabled) {
-        const hasMetaKey = event.ctrlKey || event.metaKey || event.altKey || event.shiftKey;
-        if (!hasMetaKey) {
-          return;
-        }
+      // In text edit mode, only send canvas shortcuts to parent
+      if (textEditModeEnabled && !isCanvasShortcut(event)) {
+        return;
       }
 
       sendKeyboardEventToParent(event, config);
@@ -90,6 +89,7 @@ export function setupKeyboardEvents(
         }
         break;
       case "0":
+        // Canvas shortcuts should work even in text edit mode
         if (event.ctrlKey) {
           if (canvas.resetView) {
             canvas.resetView();
@@ -104,13 +104,15 @@ export function setupKeyboardEvents(
         break;
       case "g":
       case "G":
-        if (event.shiftKey && canvas.toggleGrid) {
+        // Canvas shortcuts should work even in text edit mode
+        if (event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey && canvas.toggleGrid) {
           canvas.toggleGrid();
+          handled = true;
         }
-        handled = event.shiftKey;
         break;
       case "r":
       case "R":
+        // Canvas shortcuts should work even in text edit mode
         if (event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey && canvas.toggleRulers) {
           canvas.toggleRulers();
           handled = true;
