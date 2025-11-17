@@ -14,8 +14,9 @@ export const EDITOR_PRESET: MarkupCanvasConfig = {
   enableZoom: true,
   enablePan: true,
   enableTouch: true,
-  enableKeyboard: true,
+  enableKeyboard: false,
   bindKeyboardEventsTo: "document",
+  sendKeyboardEventsToParent: true,
 
   // Zoom behavior
   zoomSpeed: 1.5,

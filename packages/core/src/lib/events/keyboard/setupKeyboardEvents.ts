@@ -1,4 +1,6 @@
+import { sendKeyboardEventToParent } from "@/lib/events/keyboard/sendKeyboardEventToParent.js";
 import { getAdaptiveZoomSpeed } from "@/lib/events/utils/getAdaptiveZoomSpeed.js";
+import { withFeatureEnabled } from "@/lib/helpers/withFeatureEnabled.js";
 import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
 import type { MarkupCanvasConfig, Transform } from "@/types/index.js";
 
@@ -13,6 +15,20 @@ export function setupKeyboardEvents(
     if (!(event instanceof KeyboardEvent)) return;
 
     if (config.bindKeyboardEventsTo === "canvas" && document.activeElement !== canvas.container) return;
+
+    withFeatureEnabled(config, "sendKeyboardEventsToParent", () => {
+      const textEditKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+      if (textEditModeEnabled && textEditKeys.includes(event.key)) {
+        return;
+      }
+
+      sendKeyboardEventToParent(event, config);
+      event.preventDefault();
+    });
+
+    if (config.sendKeyboardEventsToParent) {
+      return;
+    }
 
     let handled = false;
     const newTransform: Partial<Transform> = {};

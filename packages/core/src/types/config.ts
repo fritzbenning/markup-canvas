@@ -20,6 +20,7 @@ export interface MarkupCanvasConfig {
   enableTouch?: boolean;
   enableKeyboard?: boolean;
   bindKeyboardEventsTo?: "canvas" | "document";
+  sendKeyboardEventsToParent?: boolean;
 
   // Zoom behavior
   zoomSpeed?: number;
