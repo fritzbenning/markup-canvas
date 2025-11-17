@@ -17,9 +17,11 @@ export function setupKeyboardEvents(
     if (config.bindKeyboardEventsTo === "canvas" && document.activeElement !== canvas.container) return;
 
     withFeatureEnabled(config, "sendKeyboardEventsToParent", () => {
-      const textEditKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
-      if (textEditModeEnabled && textEditKeys.includes(event.key)) {
-        return;
+      if (textEditModeEnabled) {
+        const hasMetaKey = event.ctrlKey || event.metaKey || event.altKey || event.shiftKey;
+        if (!hasMetaKey) {
+          return;
+        }
       }
 
       sendKeyboardEventToParent(event, config);
