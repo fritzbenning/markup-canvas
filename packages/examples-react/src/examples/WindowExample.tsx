@@ -77,7 +77,6 @@ export default function WindowExample() {
         height={15000}
         name="canvas"
         enablePostMessageAPI={true}
-        enableKeyboard={true}
         requireSpaceForMouseDrag={false}
         requireOptionForClickZoom={false}
         enableClickToZoom={true}
