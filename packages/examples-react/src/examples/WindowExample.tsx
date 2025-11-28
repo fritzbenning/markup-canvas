@@ -7,6 +7,8 @@ import { Content } from "../components/Content";
 import { Controls } from "../components/Controls";
 import { ZoomDisplay } from "../components/ZoomDisplay";
 
+const CANVAS_NAME = "canvas-1";
+
 export default function WindowExample() {
   const {
     zoom,
@@ -16,7 +18,6 @@ export default function WindowExample() {
     resetZoom,
     centerContent,
     toggleTransitionMode,
-    panToPoint,
     themeMode,
     updateThemeMode,
     toggleRulers,
@@ -24,7 +25,7 @@ export default function WindowExample() {
     toggleGrid,
     showGridState,
   } = useMarkupCanvas({
-    canvasName: "canvas",
+    canvasName: CANVAS_NAME,
     onReady: (canvas) => {
       console.log("✅ Canvas ready with initial transform!", canvas);
     },
@@ -34,7 +35,7 @@ export default function WindowExample() {
   });
 
   const handleMessage = useCallback((event: MessageEvent) => {
-    if (event.data.source === "markup-canvas" && event.data.canvasName === "canvas") {
+    if (event.data.source === "markup-canvas" && event.data.canvasName === CANVAS_NAME) {
       if (event.data.event === "zoom") {
         // Handle zoom events if needed
       }
@@ -75,7 +76,7 @@ export default function WindowExample() {
       <MarkupCanvas
         width={20000}
         height={15000}
-        name="canvas"
+        name={CANVAS_NAME}
         enablePostMessageAPI={true}
         requireSpaceForMouseDrag={false}
         requireOptionForClickZoom={false}

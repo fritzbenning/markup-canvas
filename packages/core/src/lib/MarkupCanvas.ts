@@ -59,9 +59,8 @@ export class MarkupCanvas {
       });
     });
 
-    if (options.themeMode) {
-      updateThemeMode(this.canvas.container, this.config, this.rulers, options.themeMode);
-    }
+    // Always set initial color-scheme
+    updateThemeMode(this.canvas.container, this.config, this.rulers, this.config.themeMode);
 
     // Always bind canvas to window
     this.event.setEmitInterceptor((event, data) => {

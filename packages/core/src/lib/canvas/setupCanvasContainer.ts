@@ -1,6 +1,5 @@
 import { checkContainerDimensions } from "@/lib/canvas/checkContainerDimensions";
 import { CANVAS_CONTAINER_CLASS } from "@/lib/constants";
-import { getThemeValue } from "@/lib/helpers/index.js";
 import type { MarkupCanvasConfig } from "@/types/index.js";
 
 export function setupCanvasContainer(container: HTMLElement, config?: Required<MarkupCanvasConfig>): void {
@@ -12,10 +11,12 @@ export function setupCanvasContainer(container: HTMLElement, config?: Required<M
   container.style.cursor = "grab";
   container.style.overscrollBehavior = "none";
 
-  // Apply canvas background color
+  // Apply canvas background color using light-dark() CSS function
   if (config) {
-    const backgroundColor = getThemeValue(config, "canvasBackgroundColor");
+    const backgroundColor = `light-dark(${config.canvasBackgroundColor}, ${config.canvasBackgroundColorDark})`;
     container.style.backgroundColor = backgroundColor;
+    // Set color-scheme to enable light-dark() function
+    container.style.colorScheme = config.themeMode;
   }
 
   if (!container.hasAttribute("tabindex")) {
