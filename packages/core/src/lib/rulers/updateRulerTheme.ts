@@ -21,7 +21,6 @@ export function updateRulerTheme(elements: RulerThemeUpdater, config: Required<M
     elements.horizontalRuler.style.setProperty("--ruler-border-color", borderColor);
     elements.horizontalRuler.style.setProperty("--ruler-text-color", textColor);
     elements.horizontalRuler.style.setProperty("--ruler-tick-color", tickColor);
-    elements.horizontalRuler.style.colorScheme = config.themeMode;
   }
 
   // Update vertical ruler with CSS variables
@@ -30,7 +29,6 @@ export function updateRulerTheme(elements: RulerThemeUpdater, config: Required<M
     elements.verticalRuler.style.setProperty("--ruler-border-color", borderColor);
     elements.verticalRuler.style.setProperty("--ruler-text-color", textColor);
     elements.verticalRuler.style.setProperty("--ruler-tick-color", tickColor);
-    elements.verticalRuler.style.colorScheme = config.themeMode;
   }
 
   // Update corner box with CSS variables
@@ -38,12 +36,10 @@ export function updateRulerTheme(elements: RulerThemeUpdater, config: Required<M
     elements.cornerBox.style.setProperty("--ruler-background-color", backgroundColor);
     elements.cornerBox.style.setProperty("--ruler-border-color", borderColor);
     elements.cornerBox.style.setProperty("--ruler-text-color", textColor);
-    elements.cornerBox.style.colorScheme = config.themeMode;
   }
 
   // Update grid overlay with CSS variables
   if (elements.gridOverlay) {
     elements.gridOverlay.style.setProperty("--grid-color", gridColor);
-    elements.gridOverlay.style.colorScheme = config.themeMode;
   }
 }

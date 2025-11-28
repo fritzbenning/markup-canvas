@@ -59,9 +59,6 @@ export class MarkupCanvas {
       });
     });
 
-    // Always set initial color-scheme
-    updateThemeMode(this.canvas.container, this.config, this.rulers, this.config.themeMode);
-
     // Always bind canvas to window
     this.event.setEmitInterceptor((event, data) => {
       broadcastEvent(event as string, data, this.config);
@@ -420,7 +417,7 @@ export class MarkupCanvas {
   // Theme management
   updateThemeMode(mode: "light" | "dark"): void {
     this.config = createMarkupCanvasConfig({ ...this.config, themeMode: mode });
-    updateThemeMode(this.canvas.container, this.config, this.rulers, mode);
+    updateThemeMode(this.config, this.rulers, mode);
   }
 
   toggleThemeMode(): "light" | "dark" {

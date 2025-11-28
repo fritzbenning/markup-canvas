@@ -1,7 +1,7 @@
 import { MarkupCanvas, useMarkupCanvas } from "@markup-canvas/react";
 import { Moon, Sun, ZoomIn, ZoomOut } from "lucide-react";
 import "../App.css";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { Content } from "../components/Content";
 import { Controls } from "../components/Controls";
@@ -10,6 +10,8 @@ import { ZoomDisplay } from "../components/ZoomDisplay";
 const CANVAS_NAME = "canvas-1";
 
 export default function WindowExample() {
+  const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
+
   const {
     zoom,
     zoomIn,
@@ -18,8 +20,6 @@ export default function WindowExample() {
     resetZoom,
     centerContent,
     toggleTransitionMode,
-    themeMode,
-    updateThemeMode,
     toggleRulers,
     showRulersState,
     toggleGrid,
@@ -33,6 +33,12 @@ export default function WindowExample() {
       console.warn("⚠️ Canvas not found on window");
     },
   });
+
+  const toggleTheme = useCallback(() => {
+    const newMode = themeMode === "light" ? "dark" : "light";
+    setThemeMode(newMode);
+    document.body.style.colorScheme = newMode;
+  }, [themeMode]);
 
   const handleMessage = useCallback((event: MessageEvent) => {
     if (event.data.source === "markup-canvas" && event.data.canvasName === CANVAS_NAME) {
@@ -67,7 +73,7 @@ export default function WindowExample() {
         <Button onClick={toggleTransitionMode}> Toggle Transition Mode</Button>
         <Button onClick={toggleRulers}>{showRulersState ? "Hide" : "Show"} Rulers</Button>
         <Button onClick={toggleGrid}>{showGridState ? "Hide" : "Show"} Grid</Button>
-        <Button onClick={() => updateThemeMode(themeMode === "light" ? "dark" : "light")}>
+        <Button onClick={toggleTheme}>
           {themeMode === "light" ? <Sun size={16} /> : <Moon size={16} />}
           {themeMode === "light" ? "Light" : "Dark"}
         </Button>

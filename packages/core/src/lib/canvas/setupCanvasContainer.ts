@@ -15,8 +15,6 @@ export function setupCanvasContainer(container: HTMLElement, config?: Required<M
   if (config) {
     const backgroundColor = `light-dark(${config.canvasBackgroundColor}, ${config.canvasBackgroundColorDark})`;
     container.style.backgroundColor = backgroundColor;
-    // Set color-scheme to enable light-dark() function
-    container.style.colorScheme = config.themeMode;
   }
 
   if (!container.hasAttribute("tabindex")) {
