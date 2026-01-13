@@ -64,7 +64,7 @@ export const EDITOR_PRESET: MarkupCanvasConfig = {
   gridColor: "rgba(232, 86, 193, 0.5)",
 
   // Ruler styling (dark theme)
-  rulerBackgroundColorDark: "oklch(27.4% 0.006 286.033)",
+  rulerBackgroundColorDark: "oklch(23.6623% 0 0)",
   rulerBorderColorDark: "oklch(0.322 0.0095 285.919)",
   rulerTextColorDark: "oklch(55.2% 0.016 285.938)",
   rulerTickColorDark: "oklch(55.2% 0.016 285.938)",
