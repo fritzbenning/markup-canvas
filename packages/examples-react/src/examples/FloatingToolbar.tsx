@@ -8,7 +8,6 @@ export interface FloatingToolbarProps {
   onZoomOut: () => void;
   onFitToScreen: () => void;
   onResetCanvas: () => void;
-  onCenterContent: () => void;
   transitionEnabled: boolean;
   onTransitionChange: (enabled: boolean) => void;
   rulersVisible: boolean;
@@ -92,9 +91,6 @@ export function FloatingToolbar({
         <ToolbarIconButton label="Reset canvas" onClick={onResetCanvas}>
           <Undo2 size={18} strokeWidth={2} />
         </ToolbarIconButton>
-        {/* <ToolbarIconButton label="Center content" onClick={onCenterContent}>
-          <Crosshair size={18} strokeWidth={2} />
-        </ToolbarIconButton> */}
         <span className="floating-toolbar__divider" aria-hidden />
         <ToolbarIconButton label="Settings" onClick={() => setOpen(true)}>
           <SettingsIcon size={18} strokeWidth={2} />

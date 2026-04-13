@@ -1,13 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export type ThemeMode = "light" | "dark";
 
 export function useTheme(initialMode: ThemeMode = "light") {
   const [themeMode, setThemeMode] = useState<ThemeMode>(initialMode);
-
-  useEffect(() => {
-    document.body.style.colorScheme = themeMode;
-  }, [themeMode]);
 
   const toggleTheme = useCallback(() => {
     setThemeMode((prev) => (prev === "light" ? "dark" : "light"));

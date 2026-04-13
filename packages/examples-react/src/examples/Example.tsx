@@ -14,7 +14,6 @@ export default function Example() {
     zoomOut,
     fitToScreen,
     reset,
-    centerContent,
     transitionEnabled,
     setTransitionMode,
     requireSpaceForMouseDrag,
@@ -47,11 +46,10 @@ export default function Example() {
     <main className="app">
       <FloatingToolbar
         zoom={zoom}
-        onZoomIn={() => zoomIn()}
-        onZoomOut={() => zoomOut()}
+        onZoomIn={zoomIn}
+        onZoomOut={zoomOut}
         onFitToScreen={fitToScreen}
         onResetCanvas={reset}
-        onCenterContent={centerContent}
         transitionEnabled={transitionEnabled}
         onTransitionChange={setTransitionMode}
         rulersVisible={rulersVisible}
