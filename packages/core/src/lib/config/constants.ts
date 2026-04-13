@@ -4,7 +4,6 @@ export const DEFAULT_CONFIG: Required<MarkupCanvasConfig> = {
   // Canvas dimensions
   width: 8000,
   height: 8000,
-  enableAcceleration: true,
 
   // Initial view transform
   initialZoom: 1,

@@ -1,5 +1,5 @@
-export { canvasToContent } from "./canvasToContent.js";
-export { clampZoom } from "./clampZoom.js";
-export { contentToCanvas } from "./contentToCanvas.js";
-export { createMatrix } from "./createMatrix.js";
-export { getZoomToMouseTransform } from "./getZoomToMouseTransform.js";
+export { canvasToContent } from "./canvasToContent";
+export { clampZoom } from "./clampZoom";
+export { contentToCanvas } from "./contentToCanvas";
+export { createMatrix } from "./createMatrix";
+export { getZoomToMouseTransform } from "./getZoomToMouseTransform";

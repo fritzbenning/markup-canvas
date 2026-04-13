@@ -55,7 +55,6 @@ const canvas = new MarkupCanvas(container, {
 |--------|------|---------|-------------|
 | `width` | `number` | - | Canvas width in pixels |
 | `height` | `number` | - | Canvas height in pixels |
-| `enableAcceleration` | `boolean` | `true` | Enable hardware acceleration |
 
 #### Interaction Controls
 

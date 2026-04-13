@@ -4,27 +4,27 @@ export type {
   CanvasBounds,
   CanvasOptions,
   Transform,
-} from "./canvas.js";
+} from "./canvas";
 
 // Config types
-export type { MarkupCanvasConfig } from "./config.js";
+export type { MarkupCanvasConfig } from "./config";
 
 // Event types
-export type { CallbackEventName, GestureInfo, MarkupCanvasEvents, MouseDragControls, TouchState } from "./events.js";
+export type { CallbackEventName, GestureInfo, MarkupCanvasEvents, MouseDragControls, TouchState } from "./events";
 
 // Matrix types
 export type {
   Point,
   ZoomBoundaryOptions,
   ZoomBoundaryResult,
-} from "./matrix.js";
+} from "./matrix";
 
 // Ruler types
 export type {
   RulerCanvas,
   RulerElements,
   RulerSystem,
-} from "./rulers.js";
+} from "./rulers";
 
 // Window API types
-export type { WindowAPI } from "./window.js";
+export type { WindowAPI } from "./window";

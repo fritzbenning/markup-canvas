@@ -1,6 +1,6 @@
 {
   "name": "markup-canvas",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "private": true,
   "description": "High-performance canvas-like container with pan and zoom capabilities",
   "scripts": {
@@ -10,13 +10,16 @@
     "clean": "turbo run clean",
     "format": "biome format --write .",
     "check": "biome check .",
-    "version:patch": "node scripts/bump-version.js patch",
-    "version:minor": "node scripts/bump-version.js minor",
-    "version:major": "node scripts/bump-version.js major",
-    "publish": "node scripts/publish.js"
+    "test": "turbo run test",
+    "version:patch": "tsx scripts/create-version.ts patch",
+    "version:minor": "tsx scripts/create-version.ts minor",
+    "version:major": "tsx scripts/create-version.ts major",
+    "publish": "tsx scripts/publish.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
     "turbo": "^2.5.8"
   },
   "packageManager": "pnpm@8.15.0",

@@ -1,2 +1,2 @@
-export type { RulerSystem } from "@/types/index.js";
-export { createRulers } from "./createRulers.js";
+export type { RulerSystem } from "@/types/index";
+export { createRulers } from "./create/createRulers";

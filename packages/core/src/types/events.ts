@@ -1,5 +1,5 @@
-import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
-import type { Transform } from "@/types/canvas.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas";
+import type { Transform } from "@/types/canvas";
 
 export interface MarkupCanvasEvents {
   transform: Transform;
@@ -44,9 +44,7 @@ export type PostMessageAction =
   | "fitToScreen"
   | "centerContent"
   | "panToPoint"
-  | "resetView"
-  | "resetViewToCenter"
-  | "resetToInitial"
+  | "reset"
   | "toggleRulers"
   | "showRulers"
   | "hideRulers"

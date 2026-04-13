@@ -1,7 +1,23 @@
-import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
+import { processPostMessage } from "@/lib/events/postMessage/handlers/processPostMessages";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas";
 import type { PostMessageRequest } from "@/types/events";
-import { processPostMessage } from "./processPostMessages";
 
+/**
+ * Subscribes to `window` `message` events and routes allowed envelopes to {@link processPostMessage}.
+ *
+ * Accepts `source` of `"markup-canvas"` or `"application"`, matches `canvasName` to this instance,
+ * then dispatches `action` with `data` as payload.
+ *
+ * @param canvas - Canvas whose `config.name` is matched against incoming messages.
+ * @returns Cleanup that removes the `message` listener (no-op if `window` is undefined).
+ *
+ * @example
+ * ```ts
+ * const remove = setupPostMessageEvents(canvas);
+ * // later:
+ * remove();
+ * ```
+ */
 export function setupPostMessageEvents(canvas: MarkupCanvas): () => void {
   const handleMessage = (event: MessageEvent): void => {
     const data = event.data as PostMessageRequest;

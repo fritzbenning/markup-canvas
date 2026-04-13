@@ -1,7 +1,8 @@
-import type { EventEmitter } from "@/lib/events/EventEmitter.js";
-import type { CanvasBounds, Transform } from "./canvas.js";
-import type { MarkupCanvasConfig } from "./config.js";
-import type { MarkupCanvasEvents } from "./events.js";
+import type { EventEmitter } from "@/lib/events/createEventEmitter";
+import type { KeyboardScope } from "@/lib/events/keyboard/types";
+import type { CanvasBounds, Transform } from "./canvas";
+import type { MarkupCanvasConfig } from "./config";
+import type { MarkupCanvasEvents } from "./events";
 
 export interface WindowAPI {
   config: {
@@ -12,7 +13,6 @@ export interface WindowAPI {
   transform: {
     readonly update: (transform: Transform) => void;
     readonly reset: () => void;
-    readonly resetToInitial: () => void;
   };
   zoom: {
     readonly current: number;
@@ -21,7 +21,6 @@ export interface WindowAPI {
     readonly in: (factor?: number) => void;
     readonly out: (factor?: number) => void;
     readonly reset: () => void;
-    readonly resetToCenter: () => void;
     readonly fitToScreen: () => void;
   };
   pan: {
@@ -44,6 +43,8 @@ export interface WindowAPI {
     readonly enableTextEditMode: () => boolean;
     readonly disableTextEditMode: () => boolean;
     readonly isTextEditModeEnabled: () => boolean;
+    readonly setKeyboardScope: (scope: KeyboardScope) => boolean;
+    readonly getKeyboardScope: () => KeyboardScope;
   };
   grid: {
     readonly toggle: () => void;

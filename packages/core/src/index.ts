@@ -1,5 +1,10 @@
 export { EDITOR_PRESET } from "./lib/config/presets";
-export { MarkupCanvas, MarkupCanvas as default } from "./lib/MarkupCanvas.js";
+export type {
+  KeyboardModifier,
+  KeyboardRuleScope,
+  KeyboardScope,
+} from "./lib/events/keyboard/types";
+export { MarkupCanvas, MarkupCanvas as default } from "./lib/MarkupCanvas";
 export type {
   Canvas,
   CanvasBounds,
@@ -16,4 +21,4 @@ export type {
   WindowAPI,
   ZoomBoundaryOptions,
   ZoomBoundaryResult,
-} from "./types/index.js";
+} from "./types/index";

@@ -1,1 +1,1 @@
-export { MarkupCanvas as default } from "./lib/MarkupCanvas.js";
+export { MarkupCanvas as default } from "./lib/MarkupCanvas";

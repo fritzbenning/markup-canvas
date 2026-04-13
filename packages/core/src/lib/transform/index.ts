@@ -1,2 +1,4 @@
-export { applyTransform } from "./applyTransform.js";
-export { enableHardwareAcceleration } from "./hardware-acceleration.js";
+export { applyTransform } from "./applyTransform";
+export { applyZoomToCanvas } from "./applyZoomToCanvas";
+export { resetToIdentityTransform, resetTransform } from "./resetTransform";
+export { updateTransform } from "./updateTransform";

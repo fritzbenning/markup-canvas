@@ -1,12 +1,13 @@
-import type { MarkupCanvas as CoreMarkupCanvas, Transform, WindowAPI } from "@markup-canvas/core";
+import type { MarkupCanvas, Transform } from "@markup-canvas/core";
 
 export interface MarkupCanvasRef {
-  canvas: CoreMarkupCanvas | null;
+  canvas: MarkupCanvas | null;
   zoomIn: (factor?: number) => void;
   zoomOut: (factor?: number) => void;
+  reset: () => void;
   resetZoom: () => void;
   panToPoint: (x: number, y: number) => void;
-  fitToContent: () => void;
+  fitToScreen: () => void;
   centerContent: () => void;
   getTransform: () => Transform;
   getZoom: () => number;
@@ -25,18 +26,19 @@ export interface UseMarkupCanvasOptions {
   onTransformChange?: (transform: Transform) => void;
   onZoomChange?: (zoom: number) => void;
   onPanChange?: (pan: { x: number; y: number }) => void;
-  onReady?: (canvas: CoreMarkupCanvas) => void;
+  onReady?: (canvas: MarkupCanvas) => void;
 }
 
 export interface CanvasEventHandlers {
   onZoom?: (zoom: number) => void;
   onPan?: (pan: { x: number; y: number }) => void;
   onTransform?: (transform: Transform) => void;
-  onReady?: (canvas: CoreMarkupCanvas) => void;
+  onReady?: (canvas: MarkupCanvas) => void;
 }
 
 export interface UseMarkupCanvasReturn {
-  canvas: WindowAPI | null;
+  /** Core canvas instance once the container has mounted and the canvas was created. */
+  canvas: MarkupCanvas | null;
   transform: Transform;
   zoom: number;
   pan: { x: number; y: number };
@@ -49,9 +51,9 @@ export interface UseMarkupCanvasReturn {
   panUp: (distance?: number) => void;
   panDown: (distance?: number) => void;
   panToPoint: (x: number, y: number) => void;
-  fitToContent: () => void;
+  fitToScreen: () => void;
   centerContent: () => void;
-  resetView: () => void;
+  reset: () => void;
   setTransitionMode: (enabled: boolean) => void;
   toggleTransitionMode: () => boolean;
   themeMode: "light" | "dark";
@@ -61,10 +63,10 @@ export interface UseMarkupCanvasReturn {
   showRulers: () => void;
   hideRulers: () => void;
   areRulersVisible: () => boolean;
-  showRulersState: boolean;
+  rulersVisible: boolean;
   toggleGrid: () => void;
   showGrid: () => void;
   hideGrid: () => void;
   isGridVisible: () => boolean;
-  showGridState: boolean;
+  gridVisible: boolean;
 }

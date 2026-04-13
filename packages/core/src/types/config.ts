@@ -2,7 +2,6 @@ export interface MarkupCanvasConfig {
   // Canvas dimensions
   width?: number;
   height?: number;
-  enableAcceleration?: boolean;
 
   // Initial view transform
   initialZoom?: number;

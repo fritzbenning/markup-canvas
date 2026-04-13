@@ -4,7 +4,6 @@ export const EDITOR_PRESET: MarkupCanvasConfig = {
   // Canvas dimensions
   width: 4000,
   height: 4000,
-  enableAcceleration: true,
 
   // Global Instance Access
   name: "canvas",

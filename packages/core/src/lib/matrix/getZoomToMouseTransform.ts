@@ -1,13 +1,26 @@
-import { DEFAULT_ZOOM, ZOOM_CHANGE_THRESHOLD } from "@/lib/constants.js";
-import { clampZoom } from "@/lib/matrix/clampZoom.js";
-import type { MarkupCanvasConfig, Transform } from "@/types/index.js";
+import { DEFAULT_ZOOM, ZOOM_CHANGE_THRESHOLD } from "@/lib/constants";
+import { clampZoom } from "@/lib/matrix/clampZoom";
+import type { MarkupCanvasConfig, Transform } from "@/types/index";
 
+/**
+ * Computes a new pan/zoom transform so the content point under the cursor stays fixed while zooming.
+ *
+ * When `currentTransform` is omitted, starts from scale {@link DEFAULT_ZOOM} and translation offset for rulers when enabled.
+ * If clamped zoom equals the current scale within {@link ZOOM_CHANGE_THRESHOLD}, returns the previous transform unchanged.
+ *
+ * @param mouseX - Cursor X in the same space as `translateX` (layer/viewport pixels).
+ * @param mouseY - Cursor Y in the same space as `translateY`.
+ * @param currentTransform - Active transform, or `undefined` to use defaults.
+ * @param zoomFactor - Multiplier applied to the current scale before clamping (e.g. `1.1` to zoom in).
+ * @param config - Full canvas config; used for zoom bounds and optional ruler inset.
+ * @returns The next `scale` and `translateX`/`translateY` for the transform layer.
+ */
 export function getZoomToMouseTransform(
   mouseX: number,
   mouseY: number,
   currentTransform: Transform,
   zoomFactor: number,
-  config: Required<MarkupCanvasConfig>
+  config: Required<MarkupCanvasConfig>,
 ): Transform {
   const rulerOffset = config.enableRulers ? -config.rulerSize : 0;
 

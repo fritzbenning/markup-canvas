@@ -7,7 +7,6 @@ export interface Transform {
 export interface CanvasOptions {
   width?: number;
   height?: number;
-  enableAcceleration?: boolean;
   enableEventHandling?: boolean;
 }
 

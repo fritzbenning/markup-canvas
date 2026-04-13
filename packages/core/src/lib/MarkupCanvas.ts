@@ -1,23 +1,22 @@
-import { centerContent, panDown, panLeft, panRight, panToPoint, panUp } from "@/lib/actions/pan/index.js";
-import { resetToInitialTransform, resetTransform, updateTransform } from "@/lib/actions/transform/index.js";
-import { hideGrid, isGridVisible, showGrid, toggleGrid, toggleTransition, updateThemeMode } from "@/lib/actions/ui/index.js";
-import { areRulersVisible, hideRulers, showRulers, toggleRulers } from "@/lib/actions/ui/rulers/index.js";
-import { resetView, resetViewToCenter, setZoom, zoomIn, zoomOut, zoomToPoint } from "@/lib/actions/zoom/index.js";
-import { fitToScreen } from "@/lib/canvas/fitToScreen.js";
-import { getCanvasBounds } from "@/lib/canvas/getCanvasBounds.js";
-import { createCanvas } from "@/lib/canvas/index.js";
-import { createMarkupCanvasConfig } from "@/lib/config/createMarkupCanvasConfig.js";
-import { EventEmitter } from "@/lib/events/EventEmitter.js";
-import { emitTransformEvents } from "@/lib/events/emitTransformEvents.js";
-import { setupKeyboardEvents, setupMouseEvents, setupPostMessageEvents, setupTouchEvents, setupWheelEvents } from "@/lib/events/index.js";
-import { getVisibleArea, isPointVisible, withFeatureEnabled } from "@/lib/helpers/index.js";
-import { canvasToContent } from "@/lib/matrix/canvasToContent.js";
-import { createMatrix } from "@/lib/matrix/createMatrix.js";
-import { createRulers } from "@/lib/rulers/index.js";
-import { broadcastEvent } from "@/lib/window/broadcastEvent.js";
-import { cleanupWindowBinding } from "@/lib/window/cleanupWindowBinding.js";
-import { bindCanvasToWindow } from "@/lib/window/index.js";
-import type { Canvas, CanvasBounds, MarkupCanvasConfig, MarkupCanvasEvents, MouseDragControls, Transform } from "@/types/index.js";
+import { centerContent, pan, panToPoint } from "@/lib/actions/pan/index";
+import { checkGridVisibility, hideGrid, showGrid, toggleGrid, toggleTransition, updateThemeMode } from "@/lib/actions/ui/index";
+import { checkRulersVisibility, hideRulers, showRulers, toggleRulers } from "@/lib/actions/ui/rulers/index";
+import { fitToScreen, resetViewToCenter, setZoom, zoomIn, zoomOut, zoomToPoint } from "@/lib/actions/zoom/index";
+import { createCanvas, getCanvasBounds } from "@/lib/canvas";
+import { createMarkupCanvasConfig } from "@/lib/config/createMarkupCanvasConfig";
+import { createEventEmitter } from "@/lib/events/createEventEmitter";
+import { emitTransformEvents } from "@/lib/events/emitTransformEvents";
+import { setupKeyboardEvents, setupMouseEvents, setupPostMessageEvents, setupTouchEvents, setupWheelEvents } from "@/lib/events/index";
+import type { KeyboardScope } from "@/lib/events/keyboard/types";
+import { sendPostMessage } from "@/lib/events/postMessage/utils/sendPostMessage";
+import { getVisibleArea, isPointVisible, withFeatureEnabled } from "@/lib/helpers";
+import { canvasToContent } from "@/lib/matrix/canvasToContent";
+import { createMatrix } from "@/lib/matrix/createMatrix";
+import { createRulers } from "@/lib/rulers/index";
+import { resetTransform, updateTransform } from "@/lib/transform/index";
+import { cleanupWindowBinding } from "@/lib/window/cleanupWindowBinding";
+import { bindCanvasToWindow } from "@/lib/window/index";
+import type { Canvas, CanvasBounds, MarkupCanvasConfig, MarkupCanvasEvents, MouseDragControls, Transform } from "@/types/index";
 
 declare global {
   interface Window {
@@ -31,9 +30,9 @@ export class MarkupCanvas {
   private rulers: ReturnType<typeof createRulers> | null = null;
   private dragSetup: MouseDragControls | null = null;
   private keyboardCleanup: (() => void) | null = null;
-  private textEditModeEnabled = false;
+  private keyboardScope: KeyboardScope = "default";
   public config: Required<MarkupCanvasConfig>;
-  public event = new EventEmitter<MarkupCanvasEvents>();
+  public event = createEventEmitter<MarkupCanvasEvents>();
   private _isReady = false;
 
   constructor(container: HTMLElement, options: MarkupCanvasConfig = {}) {
@@ -61,7 +60,11 @@ export class MarkupCanvas {
 
     // Always bind canvas to window
     this.event.setEmitInterceptor((event, data) => {
-      broadcastEvent(event as string, data, this.config);
+      const eventName = event as string;
+      const payload = eventName === "ready" ? { ready: true } : data;
+      const canvasName = this.config.name || "markupCanvas";
+
+      sendPostMessage(canvasName, eventName, payload, { target: "both" });
     });
 
     bindCanvasToWindow(this, this.config);
@@ -97,7 +100,7 @@ export class MarkupCanvas {
       // Keyboard events
       withFeatureEnabled(this.config, "enableKeyboard", () => {
         const keyboardCleanup = setupKeyboardEvents(this, this.config, {
-          textEditModeEnabled: this.textEditModeEnabled,
+          keyboardScope: this.keyboardScope,
         });
         this.keyboardCleanup = keyboardCleanup;
         this.cleanupCallbacks.push(keyboardCleanup);
@@ -156,15 +159,7 @@ export class MarkupCanvas {
   }
 
   reset(): boolean {
-    const result = resetTransform(this.canvas);
-    if (result) {
-      emitTransformEvents(this.event, this.canvas);
-    }
-    return result;
-  }
-
-  resetToInitial(): boolean {
-    const result = resetToInitialTransform(this.canvas, this.transformLayer, this.config);
+    const result = resetTransform(this.canvas, this.transformLayer, this.config);
     if (result) {
       emitTransformEvents(this.event, this.canvas);
     }
@@ -188,40 +183,40 @@ export class MarkupCanvas {
     return result;
   }
 
-  resetView(): boolean {
-    return resetView(this.canvas, this.transformLayer, this.config);
-  }
-
-  resetViewToCenter(): boolean {
-    return resetViewToCenter(this, this.transformLayer, this.config, this.zoomToPoint.bind(this));
-  }
-
   panLeft(distance?: number): boolean {
+    const update = this.updateTransform.bind(this);
     return (
-      panLeft(this.canvas, this.config, this.updateTransform.bind(this)) ||
-      (distance ? panLeft(this.canvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
+      pan("left", this.canvas, this.config, update) ||
+      (distance ? pan("left", this.canvas, { ...this.config, keyboardPanStep: distance }, update) : false)
     );
   }
 
   panRight(distance?: number): boolean {
+    const update = this.updateTransform.bind(this);
     return (
-      panRight(this.canvas, this.config, this.updateTransform.bind(this)) ||
-      (distance ? panRight(this.canvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
+      pan("right", this.canvas, this.config, update) ||
+      (distance ? pan("right", this.canvas, { ...this.config, keyboardPanStep: distance }, update) : false)
     );
   }
 
   panUp(distance?: number): boolean {
+    const update = this.updateTransform.bind(this);
     return (
-      panUp(this.canvas, this.config, this.updateTransform.bind(this)) ||
-      (distance ? panUp(this.canvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
+      pan("up", this.canvas, this.config, update) ||
+      (distance ? pan("up", this.canvas, { ...this.config, keyboardPanStep: distance }, update) : false)
     );
   }
 
   panDown(distance?: number): boolean {
+    const update = this.updateTransform.bind(this);
     return (
-      panDown(this.canvas, this.config, this.updateTransform.bind(this)) ||
-      (distance ? panDown(this.canvas, { ...this.config, keyboardPanStep: distance }, this.updateTransform.bind(this)) : false)
+      pan("down", this.canvas, this.config, update) ||
+      (distance ? pan("down", this.canvas, { ...this.config, keyboardPanStep: distance }, update) : false)
     );
+  }
+
+  panToPoint(x: number, y: number): boolean {
+    return panToPoint(this.canvas, this.config, x, y, this.updateTransform.bind(this), this.transformLayer);
   }
 
   zoomIn(factor: number = 0.5): boolean {
@@ -233,7 +228,19 @@ export class MarkupCanvas {
   }
 
   resetZoom(): boolean {
-    return this.resetViewToCenter();
+    return resetViewToCenter(this, this.transformLayer, this.config, this.zoomToPoint.bind(this));
+  }
+
+  centerContent(): boolean {
+    return centerContent(this.canvas, this.config, this.updateTransform.bind(this), this.transformLayer);
+  }
+
+  fitToScreen(): boolean {
+    const result = fitToScreen(this.canvas, this.transformLayer, this.config);
+    if (result) {
+      emitTransformEvents(this.event, this.canvas);
+    }
+    return result;
   }
 
   // Mouse drag control methods
@@ -255,7 +262,7 @@ export class MarkupCanvas {
       return true; // Already enabled
     }
     this.keyboardCleanup = setupKeyboardEvents(this, this.config, {
-      textEditModeEnabled: this.textEditModeEnabled,
+      keyboardScope: this.keyboardScope,
     });
     this.cleanupCallbacks.push(this.keyboardCleanup);
     return true;
@@ -274,50 +281,40 @@ export class MarkupCanvas {
     return this.keyboardCleanup !== null;
   }
 
-  // Text edit mode control methods
+  /**
+   * Restricts keyboard shortcuts (pan/zoom off; reset, grid, rulers still on) so
+   * nested inputs can handle typing without the canvas stealing keys.
+   * Same as `setKeyboardScope("restricted")`.
+   */
   enableTextEditMode(): boolean {
-    if (this.textEditModeEnabled) {
-      return true; // Already enabled
-    }
-    this.textEditModeEnabled = true;
-
-    // If keyboard is currently enabled, re-setup with new option
-    if (this.keyboardCleanup) {
-      // Remove old cleanup from callbacks
-      const index = this.cleanupCallbacks.indexOf(this.keyboardCleanup);
-      if (index > -1) {
-        this.cleanupCallbacks.splice(index, 1);
-      }
-      // Cleanup old handler
-      this.keyboardCleanup();
-      // Setup new handler with text edit mode enabled
-      this.keyboardCleanup = setupKeyboardEvents(this, this.config, {
-        textEditModeEnabled: true,
-      });
-      this.cleanupCallbacks.push(this.keyboardCleanup);
-    }
-
-    return true;
+    return this.setKeyboardScope("restricted");
   }
 
+  /** Restores the full canvas shortcut set. Same as `setKeyboardScope("default")`. */
   disableTextEditMode(): boolean {
-    if (!this.textEditModeEnabled) {
-      return true; // Already disabled
-    }
-    this.textEditModeEnabled = false;
+    return this.setKeyboardScope("default");
+  }
 
-    // If keyboard is currently enabled, re-setup with new option
+  /** True when the restricted shortcut set is active (e.g. while nested content is being edited). */
+  isTextEditModeEnabled(): boolean {
+    return this.keyboardScope === "restricted";
+  }
+
+  /** Sets which keyboard shortcuts are active; rebinds the listener when keyboard is enabled. */
+  setKeyboardScope(scope: KeyboardScope): boolean {
+    if (this.keyboardScope === scope) {
+      return true;
+    }
+    this.keyboardScope = scope;
+
     if (this.keyboardCleanup) {
-      // Remove old cleanup from callbacks
       const index = this.cleanupCallbacks.indexOf(this.keyboardCleanup);
       if (index > -1) {
         this.cleanupCallbacks.splice(index, 1);
       }
-      // Cleanup old handler
       this.keyboardCleanup();
-      // Setup new handler with text edit mode disabled
       this.keyboardCleanup = setupKeyboardEvents(this, this.config, {
-        textEditModeEnabled: false,
+        keyboardScope: this.keyboardScope,
       });
       this.cleanupCallbacks.push(this.keyboardCleanup);
     }
@@ -325,8 +322,8 @@ export class MarkupCanvas {
     return true;
   }
 
-  isTextEditModeEnabled(): boolean {
-    return this.textEditModeEnabled;
+  getKeyboardScope(): KeyboardScope {
+    return this.keyboardScope;
   }
 
   toggleGrid(): boolean {
@@ -354,7 +351,7 @@ export class MarkupCanvas {
   }
 
   isGridVisible(): boolean {
-    return isGridVisible(this.rulers);
+    return checkGridVisibility(this.rulers);
   }
 
   toggleRulers(): boolean {
@@ -382,15 +379,7 @@ export class MarkupCanvas {
   }
 
   areRulersVisible(): boolean {
-    return areRulersVisible(this.rulers);
-  }
-
-  centerContent(): boolean {
-    return centerContent(this.canvas, this.config, this.updateTransform.bind(this), this.transformLayer);
-  }
-
-  fitToScreen(): boolean {
-    return fitToScreen(this.canvas, this.transformLayer, this.config);
+    return checkRulersVisibility(this.rulers);
   }
 
   getVisibleArea(): { x: number; y: number; width: number; height: number } {
@@ -399,10 +388,6 @@ export class MarkupCanvas {
 
   isPointVisible(x: number, y: number): boolean {
     return isPointVisible(this, x, y);
-  }
-
-  panToPoint(x: number, y: number): boolean {
-    return panToPoint(this.canvas, this.config, x, y, this.updateTransform.bind(this), this.transformLayer);
   }
 
   // Configuration access

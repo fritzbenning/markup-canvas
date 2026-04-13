@@ -64,7 +64,6 @@ The `MarkupCanvas` component accepts the following props:
 |------|------|---------|-------------|
 | `width` | `number` | - | Canvas width in pixels |
 | `height` | `number` | - | Canvas height in pixels |
-| `enableAcceleration` | `boolean` | `true` | Enable hardware acceleration |
 
 **Interaction Controls**
 
@@ -145,8 +144,8 @@ The `MarkupCanvas` component accepts the following props:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `initialZoom` | `number` | `1` | Initial zoom level (scale factor) |
-| `initialPan` | `{ x: number; y: number }` | `{ x: 0, y: 0 }` | Initial pan position |
+| `zoom` | `number` | `1` | Initial zoom level (scale factor); maps to core `initialZoom` |
+| `pan` | `{ x: number; y: number }` | `{ x: 0, y: 0 }` | Initial pan position; maps to core `initialPan` |
 
 These props set the initial view transform when the canvas is created. This is useful for setting a default zoom level and pan position without needing to do it in the `onReady` callback.
 
@@ -188,8 +187,8 @@ These props set the initial view transform when the canvas is created. This is u
   themeMode="light"
   enableClickToZoom={true}
   clickZoomLevel={2}
-  initialZoom={2}
-  initialPan={{ x: 400, y: 800 }}
+  zoom={2}
+  pan={{ x: 400, y: 800 }}
   onZoomChange={(zoom) => console.log('Zoom:', zoom)}
   onPanChange={(pan) => console.log('Pan:', pan)}
   onReady={(canvas) => console.log('Canvas ready:', canvas)}
@@ -236,51 +235,52 @@ function App() {
 
 ### useMarkupCanvas Hook
 
-The `useMarkupCanvas` hook provides convenient access to canvas methods.
-**Important:** You must pass `initCanvasUtils` to the `onReady` prop for the hook to work properly.
+`MarkupCanvas` uses this hook internally. You can also call `useMarkupCanvas` directly when you want the same helpers (zoom state, `zoomIn`, theme toggles, etc.) but control the wrapper DOM yourself. Pass a **container ref** and **`config`** (`MarkupCanvasConfig` for `new MarkupCanvas(container, config)`). The hook uses `JSON.stringify(config)` internally to decide when to recreate the instance when the object reference changes but values might not.
 
 ```tsx
+import type { MarkupCanvasConfig } from '@markup-canvas/core';
 import { useRef } from 'react';
-import { MarkupCanvas, type MarkupCanvasRef, useMarkupCanvas } from '@markup-canvas/react';
+import { useMarkupCanvas } from '@markup-canvas/react';
+
+const CONFIG = {
+  width: 20000,
+  height: 15000,
+  enableZoom: true,
+  enablePan: true,
+} satisfies MarkupCanvasConfig;
 
 function App() {
-  const canvasRef = useRef<MarkupCanvasRef>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const { 
-    initCanvasUtils, 
-    zoom, 
-    zoomIn, 
-    zoomOut, 
-    fitToContent, 
+  const {
+    zoom,
+    zoomIn,
+    zoomOut,
+    fitToScreen,
     resetZoom,
     themeMode,
     toggleThemeMode,
     updateThemeMode,
-  } = useMarkupCanvas(canvasRef);
+  } = useMarkupCanvas({
+    containerRef,
+    config: CONFIG,
+  });
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
       <button onClick={() => zoomIn()}>Zoom In</button>
       <button onClick={() => zoomOut()}>Zoom Out</button>
-      <button onClick={() => fitToContent()}>Fit to Content</button>
+      <button onClick={() => fitToScreen()}>Fit to Screen</button>
       <button onClick={toggleThemeMode}>
         Toggle Theme (Current: {themeMode})
       </button>
       <span>Current zoom: {zoom.toFixed(2)}</span>
-      
-      <MarkupCanvas
-        ref={canvasRef}
-        width={20000}
-        height={15000}
-        enableZoom={true}
-        enablePan={true}
-        themeMode={themeMode}
-        onReady={initCanvasUtils} // Required for hook to work
-      >
+
+      <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
         <div style={{ position: 'absolute', top: 100, left: 100 }}>
           <h1>Zoomable Content</h1>
         </div>
-      </MarkupCanvas>
+      </div>
     </div>
   );
 }
@@ -293,7 +293,6 @@ The `useMarkupCanvas` hook returns an object with the following properties and m
 | Property/Method | Type | Description |
 |-----------------|------|-------------|
 | `canvas` | `MarkupCanvas \| null` | The canvas instance |
-| `initCanvasUtils` | `(canvas: MarkupCanvas) => void` | Initialize function to pass to `onReady` |
 | `transform` | `Transform` | Current canvas transform |
 | `zoom` | `number` | Current zoom level |
 | `pan` | `{ x: number; y: number }` | Current pan position |
@@ -302,7 +301,7 @@ The `useMarkupCanvas` hook returns an object with the following properties and m
 | `zoomOut` | `(factor?: number) => void` | Zoom out by factor |
 | `resetZoom` | `() => void` | Reset zoom to 100% |
 | `panToPoint` | `(x: number, y: number) => void` | Pan to specific coordinates |
-| `fitToContent` | `() => void` | Fit content to viewport |
+| `fitToScreen` | `() => void` | Fit content to viewport (matches core `MarkupCanvas#fitToScreen`) |
 | `centerContent` | `() => void` | Center content on canvas |
 | `setTransitionMode` | `(enabled: boolean) => void` | Enable/disable transitions |
 | `toggleTransitionMode` | `() => boolean` | Toggle transition mode |
@@ -313,12 +312,12 @@ The `useMarkupCanvas` hook returns an object with the following properties and m
 | `showRulers` | `() => void` | Show rulers |
 | `hideRulers` | `() => void` | Hide rulers |
 | `areRulersVisible` | `() => boolean` | Check if rulers are visible |
-| `showRulersState` | `boolean` | Current rulers visibility state |
+| `rulersVisible` | `boolean` | Whether rulers are currently visible |
 | `toggleGrid` | `() => void` | Toggle grid visibility |
 | `showGrid` | `() => void` | Show grid |
 | `hideGrid` | `() => void` | Hide grid |
 | `isGridVisible` | `() => boolean` | Check if grid is visible |
-| `showGridState` | `boolean` | Current grid visibility state |
+| `gridVisible` | `boolean` | Whether the grid is currently visible |
   
   ## License
 

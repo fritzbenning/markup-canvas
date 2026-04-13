@@ -1,21 +1,46 @@
-import { handleKeyDown } from "@/lib/events/keyboard/handleKeyDown.js";
-import { handleKeyUp } from "@/lib/events/keyboard/handleKeyUp.js";
-import { handleMouseDown } from "@/lib/events/mouse/handleMouseDown.js";
-import { handleMouseLeave } from "@/lib/events/mouse/handleMouseLeave.js";
-import { handleMouseMove } from "@/lib/events/mouse/handleMouseMove.js";
-import { handleMouseUp } from "@/lib/events/mouse/handleMouseUp.js";
-import { resetDragState } from "@/lib/events/utils/resetDragState.js";
-import { updateCursor } from "@/lib/events/utils/updateCursor.js";
-import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
-import type { MouseDragControls } from "@/types/events.js";
-import type { MarkupCanvasConfig } from "@/types/index.js";
+import { handleKeyDown } from "@/lib/events/keyboard/handlers/handleKeyDown";
+import { handleKeyUp } from "@/lib/events/keyboard/handlers/handleKeyUp";
+import { updateCursor } from "@/lib/events/mouse/cursor/updateCursor";
+import { handleMouseDown } from "@/lib/events/mouse/handlers/handleMouseDown";
+import { handleMouseLeave } from "@/lib/events/mouse/handlers/handleMouseLeave";
+import { handleMouseMove } from "@/lib/events/mouse/handlers/handleMouseMove";
+import { handleMouseUp } from "@/lib/events/mouse/handlers/handleMouseUp";
+import { resetDragState } from "@/lib/events/shared/resetDragState";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas";
+import type { MouseDragControls } from "@/types/events";
+import type { MarkupCanvasConfig } from "@/types/index";
 
-export function setupMouseEvents(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>, withControls: true): MouseDragControls;
-export function setupMouseEvents(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>, withControls: false): () => void;
+/**
+ * Registers mouse and optional keyboard listeners for pan, click-to-zoom, and space-to-pan.
+ *
+ * Listeners attach to `canvas.container` and `document` as needed. When `withControls` is `true`,
+ * returns enable/disable API plus `cleanup`; otherwise returns a single `cleanup` function.
+ *
+ * @param canvas - Canvas instance (uses `container`).
+ * @param config - Resolved config.
+ * @param withControls - When `true`, expose drag enable/disable; when `false`, only return `cleanup`.
+ * @returns Drag controls with `cleanup`, or only `cleanup` when `withControls` is `false`.
+ *
+ * @example
+ * ```ts
+ * const drag = setupMouseEvents(canvas, config, true);
+ * drag.cleanup();
+ * ```
+ */
 export function setupMouseEvents(
   canvas: MarkupCanvas,
   config: Required<MarkupCanvasConfig>,
-  withControls: boolean = true
+  withControls: true,
+): MouseDragControls;
+export function setupMouseEvents(
+  canvas: MarkupCanvas,
+  config: Required<MarkupCanvasConfig>,
+  withControls: false,
+): () => void;
+export function setupMouseEvents(
+  canvas: MarkupCanvas,
+  config: Required<MarkupCanvasConfig>,
+  withControls: boolean = true,
 ): MouseDragControls | (() => void) {
   // State management
   let isDragEnabled = true;
@@ -99,17 +124,28 @@ export function setupMouseEvents(
         setIsDragging: setters.setIsDragging,
         setLastMouseX: setters.setLastMouseX,
         setLastMouseY: setters.setLastMouseY,
-      }
+      },
     );
   };
 
   const mouseUpHandler = (event: MouseEvent) => {
-    handleMouseUp(event, canvas, config, isDragEnabled, isSpacePressed, isDragging, dragButton, mouseDownTime, hasDragged, {
-      setIsDragging: setters.setIsDragging,
-      setDragButton: setters.setDragButton,
-      setMouseDownTime: setters.setMouseDownTime,
-      setHasDragged: setters.setHasDragged,
-    });
+    handleMouseUp(
+      event,
+      canvas,
+      config,
+      isDragEnabled,
+      isSpacePressed,
+      isDragging,
+      dragButton,
+      mouseDownTime,
+      hasDragged,
+      {
+        setIsDragging: setters.setIsDragging,
+        setDragButton: setters.setDragButton,
+        setMouseDownTime: setters.setMouseDownTime,
+        setHasDragged: setters.setHasDragged,
+      },
+    );
   };
 
   const mouseLeaveHandler = () => {

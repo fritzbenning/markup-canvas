@@ -1,5 +1,13 @@
-import type { GestureInfo } from "@/types/index.js";
+import type { GestureInfo } from "@/types/index";
 
+/**
+ * Classifies a `wheel` event as trackpad vs mouse wheel and separates scroll vs pinch-zoom intent.
+ *
+ * Trackpad detection uses a score over pixel mode, small deltas, fractional `deltaY`, and two-axis movement; at least two signals must match. Pinch-zoom intent is inferred from `ctrlKey` (Windows/Linux) or `metaKey` (some setups).
+ *
+ * @param event - The `wheel` event (`deltaX` / `deltaY`, `deltaMode`, modifier keys).
+ * @returns Flags for trackpad, mouse wheel, trackpad scroll, trackpad pinch, and any zoom modifier.
+ */
 export function detectTrackpadGesture(event: WheelEvent): GestureInfo {
   const isZoomIntent = event.ctrlKey || event.metaKey;
 

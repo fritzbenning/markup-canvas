@@ -1,16 +1,36 @@
-import { sendKeyboardEventToParent } from "@/lib/events/keyboard/sendKeyboardEventToParent.js";
-import { getAdaptiveZoomSpeed } from "@/lib/events/utils/getAdaptiveZoomSpeed.js";
-import { withFeatureEnabled } from "@/lib/helpers/withFeatureEnabled.js";
-import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
-import type { MarkupCanvasConfig, Transform } from "@/types/index.js";
-import { isCanvasShortcut } from "./isCanvasShortcut";
+import { sendPostMessage } from "@/lib/events/postMessage/utils/sendPostMessage";
+import { withFeatureEnabled } from "@/lib/helpers";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas";
+import type { MarkupCanvasConfig } from "@/types/index";
+import { dispatchKeyboardRules } from "./dispatchKeyboardRules";
+import type { KeyboardContext, KeyboardScope, SetupKeyboardEventsOptions } from "./types";
+import { isCanvasShortcut } from "./utils/isCanvasShortcut";
 
+/**
+ * Attaches a `keydown` listener on the document or the canvas container (see
+ * `config.bindKeyboardEventsTo`) to handle canvas keyboard shortcuts and optional
+ * parent postMessage forwarding.
+ *
+ * Returns a cleanup function that removes the listener.
+ *
+ * @param canvas - Markup canvas instance (uses `container` when binding to `"canvas"`).
+ * @param config - Fully resolved canvas config.
+ * @param options - Optional {@link SetupKeyboardEventsOptions}, e.g. `keyboardScope`.
+ * @returns A function that removes the `keydown` listener when called.
+ *
+ * @example
+ * ```ts
+ * const remove = setupKeyboardEvents(canvas, config, { keyboardScope: "default" });
+ * // later:
+ * remove();
+ * ```
+ */
 export function setupKeyboardEvents(
   canvas: MarkupCanvas,
   config: Required<MarkupCanvasConfig>,
-  options?: { textEditModeEnabled?: boolean }
+  options?: SetupKeyboardEventsOptions,
 ): () => void {
-  const textEditModeEnabled = options?.textEditModeEnabled ?? false;
+  const keyboardScope: KeyboardScope = options?.keyboardScope ?? "default";
 
   function handleKeyDown(event: Event): void {
     if (!(event instanceof KeyboardEvent)) return;
@@ -18,12 +38,20 @@ export function setupKeyboardEvents(
     if (config.bindKeyboardEventsTo === "canvas" && document.activeElement !== canvas.container) return;
 
     withFeatureEnabled(config, "sendKeyboardEventsToParent", () => {
-      // In text edit mode, only send canvas shortcuts to parent
-      if (textEditModeEnabled && !isCanvasShortcut(event)) {
+      if (keyboardScope === "restricted" && !isCanvasShortcut(event)) {
         return;
       }
 
-      sendKeyboardEventToParent(event, config);
+      const canvasName = config.name || "markupCanvas";
+
+      sendPostMessage(canvasName, "keyboardShortcut", {
+        key: event.key,
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+        shiftKey: event.shiftKey,
+        altKey: event.altKey,
+        code: event.code,
+      });
       event.preventDefault();
     });
 
@@ -31,100 +59,14 @@ export function setupKeyboardEvents(
       return;
     }
 
-    let handled = false;
-    const newTransform: Partial<Transform> = {};
+    const ctx: KeyboardContext = {
+      canvas,
+      config,
+      keyboardScope,
+    };
 
-    switch (event.key) {
-      case "ArrowLeft":
-        if (textEditModeEnabled) {
-          return;
-        }
-        newTransform.translateX = canvas.transform.translateX + config.keyboardPanStep;
-        handled = true;
-        break;
-      case "ArrowRight":
-        if (textEditModeEnabled) {
-          return;
-        }
-        newTransform.translateX = canvas.transform.translateX - config.keyboardPanStep;
-        handled = true;
-        break;
-      case "ArrowUp":
-        if (textEditModeEnabled) {
-          return;
-        }
-        newTransform.translateY = canvas.transform.translateY + config.keyboardPanStep;
-        handled = true;
-        break;
-      case "ArrowDown":
-        if (textEditModeEnabled) {
-          return;
-        }
-        newTransform.translateY = canvas.transform.translateY - config.keyboardPanStep;
-        handled = true;
-        break;
-      case "=":
-      case "+":
-        if (textEditModeEnabled) {
-          return;
-        }
-        {
-          const adaptiveZoomStep = config.enableAdaptiveSpeed
-            ? getAdaptiveZoomSpeed(canvas, config.keyboardZoomStep)
-            : config.keyboardZoomStep;
-          canvas.zoomIn(adaptiveZoomStep);
-          handled = true;
-        }
-        break;
-      case "-":
-        if (textEditModeEnabled) {
-          return;
-        }
-        {
-          const adaptiveZoomStep = config.enableAdaptiveSpeed
-            ? getAdaptiveZoomSpeed(canvas, config.keyboardZoomStep)
-            : config.keyboardZoomStep;
-          canvas.zoomOut(adaptiveZoomStep);
-          handled = true;
-        }
-        break;
-      case "0":
-        // Canvas shortcuts should work even in text edit mode
-        if (event.ctrlKey) {
-          if (canvas.resetView) {
-            canvas.resetView();
-          }
-          handled = true;
-        } else if (event.metaKey) {
-          if (canvas.resetViewToCenter) {
-            canvas.resetViewToCenter();
-          }
-          handled = true;
-        }
-        break;
-      case "g":
-      case "G":
-        // Canvas shortcuts should work even in text edit mode
-        if (event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey && canvas.toggleGrid) {
-          canvas.toggleGrid();
-          handled = true;
-        }
-        break;
-      case "r":
-      case "R":
-        // Canvas shortcuts should work even in text edit mode
-        if (event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey && canvas.toggleRulers) {
-          canvas.toggleRulers();
-          handled = true;
-        }
-        break;
-    }
-
-    if (handled) {
+    if (dispatchKeyboardRules(event, ctx)) {
       event.preventDefault();
-      if (Object.keys(newTransform).length > 0) {
-        canvas.updateTransform(newTransform);
-      }
     }
   }
 

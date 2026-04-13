@@ -1,0 +1,71 @@
+import { CLICK_THRESHOLDS } from "@/lib/events/constants";
+import { withRulerOffset } from "@/lib/helpers";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas";
+import { withTransition } from "@/lib/transition/withTransition";
+import type { MarkupCanvasConfig, Transform } from "@/types/index";
+
+/**
+ * If the left-button release is a short click (not a drag) and optional-key rules pass,
+ * zooms to `clickZoomLevel` around the pointer position in content space.
+ *
+ * @param event - `mouseup` for the left button.
+ * @param canvas - Canvas instance (`container`, `transformLayer`, `canvasToContent`, `updateTransform`).
+ * @param config - Resolved config (`enableClickToZoom`, `clickZoomLevel`, `requireOptionForClickZoom`, `rulerSize`).
+ * @param mouseDownTime - `Date.now()` captured on mousedown.
+ * @param hasDragged - True if movement exceeded the click threshold before release.
+ * @param isDragging - True if a pan drag was active (suppresses zoom).
+ *
+ * @example
+ * ```ts
+ * handleClickToZoom(event, canvas, config, downTime, false, false);
+ * ```
+ */
+export function handleClickToZoom(
+  event: MouseEvent,
+  canvas: MarkupCanvas,
+  config: Required<MarkupCanvasConfig>,
+  mouseDownTime: number,
+  hasDragged: boolean,
+  isDragging: boolean
+): void {
+  const clickDuration = Date.now() - mouseDownTime;
+
+  // Check if Option/Alt key is required and pressed
+  const optionKeyPressed = event.altKey;
+  const shouldZoom = config.requireOptionForClickZoom ? optionKeyPressed : true;
+
+  if (clickDuration < CLICK_THRESHOLDS.MAX_DURATION && !hasDragged && !isDragging && shouldZoom) {
+    event.preventDefault();
+
+    const rect = canvas.container.getBoundingClientRect();
+    const rawClickX = event.clientX - rect.left;
+    const rawClickY = event.clientY - rect.top;
+
+    const { clickX, clickY } = withRulerOffset(canvas, rawClickX, rawClickY, config.rulerSize, (adjustedX, adjustedY) => ({
+      clickX: adjustedX,
+      clickY: adjustedY,
+    }));
+
+    // Convert canvas coordinates to content coordinates at current scale
+    const contentCoords = canvas.canvasToContent(clickX, clickY);
+
+    // Calculate the center of the canvas
+    const canvasCenterX = rect.width / 2;
+    const canvasCenterY = rect.height / 2;
+
+    const newScale = config.clickZoomLevel;
+
+    const newTranslateX = canvasCenterX - contentCoords.x * newScale;
+    const newTranslateY = canvasCenterY - contentCoords.y * newScale;
+
+    const newTransform: Partial<Transform> = {
+      scale: newScale,
+      translateX: newTranslateX,
+      translateY: newTranslateY,
+    };
+
+    withTransition(canvas.transformLayer, canvas.config, () => {
+      canvas.updateTransform(newTransform);
+    });
+  }
+}

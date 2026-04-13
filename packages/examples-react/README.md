@@ -4,35 +4,15 @@ A React application demonstrating multiple approaches to use `@markup-canvas/rea
 
 ## Examples
 
-This project includes **two different example approaches** accessible via different routes:
+Open the app (defaults to the component example) or go directly:
 
-### 1. **Default Example** (`/`)
-Using the `useMarkupCanvas` hook with a direct ref to the canvas component.
+| Route | What it shows |
+|-------|-----------------|
+| `#/` | **`<MarkupCanvas />`** — declarative component, imperative `ref` for controls |
+| `#/component` | Redirects to `#/` (legacy path) |
+| `#/hook` | **`useMarkupCanvas`** — same options via a container `ref` + `<div>` wrapper |
 
-**Best for:**
-- Single-window applications
-- Canvas in the same component tree
-- Direct ref access patterns
-- Simpler component hierarchies
-
-**URL:** `http://localhost:3001/#/`
-
-### 2. **Window Example** (`/window`)
-Using the `useMarkupCanvasWindow` hook to access a globally-bound canvas instance.
-
-**Best for:**
-- Multi-component applications
-- Canvas initialized in one place, controlled in another
-- Cross-component communication patterns
-- Window-based event handling
-
-**URL:** `http://localhost:3001/#/window`
-
-**How it works:**
-- Canvas is initialized with `bindToWindow={true}` and a specific `name` prop
-- The canvas instance is bound to `window[name]` (e.g., `window.windowCanvas`)
-- Components use `useMarkupCanvasWindow()` to access the canvas via window binding
-- Events are communicated via `window.postMessage()`
+Both use the same shared canvas options (`MARKUP_CONFIG` in `src/examples/canvasConfig.ts`).
 
 ## Setup
 

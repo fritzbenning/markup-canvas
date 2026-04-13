@@ -5,23 +5,37 @@
   box-sizing: border-box;
 }
 
+:root {
+  --font-ui-sans: "Geist Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-ui-mono: "Geist Mono", ui-monospace, "SF Mono", Monaco, "Cascadia Code", monospace;
+  /* Canvas / marketing content (not toolbar or settings) */
+  --font-content-sans: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-content-display: "Anek Tamil", sans-serif;
+  --font-content-script: "Herr Von Muellerhoff", cursive;
+}
+
 html {
   overscroll-behavior: none;
 }
 
 body {
-  font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-ui-sans);
   background: #f5f5f5;
   overflow: hidden;
   color: black;
 }
 
+/* Canvas content defaults (MarkupCanvas wraps children in .content-layer) */
+.content-layer {
+  font-family: var(--font-content-sans);
+}
+
 .headline-font {
-  font-family: "Anek Tamil", sans-serif;
+  font-family: var(--font-content-display);
 }
 
 .decorative-font {
-  font-family: "Herr Von Muellerhoff", cursive;
+  font-family: var(--font-content-script);
 }
 
 /* Container Styles */
@@ -70,7 +84,7 @@ body {
 
 .intro h1 {
   font-size: 150px;
-  font-family: "Anek Tamil", sans-serif;
+  font-family: var(--font-content-display);
 }
 
 .intro .beta {
@@ -80,7 +94,7 @@ body {
   right: -50px;
   transform: rotate(-16deg);
   color: #808dfd;
-  font-family: "Herr Von Muellerhoff", cursive;
+  font-family: var(--font-content-script);
 }
 
 .canvas-container {
@@ -105,7 +119,7 @@ body {
 .feature h2 {
   font-size: 28px;
   font-weight: 600;
-  font-family: "Anek Tamil", sans-serif;
+  font-family: var(--font-content-display);
 }
 
 .feature p {
@@ -142,7 +156,7 @@ body {
 
 .blockquote {
   font-size: 300px;
-  font-family: "Herr Von Muellerhoff", cursive;
+  font-family: var(--font-content-script);
   text-align: center;
   max-width: 1500px;
   line-height: 0.9;
@@ -150,7 +164,7 @@ body {
 
 .blockquote cite {
   display: block;
-  font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-content-sans);
   font-size: 32px;
   margin-top: 24px;
   color: #808dfd;
@@ -165,7 +179,7 @@ body {
 .hero-headline {
   font-size: 200px;
   color: #808dfd;
-  font-family: "Anek Tamil", sans-serif;
+  font-family: var(--font-content-display);
 }
 
 .content-item:hover {
@@ -270,6 +284,222 @@ body {
   gap: 10px;
 }
 
+/* Floating toolbar (bottom center, Figma-style) */
+.floating-toolbar {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 4px;
+  font-family: var(--font-ui-sans);
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 10px;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(14px);
+}
+
+.floating-toolbar__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #2a2a2a;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.floating-toolbar__btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.floating-toolbar__btn:focus-visible {
+  outline: 2px solid #808dfd;
+  outline-offset: 1px;
+}
+
+.floating-toolbar__divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.floating-toolbar__zoom {
+  min-width: 2.5rem;
+  padding: 0 6px;
+  text-align: center;
+  font-family: var(--font-ui-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #444;
+  user-select: none;
+}
+
+.floating-toolbar--dark {
+  background: rgba(38, 38, 38, 0.94);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.floating-toolbar--dark .floating-toolbar__btn {
+  color: #e8e8ea;
+}
+
+.floating-toolbar--dark .floating-toolbar__btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.floating-toolbar--dark .floating-toolbar__zoom {
+  color: #b4b4b8;
+}
+
+.floating-toolbar--dark .floating-toolbar__divider {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Settings modal */
+
+.settings-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.settings-panel {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  max-height: min(90vh, 640px);
+  overflow: auto;
+  font-family: var(--font-ui-sans);
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+}
+
+.settings-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  z-index: 1;
+}
+
+.settings-panel-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.settings-panel-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #444;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.settings-panel-close:hover {
+  background: #f0f0f0;
+}
+
+.settings-modal-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 8px 18px 20px;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.toggle-row:last-child {
+  border-bottom: none;
+}
+
+.toggle-row__label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #222;
+  cursor: pointer;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: 13px;
+  background: #d1d5db;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.toggle-switch[aria-checked="true"] {
+  background: #808dfd;
+}
+
+.toggle-switch:focus-visible {
+  outline: 2px solid #808dfd;
+  outline-offset: 2px;
+}
+
+.toggle-switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+  pointer-events: none;
+}
+
+.toggle-switch[aria-checked="true"] .toggle-switch__thumb {
+  transform: translateX(18px);
+}
+
 .button {
   padding: 8px 12px;
   background: rgba(255, 255, 255, 0.9);
@@ -288,30 +518,6 @@ body {
 
 .button:hover {
   background: #f5f5f5;
-}
-
-/* Zoom Indicator Styles */
-.zoom-indicator {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  padding: 8px 10px;
-  border-radius: 10px;
-  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.05rem;
-  font-weight: 500;
-  z-index: 1000;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: opacity 0.2s ease;
-}
-
-.zoom-indicator:hover {
-  background: rgba(0, 0, 0, 0.9);
 }
 
 /* PostIt Styles */

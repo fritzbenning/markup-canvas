@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "src/lib/events/keyboard/test",
+    "src/lib/events/mouse/test",
+    "src/lib/events/postMessage/test"
+  ]
+}

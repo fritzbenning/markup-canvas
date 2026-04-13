@@ -1,6 +1,7 @@
-export { resetView } from "./resetView.js";
-export { resetViewToCenter } from "./resetViewToCenter.js";
-export { setZoom } from "./setZoom.js";
-export { zoomIn } from "./zoomIn.js";
-export { zoomOut } from "./zoomOut.js";
-export { zoomToPoint } from "./zoomToPoint.js";
+export { fitToScreen } from "./fitToScreen";
+export { resetView } from "./resetView";
+export { resetViewToCenter } from "./resetViewToCenter";
+export { setZoom } from "./setZoom";
+export { zoomIn } from "./zoomIn";
+export { zoomOut } from "./zoomOut";
+export { zoomToPoint } from "./zoomToPoint";

@@ -1,2 +1,2 @@
-export type { MarkupCanvasProps } from "./MarkupCanvas.js";
-export { MarkupCanvas } from "./MarkupCanvas.js";
+export type { MarkupCanvasProps } from "./MarkupCanvas";
+export { MarkupCanvas } from "./MarkupCanvas";

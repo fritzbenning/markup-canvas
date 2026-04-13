@@ -1,9 +1,17 @@
-import { handleTouchEnd } from "@/lib/events/touch/handleTouchEnd.js";
-import { handleTouchMove } from "@/lib/events/touch/handleTouchMove.js";
-import { handleTouchStart } from "@/lib/events/touch/handleTouchStart.js";
-import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
-import type { TouchState } from "@/types/index.js";
+import { handleTouchEnd } from "@/lib/events/touch/handlers/handleTouchEnd";
+import { handleTouchMove } from "@/lib/events/touch/handlers/handleTouchMove";
+import { handleTouchStart } from "@/lib/events/touch/handlers/handleTouchStart";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas";
+import type { TouchState } from "@/types/index";
 
+/**
+ * Attaches `touchstart` / `touchmove` / `touchend` listeners on the canvas container for one-finger pan and two-finger pinch zoom.
+ *
+ * Listeners are registered with `{ passive: false }` so handlers can call `preventDefault` for consistent gesture handling.
+ *
+ * @param canvas - Target canvas (listeners on `canvas.container`).
+ * @returns Disposer that removes all three listeners.
+ */
 export function setupTouchEvents(canvas: MarkupCanvas): () => void {
   const touchState: TouchState = {
     touches: [],

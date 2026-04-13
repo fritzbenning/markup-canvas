@@ -1,5 +1,5 @@
-import { DEFAULT_CONFIG } from "@/lib/config/constants.js";
-import type { MarkupCanvasConfig } from "@/types/index.js";
+import { DEFAULT_CONFIG } from "@/lib/config/constants";
+import type { MarkupCanvasConfig } from "@/types/index";
 
 export function createMarkupCanvasConfig(options: MarkupCanvasConfig = {}): Required<MarkupCanvasConfig> {
   const config: Required<MarkupCanvasConfig> = {

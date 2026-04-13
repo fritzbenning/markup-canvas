@@ -1,15 +1,17 @@
 import { createMatrixString } from "@/lib/matrix/createMatrixString";
 
+/**
+ * Sets `element.style.transform` from a 2D {@link DOMMatrix}.
+ *
+ * @param element - Element whose CSS `transform` is updated.
+ * @param matrix - Matrix serialized with {@link createMatrixString}.
+ * @returns Whether the transform was applied (`false` if `element` is missing).
+ */
 export function applyTransform(element: HTMLElement, matrix: DOMMatrix): boolean {
-  if (!element?.style || !matrix) {
+  if (!element) {
     return false;
   }
 
-  try {
-    element.style.transform = createMatrixString(matrix);
-    return true;
-  } catch (error) {
-    console.warn("Transform application failed:", error);
-    return false;
-  }
+  element.style.transform = createMatrixString(matrix);
+  return true;
 }

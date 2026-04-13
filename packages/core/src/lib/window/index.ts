@@ -1,3 +1,2 @@
-export { bindCanvasToWindow } from "./bindCanvasToWindow.js";
-export { broadcastEvent } from "./broadcastEvent.js";
-export { cleanupWindowBinding } from "./cleanupWindowBinding.js";
+export { bindCanvasToWindow } from "./bindCanvasToWindow";
+export { cleanupWindowBinding } from "./cleanupWindowBinding";

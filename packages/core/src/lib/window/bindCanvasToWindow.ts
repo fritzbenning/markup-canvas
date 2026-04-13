@@ -1,6 +1,18 @@
-import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
-import type { MarkupCanvasConfig, WindowAPI } from "@/types/index.js";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas";
+import type { MarkupCanvasConfig, WindowAPI } from "@/types/index";
 
+/**
+ * Exposes a stable {@link WindowAPI} on `window` so embedders, DevTools, and automated tests can drive
+ * the canvas without importing the package (e.g. `window.markupCanvas.zoom.in()`).
+ *
+ * The global key is `config.name`, defaulting to `"markupCanvas"`. The same API is also stored in
+ * `window.__markupCanvasInstances` (a `Map` of name → API) when multiple instances exist.
+ *
+ * No-ops when `window` is undefined (SSR / non-browser).
+ *
+ * @param canvas - Live canvas instance whose methods are bound into the API object.
+ * @param config - Resolved config; `name` selects the `window` property key.
+ */
 export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>): void {
   if (typeof window === "undefined") {
     return;
@@ -21,7 +33,6 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
     transform: {
       update: canvas.updateTransform.bind(canvas),
       reset: canvas.reset.bind(canvas),
-      resetToInitial: canvas.resetToInitial.bind(canvas),
     },
 
     // Zoom group
@@ -34,7 +45,6 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
       in: canvas.zoomIn.bind(canvas),
       out: canvas.zoomOut.bind(canvas),
       reset: canvas.resetZoom.bind(canvas),
-      resetToCenter: canvas.resetViewToCenter.bind(canvas),
       fitToScreen: canvas.fitToScreen.bind(canvas),
     },
 
@@ -63,6 +73,8 @@ export function bindCanvasToWindow(canvas: MarkupCanvas, config: Required<Markup
       enableTextEditMode: canvas.enableTextEditMode.bind(canvas),
       disableTextEditMode: canvas.disableTextEditMode.bind(canvas),
       isTextEditModeEnabled: canvas.isTextEditModeEnabled.bind(canvas),
+      setKeyboardScope: canvas.setKeyboardScope.bind(canvas),
+      getKeyboardScope: canvas.getKeyboardScope.bind(canvas),
     },
 
     // Grid group

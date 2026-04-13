@@ -1,1 +1,1 @@
-export { EDITOR_PRESET } from "./editor-preset.js";
+export { EDITOR_PRESET } from "./editor-preset";

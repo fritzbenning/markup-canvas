@@ -27,6 +27,7 @@ export default [
       nodeResolve(),
       commonjs(),
       typescript({
+        tsconfig: "./tsconfig.build.json",
         declaration: true,
         declarationDir: "dist",
         rootDir: "src",
@@ -50,6 +51,7 @@ export default [
       nodeResolve(),
       commonjs(),
       typescript({
+        tsconfig: "./tsconfig.build.json",
         declaration: false,
       }),
     ],
@@ -71,6 +73,7 @@ export default [
       nodeResolve(),
       commonjs(),
       typescript({
+        tsconfig: "./tsconfig.build.json",
         declaration: false,
       }),
     ],
@@ -92,6 +95,7 @@ export default [
       nodeResolve(),
       commonjs(),
       typescript({
+        tsconfig: "./tsconfig.build.json",
         declaration: false,
       }),
       terser({

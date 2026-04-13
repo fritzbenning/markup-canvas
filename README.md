@@ -44,25 +44,17 @@ npm install @markup-canvas/react @markup-canvas/core
 
 ```tsx
 import { useRef } from 'react';
-import { MarkupCanvas, type MarkupCanvasRef, useMarkupCanvas } from '@markup-canvas/react';
+import { MarkupCanvas, type MarkupCanvasRef } from '@markup-canvas/react';
 
 function App() {
   const canvasRef = useRef<MarkupCanvasRef>(null);
-  const { initCanvasUtils, zoomIn, zoomOut } = useMarkupCanvas(canvasRef);
 
   return (
     <div>
-      <button onClick={() => zoomIn()}>Zoom In</button>
-      <button onClick={() => zoomOut()}>Zoom Out</button>
-      
-      <MarkupCanvas
-        ref={canvasRef}
-        width={20000}
-        height={15000}
-        enableZoom={true}
-        enablePan={true}
-        onReady={initCanvasUtils}
-      >
+      <button onClick={() => canvasRef.current?.zoomIn()}>Zoom In</button>
+      <button onClick={() => canvasRef.current?.zoomOut()}>Zoom Out</button>
+
+      <MarkupCanvas ref={canvasRef} width={20000} height={15000} enableZoom={true} enablePan={true}>
         <div>Your zoomable content here</div>
       </MarkupCanvas>
     </div>

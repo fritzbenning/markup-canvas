@@ -1,9 +1,17 @@
-import { getViewportCenter } from "@/lib/events/utils/getViewportCenter.js";
-import { withClampedZoom } from "@/lib/helpers/index.js";
-import type { MarkupCanvas } from "@/lib/MarkupCanvas.js";
-import { withTransition } from "@/lib/transition/withTransition.js";
-import type { MarkupCanvasConfig } from "@/types/index.js";
+import { getViewportCenter, withClampedZoom } from "@/lib/helpers";
+import type { MarkupCanvas } from "@/lib/MarkupCanvas";
+import { withTransition } from "@/lib/transition/withTransition";
+import type { MarkupCanvasConfig } from "@/types/index";
 
+/**
+ * Animates the viewport to scale `1` (clamped to config limits), zooming about the current viewport center.
+ *
+ * @param canvas - Markup canvas instance (provides bounds via `getBounds`).
+ * @param transformLayer - Layer element used for transition styling.
+ * @param config - Resolved configuration.
+ * @param zoomToPoint - Zoom implementation, typically bound to the canvas (content-space pivot + target scale).
+ * @returns Whether the zoom operation reported success.
+ */
 export function resetViewToCenter(
   canvas: MarkupCanvas,
   transformLayer: HTMLElement,

@@ -1,4 +1,4 @@
-export * from "./grid/index.js";
-export * from "./rulers/index.js";
-export { toggleTransition } from "./toggleTransition.js";
-export { updateThemeMode } from "./updateThemeMode.js";
+export * from "./grid/index";
+export * from "./rulers/index";
+export { toggleTransition } from "./toggleTransition";
+export { updateThemeMode } from "./updateThemeMode";

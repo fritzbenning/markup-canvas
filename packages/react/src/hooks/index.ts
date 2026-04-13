@@ -1,1 +1,2 @@
-export { useMarkupCanvas } from "./useMarkupCanvas.js";
+export type { UseMarkupCanvasHookOptions } from "./useMarkupCanvas";
+export { useMarkupCanvas } from "./useMarkupCanvas";
