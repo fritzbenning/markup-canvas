@@ -27,22 +27,22 @@ import { isCanvasShortcut } from "./utils/isCanvasShortcut";
  */
 export function setupKeyboardEvents(
   canvas: MarkupCanvas,
-  config: Required<MarkupCanvasConfig>,
-  options?: SetupKeyboardEventsOptions,
+  _config: Required<MarkupCanvasConfig>,
+  options?: SetupKeyboardEventsOptions
 ): () => void {
   const keyboardScope: KeyboardScope = options?.keyboardScope ?? "default";
 
   function handleKeyDown(event: Event): void {
     if (!(event instanceof KeyboardEvent)) return;
 
-    if (config.bindKeyboardEventsTo === "canvas" && document.activeElement !== canvas.container) return;
+    if (canvas.config.bindKeyboardEventsTo === "canvas" && document.activeElement !== canvas.container) return;
 
-    withFeatureEnabled(config, "sendKeyboardEventsToParent", () => {
+    withFeatureEnabled(canvas.config, "sendKeyboardEventsToParent", () => {
       if (keyboardScope === "restricted" && !isCanvasShortcut(event)) {
         return;
       }
 
-      const canvasName = config.name || "markupCanvas";
+      const canvasName = canvas.config.name || "markupCanvas";
 
       sendPostMessage(canvasName, "keyboardShortcut", {
         key: event.key,
@@ -55,13 +55,13 @@ export function setupKeyboardEvents(
       event.preventDefault();
     });
 
-    if (config.sendKeyboardEventsToParent) {
+    if (canvas.config.sendKeyboardEventsToParent) {
       return;
     }
 
     const ctx: KeyboardContext = {
       canvas,
-      config,
+      config: canvas.config,
       keyboardScope,
     };
 
@@ -70,7 +70,7 @@ export function setupKeyboardEvents(
     }
   }
 
-  const keyboardTarget = config.bindKeyboardEventsTo === "canvas" ? canvas.container : document;
+  const keyboardTarget = canvas.config.bindKeyboardEventsTo === "canvas" ? canvas.container : document;
 
   keyboardTarget.addEventListener("keydown", handleKeyDown);
 

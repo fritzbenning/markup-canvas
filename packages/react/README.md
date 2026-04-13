@@ -303,8 +303,15 @@ The `useMarkupCanvas` hook returns an object with the following properties and m
 | `panToPoint` | `(x: number, y: number) => void` | Pan to specific coordinates |
 | `fitToScreen` | `() => void` | Fit content to viewport (matches core `MarkupCanvas#fitToScreen`) |
 | `centerContent` | `() => void` | Center content on canvas |
+| `transitionEnabled` | `boolean` | Whether zoom/pan transitions are enabled (mirrors canvas config; updated when the canvas is ready) |
 | `setTransitionMode` | `(enabled: boolean) => void` | Enable/disable transitions |
 | `toggleTransitionMode` | `() => boolean` | Toggle transition mode |
+| `requireSpaceForMouseDrag` | `boolean` | Whether Space is required to pan with the mouse |
+| `setRequireSpaceForMouseDrag` | `(enabled: boolean) => void` | Update Space-to-pan requirement |
+| `enableClickToZoom` | `boolean` | Whether click-to-zoom is enabled |
+| `setEnableClickToZoom` | `(enabled: boolean) => void` | Enable/disable click-to-zoom |
+| `requireOptionForClickZoom` | `boolean` | Whether Alt/Option is required for click-to-zoom |
+| `setRequireOptionForClickZoom` | `(enabled: boolean) => void` | Update Alt/Option requirement for click-to-zoom |
 | `themeMode` | `"light" \| "dark"` | Current theme mode |
 | `updateThemeMode` | `(mode: "light" \| "dark") => void` | Update theme mode |
 | `toggleThemeMode` | `() => "light" \| "dark"` | Toggle between themes |

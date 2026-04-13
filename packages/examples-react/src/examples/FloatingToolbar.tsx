@@ -17,6 +17,12 @@ export interface FloatingToolbarProps {
   onGridChange: (visible: boolean) => void;
   themeMode: "light" | "dark";
   onThemeModeChange: (mode: "light" | "dark") => void;
+  requireSpaceForMouseDrag: boolean;
+  onRequireSpaceForMouseDragChange: (enabled: boolean) => void;
+  enableClickToZoom: boolean;
+  onEnableClickToZoomChange: (enabled: boolean) => void;
+  requireOptionForClickZoom: boolean;
+  onRequireOptionForClickZoomChange: (enabled: boolean) => void;
 }
 
 function ToolbarIconButton({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
@@ -41,6 +47,12 @@ export function FloatingToolbar({
   onGridChange,
   themeMode,
   onThemeModeChange,
+  requireSpaceForMouseDrag,
+  onRequireSpaceForMouseDragChange,
+  enableClickToZoom,
+  onEnableClickToZoomChange,
+  requireOptionForClickZoom,
+  onRequireOptionForClickZoomChange,
 }: FloatingToolbarProps) {
   const [open, setOpen] = useState(false);
   const dialogId = useId();
@@ -122,6 +134,26 @@ export function FloatingToolbar({
                 checked={themeMode === "dark"}
                 onChange={(on) => onThemeModeChange(on ? "dark" : "light")}
               />
+              <ToggleSwitch
+                id={`${dialogId}-space-pan`}
+                label="Hold Space to pan with the mouse"
+                checked={requireSpaceForMouseDrag}
+                onChange={onRequireSpaceForMouseDragChange}
+              />
+              <ToggleSwitch
+                id={`${dialogId}-click-zoom`}
+                label="Click to zoom"
+                checked={enableClickToZoom}
+                onChange={onEnableClickToZoomChange}
+              />
+              {enableClickToZoom ? (
+                <ToggleSwitch
+                  id={`${dialogId}-option-click-zoom`}
+                  label="Require Alt/Option for click-to-zoom"
+                  checked={requireOptionForClickZoom}
+                  onChange={onRequireOptionForClickZoomChange}
+                />
+              ) : null}
             </div>
           </div>
         </div>

@@ -1,11 +1,12 @@
 import { vi } from "vitest";
 import { createMarkupCanvasConfig } from "@/lib/config/createMarkupCanvasConfig";
 import type { MarkupCanvas } from "@/lib/MarkupCanvas";
+import type { MarkupCanvasConfig } from "@/types/index";
 
 /**
  * Minimal {@link MarkupCanvas} double for mouse event unit tests (container, transform, `updateTransform`, etc.).
  */
-export function createMouseTestCanvas(): MarkupCanvas {
+export function createMouseTestCanvas(overrides?: MarkupCanvasConfig): MarkupCanvas {
   const container = document.createElement("div");
   Object.defineProperty(container, "getBoundingClientRect", {
     configurable: true,
@@ -22,7 +23,7 @@ export function createMouseTestCanvas(): MarkupCanvas {
     }),
   });
   const transformLayer = document.createElement("div");
-  const config = createMarkupCanvasConfig();
+  const config = createMarkupCanvasConfig(overrides);
   return {
     container,
     transformLayer,

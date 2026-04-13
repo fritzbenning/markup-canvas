@@ -13,7 +13,7 @@ import type { MarkupCanvasConfig } from "@/types/index";
  * @param config - Resolved config passed through to {@link handleWheel}.
  * @returns Disposer that removes the `wheel` listener.
  */
-export function setupWheelEvents(canvas: MarkupCanvas, config: Required<MarkupCanvasConfig>): () => void {
+export function setupWheelEvents(canvas: MarkupCanvas, _config: Required<MarkupCanvasConfig>): () => void {
   const trackpadPanHandler = createTrackpadPanHandler(canvas);
 
   const wheelHandler = (event: WheelEvent) => {
@@ -23,7 +23,7 @@ export function setupWheelEvents(canvas: MarkupCanvas, config: Required<MarkupCa
       return trackpadPanHandler(event);
     }
 
-    return handleWheel(event, canvas, config);
+    return handleWheel(event, canvas, canvas.config);
   };
 
   canvas.container.addEventListener("wheel", wheelHandler, { passive: false });

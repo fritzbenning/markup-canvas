@@ -423,6 +423,18 @@ export class MarkupCanvas {
     return newEnableTransition;
   }
 
+  updateRequireSpaceForMouseDrag(enabled: boolean): void {
+    this.config = createMarkupCanvasConfig({ ...this.config, requireSpaceForMouseDrag: enabled });
+  }
+
+  updateEnableClickToZoom(enabled: boolean): void {
+    this.config = createMarkupCanvasConfig({ ...this.config, enableClickToZoom: enabled });
+  }
+
+  updateRequireOptionForClickZoom(enabled: boolean): void {
+    this.config = createMarkupCanvasConfig({ ...this.config, requireOptionForClickZoom: enabled });
+  }
+
   // Cleanup method
   cleanup(): void {
     cleanupWindowBinding(this.config);

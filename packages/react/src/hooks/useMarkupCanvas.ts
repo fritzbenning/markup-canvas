@@ -22,6 +22,14 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions): UseMarkupC
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isReady, setIsReady] = useState(false);
+  const [transitionEnabled, setTransitionEnabled] = useState(() => config.enableTransition ?? true);
+  const [requireSpaceForMouseDrag, setRequireSpaceForMouseDragState] = useState(
+    () => config.requireSpaceForMouseDrag ?? false,
+  );
+  const [enableClickToZoom, setEnableClickToZoomState] = useState(() => config.enableClickToZoom ?? true);
+  const [requireOptionForClickZoom, setRequireOptionForClickZoomState] = useState(
+    () => config.requireOptionForClickZoom ?? false,
+  );
   const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
   const [rulersVisible, setRulersVisible] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
@@ -58,6 +66,10 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions): UseMarkupC
     setTransform(t);
     setZoom(t.scale);
     setPan({ x: t.translateX, y: t.translateY });
+    setTransitionEnabled(instance.config.enableTransition);
+    setRequireSpaceForMouseDragState(instance.config.requireSpaceForMouseDrag);
+    setEnableClickToZoomState(instance.config.enableClickToZoom);
+    setRequireOptionForClickZoomState(instance.config.requireOptionForClickZoom);
     setThemeMode(instance.config.themeMode);
     setRulersVisible(instance.areRulersVisible());
     setGridVisible(instance.isGridVisible());
@@ -214,13 +226,43 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions): UseMarkupC
   const setTransitionMode = useCallback(
     (enabled: boolean) => {
       canvas?.updateTransition(enabled);
+      setTransitionEnabled(enabled);
     },
     [canvas]
   );
 
   const toggleTransitionMode = useCallback(() => {
-    return canvas?.toggleTransitionMode() ?? false;
+    if (!canvas) {
+      return false;
+    }
+    const next = canvas.toggleTransitionMode();
+    setTransitionEnabled(next);
+    return next;
   }, [canvas]);
+
+  const setRequireSpaceForMouseDrag = useCallback(
+    (enabled: boolean) => {
+      canvas?.updateRequireSpaceForMouseDrag(enabled);
+      setRequireSpaceForMouseDragState(enabled);
+    },
+    [canvas]
+  );
+
+  const setEnableClickToZoom = useCallback(
+    (enabled: boolean) => {
+      canvas?.updateEnableClickToZoom(enabled);
+      setEnableClickToZoomState(enabled);
+    },
+    [canvas]
+  );
+
+  const setRequireOptionForClickZoom = useCallback(
+    (enabled: boolean) => {
+      canvas?.updateRequireOptionForClickZoom(enabled);
+      setRequireOptionForClickZoomState(enabled);
+    },
+    [canvas]
+  );
 
   const updateThemeMode = useCallback(
     (mode: "light" | "dark") => {
@@ -289,8 +331,15 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions): UseMarkupC
     fitToScreen,
     centerContent,
     reset,
+    transitionEnabled,
     setTransitionMode,
     toggleTransitionMode,
+    requireSpaceForMouseDrag,
+    setRequireSpaceForMouseDrag,
+    enableClickToZoom,
+    setEnableClickToZoom,
+    requireOptionForClickZoom,
+    setRequireOptionForClickZoom,
     themeMode,
     updateThemeMode,
     toggleThemeMode,

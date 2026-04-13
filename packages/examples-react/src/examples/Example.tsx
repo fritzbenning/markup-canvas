@@ -1,13 +1,12 @@
 import { useMarkupCanvas } from "@markup-canvas/react";
 import "../App.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Content } from "../components/Content";
 import { MARKUP_CONFIG } from "./config";
 import { FloatingToolbar } from "./FloatingToolbar";
 
 export default function Example() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [transitionEnabled, setTransitionEnabled] = useState<boolean>(MARKUP_CONFIG.enableTransition);
 
   const {
     zoom,
@@ -16,7 +15,14 @@ export default function Example() {
     fitToScreen,
     reset,
     centerContent,
+    transitionEnabled,
     setTransitionMode,
+    requireSpaceForMouseDrag,
+    setRequireSpaceForMouseDrag,
+    enableClickToZoom,
+    setEnableClickToZoom,
+    requireOptionForClickZoom,
+    setRequireOptionForClickZoom,
     themeMode,
     updateThemeMode,
     showRulers,
@@ -28,9 +34,8 @@ export default function Example() {
   } = useMarkupCanvas({
     containerRef,
     config: MARKUP_CONFIG,
-    onReady: (canvas) => {
-      setTransitionEnabled(canvas.config.enableTransition);
-      console.log("✅ [hook] Canvas ready", canvas);
+    onReady: (instance) => {
+      console.log("✅ [hook] Canvas ready", instance);
     },
   });
 
@@ -48,10 +53,7 @@ export default function Example() {
         onResetCanvas={reset}
         onCenterContent={centerContent}
         transitionEnabled={transitionEnabled}
-        onTransitionChange={(enabled) => {
-          setTransitionMode(enabled);
-          setTransitionEnabled(enabled);
-        }}
+        onTransitionChange={setTransitionMode}
         rulersVisible={rulersVisible}
         onRulersChange={(visible) => {
           if (visible) showRulers();
@@ -64,6 +66,12 @@ export default function Example() {
         }}
         themeMode={themeMode}
         onThemeModeChange={updateThemeMode}
+        requireSpaceForMouseDrag={requireSpaceForMouseDrag}
+        onRequireSpaceForMouseDragChange={setRequireSpaceForMouseDrag}
+        enableClickToZoom={enableClickToZoom}
+        onEnableClickToZoomChange={setEnableClickToZoom}
+        requireOptionForClickZoom={requireOptionForClickZoom}
+        onRequireOptionForClickZoomChange={setRequireOptionForClickZoom}
       />
       <div ref={containerRef} style={{ width: "100%", height: "100%", flex: 1, minHeight: 0 }}>
         <Content />

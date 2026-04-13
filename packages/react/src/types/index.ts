@@ -54,8 +54,15 @@ export interface UseMarkupCanvasReturn {
   fitToScreen: () => void;
   centerContent: () => void;
   reset: () => void;
+  transitionEnabled: boolean;
   setTransitionMode: (enabled: boolean) => void;
   toggleTransitionMode: () => boolean;
+  requireSpaceForMouseDrag: boolean;
+  setRequireSpaceForMouseDrag: (enabled: boolean) => void;
+  enableClickToZoom: boolean;
+  setEnableClickToZoom: (enabled: boolean) => void;
+  requireOptionForClickZoom: boolean;
+  setRequireOptionForClickZoom: (enabled: boolean) => void;
   themeMode: "light" | "dark";
   updateThemeMode: (mode: "light" | "dark") => void;
   toggleThemeMode: () => "light" | "dark";

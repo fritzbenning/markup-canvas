@@ -29,17 +29,17 @@ import type { MarkupCanvasConfig } from "@/types/index";
  */
 export function setupMouseEvents(
   canvas: MarkupCanvas,
-  config: Required<MarkupCanvasConfig>,
+  _config: Required<MarkupCanvasConfig>,
   withControls: true,
 ): MouseDragControls;
 export function setupMouseEvents(
   canvas: MarkupCanvas,
-  config: Required<MarkupCanvasConfig>,
+  _config: Required<MarkupCanvasConfig>,
   withControls: false,
 ): () => void;
 export function setupMouseEvents(
   canvas: MarkupCanvas,
-  config: Required<MarkupCanvasConfig>,
+  _config: Required<MarkupCanvasConfig>,
   withControls: boolean = true,
 ): MouseDragControls | (() => void) {
   // State management
@@ -89,13 +89,13 @@ export function setupMouseEvents(
 
   // Event handler wrappers
   const keyDownHandler = (event: KeyboardEvent) => {
-    handleKeyDown(event, canvas, config, isDragEnabled, isDragging, {
+    handleKeyDown(event, canvas, canvas.config, isDragEnabled, isDragging, {
       setIsSpacePressed: setters.setIsSpacePressed,
     });
   };
 
   const keyUpHandler = (event: KeyboardEvent) => {
-    handleKeyUp(event, canvas, config, isDragEnabled, isDragging, {
+    handleKeyUp(event, canvas, canvas.config, isDragEnabled, isDragging, {
       setIsSpacePressed: setters.setIsSpacePressed,
       setIsDragging: setters.setIsDragging,
       setDragButton: setters.setDragButton,
@@ -103,14 +103,14 @@ export function setupMouseEvents(
   };
 
   const mouseDownHandler = (event: MouseEvent) => {
-    handleMouseDown(event, canvas, config, isDragEnabled, isSpacePressed, setters);
+    handleMouseDown(event, canvas, canvas.config, isDragEnabled, isSpacePressed, setters);
   };
 
   const mouseMoveHandler = (event: MouseEvent) => {
     handleMouseMove(
       event,
       canvas,
-      config,
+      canvas.config,
       isDragEnabled,
       isDragging,
       isSpacePressed,
@@ -132,7 +132,7 @@ export function setupMouseEvents(
     handleMouseUp(
       event,
       canvas,
-      config,
+      canvas.config,
       isDragEnabled,
       isSpacePressed,
       isDragging,
@@ -149,7 +149,7 @@ export function setupMouseEvents(
   };
 
   const mouseLeaveHandler = () => {
-    handleMouseLeave(canvas, config, isDragEnabled, isSpacePressed, isDragging, {
+    handleMouseLeave(canvas, canvas.config, isDragEnabled, isSpacePressed, isDragging, {
       setIsDragging: setters.setIsDragging,
       setDragButton: setters.setDragButton,
     });
@@ -161,12 +161,10 @@ export function setupMouseEvents(
   document.addEventListener("mouseup", mouseUpHandler);
   canvas.container.addEventListener("mouseleave", mouseLeaveHandler);
 
-  if (config.requireSpaceForMouseDrag) {
-    document.addEventListener("keydown", keyDownHandler);
-    document.addEventListener("keyup", keyUpHandler);
-  }
+  document.addEventListener("keydown", keyDownHandler);
+  document.addEventListener("keyup", keyUpHandler);
 
-  updateCursor(canvas, config, isDragEnabled, isSpacePressed, isDragging);
+  updateCursor(canvas, canvas.config, isDragEnabled, isSpacePressed, isDragging);
 
   const cleanup = () => {
     canvas.container.removeEventListener("mousedown", mouseDownHandler);
@@ -174,10 +172,8 @@ export function setupMouseEvents(
     document.removeEventListener("mouseup", mouseUpHandler);
     canvas.container.removeEventListener("mouseleave", mouseLeaveHandler);
 
-    if (config.requireSpaceForMouseDrag) {
-      document.removeEventListener("keydown", keyDownHandler);
-      document.removeEventListener("keyup", keyUpHandler);
-    }
+    document.removeEventListener("keydown", keyDownHandler);
+    document.removeEventListener("keyup", keyUpHandler);
   };
 
   if (withControls) {
@@ -185,19 +181,19 @@ export function setupMouseEvents(
       cleanup,
       enable: () => {
         isDragEnabled = true;
-        updateCursor(canvas, config, isDragEnabled, isSpacePressed, isDragging);
+        updateCursor(canvas, canvas.config, isDragEnabled, isSpacePressed, isDragging);
         return true;
       },
       disable: () => {
         isDragEnabled = false;
         // Stop any current dragging
         if (isDragging) {
-          resetDragState(canvas, config, isDragEnabled, isSpacePressed, {
+          resetDragState(canvas, canvas.config, isDragEnabled, isSpacePressed, {
             setIsDragging: setters.setIsDragging,
             setDragButton: setters.setDragButton,
           });
         }
-        updateCursor(canvas, config, isDragEnabled, isSpacePressed, isDragging);
+        updateCursor(canvas, canvas.config, isDragEnabled, isSpacePressed, isDragging);
         return true;
       },
       isEnabled: () => isDragEnabled,
