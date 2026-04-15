@@ -35,6 +35,15 @@ export interface RulerSystem {
 }
 
 /**
+ * Minimal event bus surface the ruler subsystem needs to subscribe to transform changes.
+ * Kept narrow so rulers don't depend on the full {@link MarkupCanvasEvents} shape.
+ */
+export interface RulerTransformEmitter {
+  on(event: "transform", handler: (data: Transform) => void): void;
+  off(event: "transform", handler: (data: Transform) => void): void;
+}
+
+/**
  * Minimal canvas surface the ruler subsystem needs: container, optional transform layer,
  * current {@link Transform}, and accessors to update the view and read {@link CanvasBounds}.
  *
@@ -52,6 +61,11 @@ export interface RulerCanvas {
   updateTransform: (newTransform: Partial<Transform>) => boolean;
   /** Latest measured bounds (viewport, content, pan/zoom limits). */
   getBounds: () => CanvasBounds;
+  /**
+   * Optional event emitter for transform notifications. When present, rulers subscribe
+   * to the `"transform"` event instead of monkey-patching `updateTransform`.
+   */
+  event?: RulerTransformEmitter;
 }
 
 /**

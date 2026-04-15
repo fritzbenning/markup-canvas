@@ -10,6 +10,8 @@ export function updateRulers(
   gridOverlay: HTMLElement | undefined,
   config: Required<MarkupCanvasConfig>
 ): void {
+  console.log("updateRulers");
+
   const bounds = canvas.getBounds();
   const scale = bounds.scale || 1;
   const translateX = bounds.translateX || 0;
