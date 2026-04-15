@@ -1,5 +1,7 @@
 import ExampleImage from "../assets/example-1.avif";
 import { Image } from "./Image";
+import { Polaroid } from "./Polaroid";
+import { Position } from "./Position";
 
 export function Content() {
   return (
@@ -54,7 +56,11 @@ export function Content() {
         </blockquote>
       </div>
 
-      <Image src={ExampleImage} width={1200} height={800} left={2000} top={2000} alt="My description" />
+      <Position left={2000} top={2000}>
+        <Polaroid>
+          <Image src={ExampleImage} width={1200} height={800} alt="My description" />
+        </Polaroid>
+      </Position>
     </>
   );
 }
