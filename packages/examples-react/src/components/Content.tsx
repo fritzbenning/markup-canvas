@@ -47,8 +47,8 @@ export function Content() {
         style={{ bottom: 0, right: 1000 }}
       />
 
-      <div className="absolute flex gap-[100px]" style={{ top: 7000, left: 7000 }}>
-        <blockquote className="max-w-[1500px] text-center font-script text-[300px] leading-[0.9]">
+      <div className="absolute flex gap-[100px]" style={{ top: "50%", left: "50%" }}>
+        <blockquote className="max-w-[1500px] translate-x-[-50%] translate-y-[-50%] text-center font-script text-[300px] leading-[0.9]">
           "Don't Make Me Think"
           <cite className="mt-6 block font-content font-normal text-[#808dfd] text-[32px] not-italic">Steve Krug</cite>
         </blockquote>

@@ -1,3 +1,4 @@
+export { ZOOM_SCALE_STEPS, type ZoomScaleStep } from "./constants";
 export { fitToScreen } from "./fitToScreen";
 export { resetView } from "./resetView";
 export { resetViewToCenter } from "./resetViewToCenter";

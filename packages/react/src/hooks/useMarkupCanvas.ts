@@ -158,14 +158,12 @@ export function useMarkupCanvas(options: UseMarkupCanvasHookOptions): UseMarkupC
     };
   }, [postMessageIdentifier, handleTransform, handleZoom, handlePan]);
 
-  const zoomIn = useCallback((factor?: number) => {
-    const f = typeof factor === "number" && Number.isFinite(factor) ? factor : 0.5;
-    canvas?.zoomIn(f);
+  const zoomIn = useCallback(() => {
+    canvas?.zoomIn();
   }, [canvas]);
 
-  const zoomOut = useCallback((factor?: number) => {
-    const f = typeof factor === "number" && Number.isFinite(factor) ? factor : 0.5;
-    canvas?.zoomOut(f);
+  const zoomOut = useCallback(() => {
+    canvas?.zoomOut();
   }, [canvas]);
 
   const resetZoom = useCallback(() => {

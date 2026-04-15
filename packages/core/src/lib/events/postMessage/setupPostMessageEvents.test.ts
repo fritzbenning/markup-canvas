@@ -18,7 +18,7 @@ describe("setupPostMessageEvents", () => {
       }),
     );
 
-    expect(canvas.zoomIn).toHaveBeenCalledWith(0.2);
+    expect(canvas.zoomIn).toHaveBeenCalledOnce();
     cleanup();
   });
 

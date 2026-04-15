@@ -95,8 +95,8 @@ describe("bindCanvasToWindow", () => {
     bindCanvasToWindow(canvas, config);
 
     const api = (window as unknown as Record<string, WindowAPI>).bindWindowTest;
-    api.zoom.in(2);
-    expect(canvas.zoomIn).toHaveBeenCalledWith(2);
+    api.zoom.in();
+    expect(canvas.zoomIn).toHaveBeenCalledOnce();
   });
 
   it("uses a custom global name when config.name is set", () => {

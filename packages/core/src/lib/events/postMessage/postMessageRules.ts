@@ -8,15 +8,15 @@ export const postMessageRules: readonly PostMessageRule[] = [
   {
     id: "zoom-in",
     action: "zoomIn",
-    run: (canvas, payload) => {
-      canvas.zoomIn(payload as number | undefined);
+    run: (canvas, _payload) => {
+      canvas.zoomIn();
     },
   },
   {
     id: "zoom-out",
     action: "zoomOut",
-    run: (canvas, payload) => {
-      canvas.zoomOut(payload as number | undefined);
+    run: (canvas, _payload) => {
+      canvas.zoomOut();
     },
   },
   {

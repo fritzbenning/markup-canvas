@@ -2,8 +2,8 @@ import type { MarkupCanvas, Transform } from "@markup-canvas/core";
 
 export interface MarkupCanvasRef {
   canvas: MarkupCanvas | null;
-  zoomIn: (factor?: number) => void;
-  zoomOut: (factor?: number) => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
   reset: () => void;
   resetZoom: () => void;
   panToPoint: (x: number, y: number) => void;
@@ -43,8 +43,8 @@ export interface UseMarkupCanvasReturn {
   zoom: number;
   pan: { x: number; y: number };
   isReady: boolean;
-  zoomIn: (factor?: number) => void;
-  zoomOut: (factor?: number) => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
   resetZoom: () => void;
   panLeft: (distance?: number) => void;
   panRight: (distance?: number) => void;

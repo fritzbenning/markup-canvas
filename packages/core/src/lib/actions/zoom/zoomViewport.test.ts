@@ -22,18 +22,18 @@ describe("zoomViewport actions", () => {
   const config = createMarkupCanvasConfig({ minZoom: 0.1, maxZoom: 10 });
   const transformLayer = document.createElement("div");
 
-  it("zoomIn calls zoomToPoint with clamped scale about viewport center", () => {
+  it("zoomIn advances to the next discrete step (clamped to config)", () => {
     const canvas = stubMarkupCanvas({ scale: 1, translateX: 0, translateY: 0 }, { width: 200, height: 100 });
     const zoomToPoint = vi.fn(() => true);
-    zoomIn(canvas, transformLayer, config, zoomToPoint, 0.5);
-    expect(zoomToPoint).toHaveBeenCalledWith(100, 50, expect.closeTo(1.5, 5));
+    zoomIn(canvas, transformLayer, config, zoomToPoint);
+    expect(zoomToPoint).toHaveBeenCalledWith(100, 50, 1.5);
   });
 
-  it("zoomOut calls zoomToPoint with reduced scale", () => {
+  it("zoomOut steps to the previous discrete stop", () => {
     const canvas = stubMarkupCanvas({ scale: 2, translateX: 0, translateY: 0 }, { width: 400, height: 200 });
     const zoomToPoint = vi.fn(() => true);
-    zoomOut(canvas, transformLayer, config, zoomToPoint, 0.25);
-    expect(zoomToPoint).toHaveBeenCalledWith(200, 100, expect.closeTo(1.5, 5));
+    zoomOut(canvas, transformLayer, config, zoomToPoint);
+    expect(zoomToPoint).toHaveBeenCalledWith(200, 100, 1.5);
   });
 
   it("setZoom passes absolute scale clamped to limits", () => {
@@ -44,10 +44,7 @@ describe("zoomViewport actions", () => {
   });
 
   it("resetViewToCenter targets scale 1 at viewport center", () => {
-    const canvas = stubMarkupCanvas(
-      { scale: 3, translateX: 10, translateY: 20 },
-      { width: 200, height: 100 },
-    );
+    const canvas = stubMarkupCanvas({ scale: 3, translateX: 10, translateY: 20 }, { width: 200, height: 100 });
     const zoomToPoint = vi.fn(() => true);
     resetViewToCenter(canvas, transformLayer, config, zoomToPoint);
     expect(zoomToPoint).toHaveBeenCalledWith(100, 50, 1);

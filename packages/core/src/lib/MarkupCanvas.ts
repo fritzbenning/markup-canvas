@@ -219,12 +219,12 @@ export class MarkupCanvas {
     return panToPoint(this.canvas, this.config, x, y, this.updateTransform.bind(this), this.transformLayer);
   }
 
-  zoomIn(factor: number = 0.5): boolean {
-    return zoomIn(this, this.transformLayer, this.config, this.zoomToPoint.bind(this), factor);
+  zoomIn(): boolean {
+    return zoomIn(this, this.transformLayer, this.config, this.zoomToPoint.bind(this));
   }
 
-  zoomOut(factor: number = 0.5): boolean {
-    return zoomOut(this, this.transformLayer, this.config, this.zoomToPoint.bind(this), factor);
+  zoomOut(): boolean {
+    return zoomOut(this, this.transformLayer, this.config, this.zoomToPoint.bind(this));
   }
 
   resetZoom(): boolean {

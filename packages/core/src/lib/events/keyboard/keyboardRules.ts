@@ -1,4 +1,3 @@
-import { getAdaptiveZoomSpeed } from "@/lib/events/shared/getAdaptiveZoomSpeed";
 import type { KeyboardRule } from "./types";
 
 /**
@@ -41,20 +40,13 @@ export const keyboardRules: readonly KeyboardRule[] = [
     id: "zoom-in",
     scope: "default",
     keys: ["=", "+"],
-    run: (_e, { canvas, config }) => {
-      const step = config.enableAdaptiveSpeed ? getAdaptiveZoomSpeed(canvas, config.keyboardZoomStep) : config.keyboardZoomStep;
-      return canvas.zoomIn(step);
-    },
+    run: (_e, { canvas }) => canvas.zoomIn(),
   },
   {
     id: "zoom-out",
     scope: "default",
     keys: "-",
-    run: (_e, { canvas, config }) => {
-      const step = config.enableAdaptiveSpeed ? getAdaptiveZoomSpeed(canvas, config.keyboardZoomStep) : config.keyboardZoomStep;
-
-      return canvas.zoomOut(step);
-    },
+    run: (_e, { canvas }) => canvas.zoomOut(),
   },
   {
     id: "reset-zoom",

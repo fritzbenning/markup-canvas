@@ -15,7 +15,7 @@ import { dispatchPostMessageRules } from "../utils/dispatchPostMessageRules";
  *
  * @example
  * ```ts
- * processPostMessage(canvas, "zoomIn", 0.1, "myCanvas");
+ * processPostMessage(canvas, "zoomIn", undefined, "myCanvas");
  * processPostMessage(canvas, "setZoom", 2, "myCanvas");
  * ```
  */

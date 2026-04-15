@@ -5,7 +5,7 @@ import { ToggleSwitch } from "../components/ToggleSwitch";
 import type { ThemeMode } from "./useTheme";
 
 const floatingToolbarVariants = cva(
-  "-translate-x-1/2 fixed bottom-4 left-1/2 z-100 flex items-center gap-0.5 rounded-[10px] bg-white/92 p-1 font-sans shadow-[0_4px_20px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.04)] backdrop-blur-[14px] dark:bg-[rgba(38,38,38,0.94)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.45),0_0_0_1px_rgba(255,255,255,0.06)]"
+  "-translate-x-1/2 fixed bottom-4 left-1/2 z-100 flex items-center gap-0.5 rounded-[10px] bg-white/92 p-1 font-sans shadow-[0_4px_20px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.04)] backdrop-blur-[14px] dark:bg-[rgba(20,20,20,0.94)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.45),0_0_0_1px_rgba(255,255,255,0.06)]"
 );
 
 const toolbarIconButtonVariants = cva(

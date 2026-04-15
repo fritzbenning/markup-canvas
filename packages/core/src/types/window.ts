@@ -18,8 +18,8 @@ export interface WindowAPI {
     readonly current: number;
     readonly set: (zoomLevel: number) => void;
     readonly toPoint: (x: number, y: number, zoomLevel: number) => void;
-    readonly in: (factor?: number) => void;
-    readonly out: (factor?: number) => void;
+    readonly in: () => void;
+    readonly out: () => void;
     readonly reset: () => void;
     readonly fitToScreen: () => void;
   };
