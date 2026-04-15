@@ -1,5 +1,4 @@
 import { useMarkupCanvas } from "@markup-canvas/react";
-import "../App.css";
 import { useEffect, useRef } from "react";
 import { Content } from "../components/Content";
 import { MARKUP_CONFIG } from "./config";
@@ -43,33 +42,37 @@ export default function Example() {
   }, [themeMode]);
 
   return (
-    <main className="app">
+    <main className="fixed inset-0 overflow-hidden bg-[#f6f6f6]">
       <FloatingToolbar
-        zoom={zoom}
-        onZoomIn={zoomIn}
-        onZoomOut={zoomOut}
-        onFitToScreen={fitToScreen}
-        onResetCanvas={reset}
-        transitionEnabled={transitionEnabled}
-        onTransitionChange={setTransitionMode}
-        rulersVisible={rulersVisible}
-        onRulersChange={(visible) => {
-          if (visible) showRulers();
-          else hideRulers();
+        tools={{
+          zoom,
+          onZoomIn: () => zoomIn(),
+          onZoomOut: () => zoomOut(),
+          onFitToScreen: fitToScreen,
+          onResetCanvas: reset,
         }}
-        gridVisible={gridVisible}
-        onGridChange={(visible) => {
-          if (visible) showGrid();
-          else hideGrid();
+        settings={{
+          themeMode,
+          onThemeModeChange: updateThemeMode,
+          transitionEnabled,
+          onTransitionChange: setTransitionMode,
+          rulersVisible,
+          onRulersChange: (visible) => {
+            if (visible) showRulers();
+            else hideRulers();
+          },
+          gridVisible,
+          onGridChange: (visible) => {
+            if (visible) showGrid();
+            else hideGrid();
+          },
+          requireSpaceForMouseDrag,
+          onRequireSpaceForMouseDragChange: setRequireSpaceForMouseDrag,
+          enableClickToZoom,
+          onEnableClickToZoomChange: setEnableClickToZoom,
+          requireOptionForClickZoom,
+          onRequireOptionForClickZoomChange: setRequireOptionForClickZoom,
         }}
-        themeMode={themeMode}
-        onThemeModeChange={updateThemeMode}
-        requireSpaceForMouseDrag={requireSpaceForMouseDrag}
-        onRequireSpaceForMouseDragChange={setRequireSpaceForMouseDrag}
-        enableClickToZoom={enableClickToZoom}
-        onEnableClickToZoomChange={setEnableClickToZoom}
-        requireOptionForClickZoom={requireOptionForClickZoom}
-        onRequireOptionForClickZoomChange={setRequireOptionForClickZoom}
       />
       <div ref={containerRef} style={{ width: "100%", height: "100%", flex: 1, minHeight: 0 }}>
         <Content />

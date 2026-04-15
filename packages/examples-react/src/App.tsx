@@ -1,7 +1,6 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import Example from "./examples/Example";
 import SimpleExample from "./examples/SimpleExample";
-import "./App.css";
 
 function App() {
   return (

@@ -1,27 +1,44 @@
-:root {
-  font-family: "Geist Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* Class-based dark mode (e.g. toolbar toggles `dark` on a wrapper) */
+/* biome-ignore lint/suspicious/noUnknownAtRules: Tailwind CSS v4 custom variant */
+@custom-variant dark (&:where(.dark, .dark *));
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* biome-ignore lint/suspicious/noUnknownAtRules: Tailwind CSS v4 @theme extension */
+@theme {
+  --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-content: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Anek Tamil", ui-sans-serif, sans-serif;
+  --font-script: "Herr Von Muellerhoff", cursive;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+@layer base {
+  html {
+    overscroll-behavior: none;
+  }
+
+  body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    color: #000;
+    font-family: var(--font-sans);
+  }
+
+  #root {
+    width: 100%;
+    height: 100vh;
+  }
 }
 
-#root {
-  width: 100%;
-  height: 100vh;
+/* Classes injected by @markup-canvas/core (transform / content layers) */
+@layer components {
+  .content-layer {
+    font-family: var(--font-content);
+  }
+
+  .transform-layer {
+    background-color: #fff;
+  }
 }
